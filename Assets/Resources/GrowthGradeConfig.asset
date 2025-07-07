@@ -1,0 +1,45 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 066d1324bfff1764a90a42bf764ddc5c, type: 3}
+  m_Name: GrowthGradeConfig
+  m_EditorClassIdentifier: 
+  gradeInfos:
+  - Grade: 0
+    MinRate: 50
+    MaxRate: 80
+    Probability: 80
+  - Grade: 1
+    MinRate: 81
+    MaxRate: 110
+    Probability: 40
+  - Grade: 2
+    MinRate: 111
+    MaxRate: 140
+    Probability: 20
+  - Grade: 3
+    MinRate: 141
+    MaxRate: 170
+    Probability: 10
+  - Grade: 4
+    MinRate: 171
+    MaxRate: 200
+    Probability: 5
+  - Grade: 5
+    MinRate: 201
+    MaxRate: 230
+    Probability: 2.5
+  - Grade: 6
+    MinRate: 231
+    MaxRate: 260
+    Probability: 1.25
+  minEnhanceBonus: 1
+  maxEnhanceBonus: 15

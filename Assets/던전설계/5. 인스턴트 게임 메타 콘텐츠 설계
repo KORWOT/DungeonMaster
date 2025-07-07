@@ -1,0 +1,208 @@
+[현재 구현 상태 요약]
+✅ 구현 완료:
+- 전투 시스템 (BattleManager, DamageCalculator)
+- 캐릭터 시스템 (Monster, Enemy, ICharacter)
+- 스탯 시스템 (StatContainer, StatType)
+- 스킬 시스템 (ISkill, BaseSkill, SkillManager)
+- 데이터 관리 (BaseMonsterCard, UserDataManager)
+- 성장률 시스템 (GrowthGradeSystem)
+
+❌ 전혀 미구현 (인스턴트 게임 메타 콘텐츠):
+- 침략 시스템, 소환 시스템, 자원채취 시스템
+- 차원문 시스템, 이벤트 시스템, 대장간 시스템
+- 제물 시스템, 병영 시스템, 던전 관리 시스템
+
+[1] 침략 시스템
+❌ 미구현:
+몬스터로 인간세상 침략(마왕 기본 미참여, 추후 이벤트/장비로 참여 확장 가능)
+
+침략 성공시 "위협도" 상승 → 용사들의 침략 난이도(숫자 및 정예몹 등급) 증가
+
+침략 자체만으로도 보상, 방어 성공 시 추가 보상 및 정예몹 처리 기회 제공
+
+일수(턴) 경과에 따라 최종보상 증가
+
+침략 실패 시:
+부상(능력치 하락, 일정 기간 배치 불가),
+사기저하(능력치 저하)
+위협도는 증가하지 않음
+
+🔧 구현 필요 클래스:
+- InvasionManager: 침략 시스템 관리
+- ThreatLevelSystem: 위협도 시스템
+- InvasionRewardSystem: 침략 보상 시스템
+- HeroInvasionSystem: 용사 침략 시스템
+
+[2] 소환 시스템
+❌ 미구현:
+마석, 골드 등 자원으로 몬스터 랜덤 소환
+
+배치된 방/시설에 따라 소환 확률 보너스(예: 특정 시설 소환 확률 증가)
+
+확률 이벤트(특정 몹, 고등급, 속성별 소환 등 확장 가능성)
+
+소환은 여러 종류/속성/특수 소환 방식 확장 가능
+
+🔧 구현 필요 클래스:
+- SummonManager: 소환 시스템 관리
+- ResourceSystem: 자원 시스템 (마석, 골드)
+- SummonProbabilitySystem: 소환 확률 시스템
+- SummonEventSystem: 소환 이벤트 시스템
+
+[3] 자원채취 시스템
+❌ 미구현:
+몬스터를 배치하면 주기적으로(예: 일수 단위)
+골드, 마석, 자재 등 자원 채취
+
+몬스터마다 채취능력(효율) 다름,
+스킬/업그레이드로 채취량 강화 가능
+
+"집중채취" 등 하루를 소모해 단기 채취량 증폭 가능
+
+🔧 구현 필요 클래스:
+- ResourceHarvestingSystem: 자원 채취 시스템
+- MonsterHarvestingStats: 몬스터 채취 능력 스탯
+- HarvestingUpgradeSystem: 채취 업그레이드 시스템
+- FocusedHarvestingSystem: 집중 채취 시스템
+
+[4] 차원문 시스템
+❌ 미구현:
+특정 방 배치로 오픈, 적은 수의 정예 몬스터만 파견 가능
+
+탐색 후 몬스터 장비, 소환서, 자원, 이벤트 등 다양한 보상 획득
+
+보상 품질은 파견 몬스터의 전투력에 따라 결정
+(전투력 부족 시 실패/무보상 가능)
+
+파견 중엔 해당 몬스터는 침략/방어 등 행동 불가,
+일정 일수 후 복귀
+
+🔧 구현 필요 클래스:
+- DimensionalGateSystem: 차원문 시스템
+- ExpeditionSystem: 탐색 시스템
+- ExpeditionRewardSystem: 탐색 보상 시스템
+- MonsterExpeditionStatus: 몬스터 탐색 상태 관리
+
+[5] 이벤트 시스템
+❌ 미구현:
+상인방문, 광신도 방문, 마왕레벨업 등
+다양한 "확률적 랜덤 이벤트" 발생
+
+이벤트는 제한 없이 게임 전반의 여러 요소(자원, 강화, 성장, 위기 등)에
+영향 미침
+
+이벤트 발생 시 플레이어 선택지/특수 보상/리스크 발생
+
+🔧 구현 필요 클래스:
+- EventManager: 이벤트 시스템 관리
+- RandomEventSystem: 랜덤 이벤트 시스템
+- EventChoiceSystem: 이벤트 선택지 시스템
+- EventRewardSystem: 이벤트 보상 시스템
+
+[6] 대장간 시스템
+❌ 미구현:
+인스턴트 게임 내에서 몬스터 장비 제작, 강화, 분해
+
+분해 시 자원 획득
+
+장비 제작/강화에는 재료/성공확률/특수 옵션 부여 등 포함
+
+🔧 구현 필요 클래스:
+- BlacksmithSystem: 대장간 시스템
+- EquipmentCraftingSystem: 장비 제작 시스템
+- EquipmentEnhancementSystem: 장비 강화 시스템
+- EquipmentDecompositionSystem: 장비 분해 시스템
+
+[7] 제물 시스템
+❌ 미구현:
+기존 몬스터를 제물로 삼아 다른 몬스터의
+레벨업, 확률적 등급 상승, 스킬 강화/전수 등 가능
+
+자원 또는 스킬북(특정 스킬 확정 부여 등) 획득 가능
+
+제물 시스템에는 일부 랜덤성(실패, 부작용 등)도 존재
+
+🔧 구현 필요 클래스:
+- SacrificeSystem: 제물 시스템
+- MonsterSacrificeSystem: 몬스터 제물 시스템
+- SkillBookSystem: 스킬북 시스템
+- SacrificeRandomnessSystem: 제물 랜덤성 시스템
+
+[8] 병영 시스템
+❌ 미구현:
+몬스터 관리:
+장비 장착, 방에 배치, 아이템 사용(예: 스킬북 등록, 강화 등)
+
+몬스터별 배치 효과/아이템 제한/강화 등 전략적 선택 가능
+
+🔧 구현 필요 클래스:
+- BarracksSystem: 병영 시스템
+- MonsterManagementSystem: 몬스터 관리 시스템
+- EquipmentManagementSystem: 장비 관리 시스템
+- ItemUsageSystem: 아이템 사용 시스템
+
+[9] 던전 관리 시스템
+❌ 미구현:
+방 배치/강화/제작/합성 등 전체 던전 운영 관리
+
+던전의 전반적 기능(특수방, 성장방, 강화방 등) 선택/확장 가능
+
+🔧 구현 필요 클래스:
+- DungeonManagementSystem: 던전 관리 시스템
+- RoomPlacementSystem: 방 배치 시스템
+- RoomEnhancementSystem: 방 강화 시스템
+- SpecialRoomSystem: 특수방 시스템
+
+[10] 게임 전체 루프/목표 (요약)
+✅ 현재 구현:
+게임 시작 → 전투 시스템 → 승리/패배
+
+❌ 미구현:
+게임 시작 → 방 배치 → 몬스터 배치 → 방어 → (승리: 다음 진행, 패배: 게임오버)
+
+목표 일수(EX: 1000일)까지 버티면 승리(무한모드 지원, 1000일 달성시 보상 극대화)
+
+진행 중 자원채취, 소환, 침략 등으로 성장/강화
+
+고위험(침략/차원문 등) 클리어 시 고보상 획득
+
+[11] 자원 종류 및 사용 예시
+✅ 구현된 자원 시스템:
+- 현재는 개념만 존재, 실제 구현 필요
+
+❌ 미구현:
+자원명	주요 사용처	구현상태
+마석	몬스터 강화, 소환, 제물, 등급장비/방 강화, 던전 스킬/특수버프 등	❌ 미구현
+골드	전체 시스템, 강화, 구매 등 다양한 곳에 사용	❌ 미구현
+자재	방 배치, 장비 제작/강화 등에 사용	❌ 미구현
+
+[12] 구현 우선순위 및 로드맵]
+🔥 1단계 (핵심 시스템):
+- ResourceSystem: 자원 시스템 (마석, 골드, 자재)
+- SummonManager: 소환 시스템
+- DungeonManagementSystem: 던전 관리 시스템
+
+🔶 2단계 (확장 시스템):
+- InvasionManager: 침략 시스템
+- ResourceHarvestingSystem: 자원 채취 시스템
+- EventManager: 이벤트 시스템
+
+🔵 3단계 (고급 시스템):
+- DimensionalGateSystem: 차원문 시스템
+- BlacksmithSystem: 대장간 시스템
+- SacrificeSystem: 제물 시스템
+
+[13] 현재 구현된 기반 시스템 활용]
+✅ 기존 시스템과의 연동:
+- Monster, Enemy 클래스 활용
+- StatContainer 스탯 시스템 활용
+- BaseMonsterCard 데이터 시스템 활용
+- UserDataManager 저장/로드 시스템 활용
+- GrowthGradeSystem 성장률 시스템 활용
+
+🔧 확장 필요:
+- 시간 시스템 (일수, 턴 관리)
+- 자원 관리 시스템
+- 이벤트 시스템
+- UI 시스템 (현재 테스트용만 존재)
+

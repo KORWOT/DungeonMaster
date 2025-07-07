@@ -1,0 +1,50 @@
+Phase,Category,Task,Priority,Status,Estimated Time,Notes,Prerequisites
+Phase 1,Initial Setup,파이어볼 스킬 생성,🔥 필수,⬜ 미완료,30분,"Create → Game → Skill Data, 파일명: Fireball_Skill",없음
+Phase 1,Initial Setup,SkillManager 기본 설정,🔥 필수,⬜ 미완료,15분,Resources 폴더에 생성하고 Fireball_Skill 할당,파이어볼 스킬 생성 완료
+Phase 1,Initial Setup,테스트 환경 구성,🔥 필수,⬜ 미완료,20분,SkillTestManager 오브젝트 + SkillPerformanceTest 컴포넌트,SkillManager 설정 완료
+Phase 1,Initial Setup,동작 테스트 실행,🔥 필수,⬜ 미완료,10분,성능 테스트 실행하여 정상 동작 확인,테스트 환경 구성 완료
+Phase 1,Skill Creation,힐링 스킬 생성,⚡ 중요,⬜ 미완료,20분,"Type: Heal, FixedValue: 30",기본 세팅 완료
+Phase 1,Skill Creation,공격 버프 스킬 생성,⚡ 중요,⬜ 미완료,20분,"Type: AttackBuff, PercentValue: 20, Duration: 10",기본 세팅 완료
+Phase 1,Skill Creation,디버프 스킬 생성,⚡ 중요,⬜ 미완료,20분,"Type: SpeedDebuff, PercentValue: -30, Duration: 5",기본 세팅 완료
+Phase 1,Skill Creation,다중 히트 스킬 생성,💡 선택,⬜ 미완료,25분,"HitCount: 3, FixedValue: 20",기본 스킬들 완료
+Phase 1,Skill Creation,AoE 스킬 생성,💡 선택,⬜ 미완료,25분,"TargetType: AllEnemies, FixedValue: 40",기본 스킬들 완료
+Phase 1,Scaling Test,Linear 스케일링 테스트,⚡ 중요,⬜ 미완료,30분,perLevelValue: 10으로 테스트,스킬 생성 완료
+Phase 1,Scaling Test,Exponential 스케일링 테스트,💡 선택,⬜ 미완료,20분,exponentialBase: 1.15로 테스트,Linear 테스트 완료
+Phase 1,Scaling Test,Step 스케일링 테스트,💡 선택,⬜ 미완료,20분,"stepLevels: [1,3,5,7,10]으로 테스트",Exponential 테스트 완료
+Phase 1,Integration,몬스터 카드 스킬 할당,⚡ 중요,⬜ 미완료,40분,skillNames 배열에 스킬명 입력,스킬 생성 모두 완료
+Phase 1,Integration,SkillManager 몬스터 매핑,⚡ 중요,⬜ 미완료,30분,Monster Skill Mappings 설정,몬스터 카드 수정 완료
+Phase 1,Integration,스킬-몬스터 레벨 연동 확인,⚡ 중요,⬜ 미완료,20분,레벨별 효과 변화 테스트,매핑 설정 완료
+Phase 2,UI Setup,스킬 설명 UI 창 구현,⚡ 중요,⬜ 미완료,3시간,GetDetailedDescription() 활용,Phase 1 완료
+Phase 2,UI Setup,스킬 아이콘 표시 시스템,⚡ 중요,⬜ 미완료,2시간,SkillData.Icon 프로퍼티 활용,설명 UI 완료
+Phase 2,UI Setup,레벨업 미리보기 UI,⚡ 중요,⬜ 미완료,2.5시간,GetCompletePreview() 활용,아이콘 시스템 완료
+Phase 2,UI Setup,스킬 쿨다운 표시,💡 선택,⬜ 미완료,2시간,실시간 UI 업데이트,미리보기 UI 완료
+Phase 2,Monster UI,몬스터 스킬 목록 표시,⚡ 중요,⬜ 미완료,3시간,MonsterCard 연동,기본 UI 완료
+Phase 2,Monster UI,스킬 레벨업 버튼,⚡ 중요,⬜ 미완료,2시간,DataSkill.LevelUp() 활용,스킬 목록 완료
+Phase 2,Monster UI,업그레이드 비용 시스템,💡 선택,⬜ 미완료,4시간,경제 시스템 구현,레벨업 버튼 완료
+Phase 2,Monster UI,스킬 트리 시스템,💡 선택,⬜ 미완료,8시간,고급 기능,비용 시스템 완료
+Phase 3,Dungeon Core,던전 맵 시스템,🔥 필수,⬜ 미완료,1주,그리드 기반 맵,Phase 2 완료
+Phase 3,Dungeon Core,몬스터 배치 시스템,🔥 필수,⬜ 미완료,4일,드래그 앤 드롭,던전 맵 완료
+Phase 3,Dungeon Core,웨이브 시스템,🔥 필수,⬜ 미완료,5일,적 공격 패턴,배치 시스템 완료
+Phase 3,Dungeon Core,던전 방어 로직,🔥 필수,⬜ 미완료,1주,게임 코어 루프,웨이브 시스템 완료
+Phase 3,Combat System,실시간 스킬 사용 로직,🔥 필수,⬜ 미완료,3일,ISkill.Use() 활용,던전 로직 완료
+Phase 3,Combat System,타겟팅 시스템,🔥 필수,⬜ 미완료,2일,SkillTargetType 기반,스킬 사용 로직 완료
+Phase 3,Combat System,데미지 계산 및 적용,🔥 필수,⬜ 미완료,2일,SkillEffectApplier 활용,타겟팅 시스템 완료
+Phase 3,Combat System,스킬 이펙트 재생,⚡ 중요,⬜ 미완료,3일,EffectPrefab 활용,데미지 시스템 완료
+Phase 4,Caching Core,BattleSkillPreloader 구현,🔥 필수,⬜ 미완료,2일,⚡ 캐싱 시작!,Phase 3 완료
+Phase 4,Caching Core,PreloadBattleSkills 메서드,🔥 필수,⬜ 미완료,1일,선별적 캐싱 로직,Preloader 완료
+Phase 4,Caching Core,캐시 히트율 95%+ 달성,🔥 필수,⬜ 미완료,2일,성능 튜닝,Preload 메서드 완료
+Phase 4,Caching Core,성능 모니터링 시스템,⚡ 중요,⬜ 미완료,1일,SkillDataCache.GetCacheStats(),캐시 시스템 완료
+Phase 4,Other Optimization,Object Pooling,⚡ 중요,⬜ 미완료,2일,몬스터 및 이펙트,캐싱 완료
+Phase 4,Other Optimization,렌더링 최적화,💡 선택,⬜ 미완료,1일,Frustum Culling,Object Pooling 완료
+Phase 4,Other Optimization,AI 최적화,💡 선택,⬜ 미완료,2일,Update 분산 처리,렌더링 최적화 완료
+Phase 4,Other Optimization,메모리 최적화,💡 선택,⬜ 미완료,1일,GC 최소화,AI 최적화 완료
+Phase 5,Balancing,스킬 데미지 밸런싱 도구,⚡ 중요,⬜ 미완료,3일,밸런싱 자동화,Phase 4 완료
+Phase 5,Balancing,몬스터 체력/공격력 조정,⚡ 중요,⬜ 미완료,2일,게임 밸런스,밸런싱 도구 완료
+Phase 5,Balancing,던전 난이도 조절,⚡ 중요,⬜ 미완료,2일,플레이어 경험 조정,몬스터 조정 완료
+Phase 5,Balancing,경제 시스템 완성,💡 선택,⬜ 미완료,3일,업그레이드 비용 최적화,난이도 조절 완료
+Phase 5,Polish,사운드 효과 추가,⚡ 중요,⬜ 미완료,2일,SkillSound 활용,밸런싱 완료
+Phase 5,Polish,파티클 이펙트 개선,⚡ 중요,⬜ 미완료,3일,비주얼 품질 향상,사운드 완료
+Phase 5,Polish,UI/UX 개선,⚡ 중요,⬜ 미완료,1주,애니메이션 및 피드백,이펙트 완료
+Phase 5,Polish,모바일 최적화 테스트,🔥 필수,⬜ 미완료,3일,실기기 테스트,UX 개선 완료
+Phase 5,Final,최종 성능 벤치마크,🔥 필수,⬜ 미완료,1일,목표 달성 확인,모든 작업 완료
+Phase 5,Final,게임 완성 및 배포 준비,🔥 필수,⬜ 미완료,2일,최종 점검,벤치마크 완료 
