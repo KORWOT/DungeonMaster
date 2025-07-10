@@ -1,5 +1,7 @@
 using System;
 using System.Collections.Generic;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 using UnityEngine;
 
 namespace DungeonMaster.Character
@@ -42,7 +44,7 @@ namespace DungeonMaster.Character
                 return data;
             }
             
-            Debug.LogError($"[GradeGrowthConfig] 등급 '{grade}'에 대한 성장 데이터를 찾을 수 없습니다!");
+            GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_growth_data_not_found", grade));
             return null;
         }
     }

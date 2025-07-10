@@ -62,4 +62,201 @@ unique_effect_fortress_desc,장비,고유 효과,"피해 감소 {0}% + 반사 �
 unique_effect_custom_name,장비,고유 효과,사용자 정의 효과,Custom Effect,カスタム効果,自定义效果,Name for Custom unique effect
 unique_effect_custom_desc,장비,고유 효과,사용자 정의 설명입니다.,This is a custom description.,これはカスタム説明です。,这是自定义描述。,Description for Custom unique effect
 unique_effect_unknown_desc,장비,고유 효과,알 수 없는 고유 효과입니다.,This is an unknown unique effect.,不明な固有効果です。,是未知的固有效果。,Description for unknown unique effect
-unique_effect_error_desc,장비,고유 효과,설명 생성 중 오류가 발생했습니다.,An error occurred while generating the description.,説明の生成中にエラーが発生しました。,生成描述时发生错误。,Description for error case 
+unique_effect_error_desc,장비,고유 효과,설명 생성 중 오류가 발생했습니다.,An error occurred while generating the description.,説明の生成中にエラーが発生しました。,生成描述时发生错误。,Description for error case
+equip_unknown,장비,공통,알 수 없는 장비,Unknown Equipment,不明な装備,未知装备,Default name for an unknown equipment
+desc_not_available,공통,UI,설명이 없습니다.,No description available.,説明がありません。,没有说明。,Default description text
+effect_unique_none,장비,UI,고유 효과 없음,No Unique Effect,固有効果なし,无特有效果,Text when there is no unique effect
+effect_unique_desc_none,장비,UI,이 장비에는 고유 효과가 없습니다.,This equipment has no unique effect.,この装備に固有効果はありません。,该装备没有特有效果。,Description when there is no unique effect
+effect_section_base,장비,UI,기본 효과,Base Effects,基本効果,基本效果,Section title for base effects
+effect_section_additional,장비,UI,추가 효과,Additional Effects,追加効果,追加效果,Section title for additional effects
+effect_section_unique,장비,UI,고유 효과,Unique Effect,固有効果,特有效果,Section title for unique effects
+log_gold_added,자원,로그,골드 {0} 추가됨. 현재 골드: {1},Gold {0} added. Current gold: {1},ゴールド{0}追加。現在ゴールド: {1},金币 {0} 已添加。当前金币: {1},Log message for adding gold
+log_gems_added,자원,로그,젬 {0} 추가됨. 현재 젬: {1},Gems {0} added. Current gems: {1},ジェム{0}追加。現在ジェム: {1},宝石 {0} 已添加。当前宝石: {1},Log message for adding gems
+log_gold_spent,자원,로그,골드 {0} 소모됨. 현재 골드: {1},Gold {0} spent. Current gold: {1},ゴールド{0}消費。現在ゴールド: {1},金币 {0} 已花费。当前金币: {1},Log message for spending gold
+log_gems_spent,자원,로그,젬 {0} 소모됨. 현재 젬: {1},Gems {0} spent. Current gems: {1},ジェム{0}消費。現在ジェム: {1},宝石 {0} 已花费。当前宝石: {1},Log message for spending gems
+log_gold_insufficient,자원,로그,"골드가 부족합니다! 필요: {0}, 보유: {1}","Insufficient gold! Required: {0}, Have: {1}","ゴールドが不足しています！必要: {0}, 保有: {1}","金币不足！需要: {0}, 拥有: {1}",Log message for insufficient gold
+log_gems_insufficient,자원,로그,"젬이 부족합니다! 필요: {0}, 보유: {1}","Insufficient gems! Required: {0}, Have: {1}","ジェムが不足しています！必要: {0}, 保有: {1}","宝石不足！需要: {0}, 拥有: {1}",Log message for insufficient gems
+status_no_data,공통,UI,데이터 없음,No Data,データなし,无数据,Status text for no data
+status_resource,자원,UI,"골드: {0:N0}, 젬: {1:N0}","Gold: {0:N0}, Gems: {1:N0}","ゴールド: {0:N0}, ジェム: {1:N0}","金币: {0:N0}, 宝石: {1:N0}",Resource status display format
+log_level_up,캐릭터,로그,"레벨업! 현재 레벨: {0}","Level up! Current level: {0}","レベルアップ！現在レベル: {0}","等级提升！当前等级: {0}",Log message for leveling up
+log_exp_gained,캐릭터,로그,"경험치 {0} 획득. 현재: {1}/{2}","Gained {0} experience. Current: {1}/{2}","経験値{0}獲得。現在: {1}/{2}","获得经验 {0}。当前: {1}/{2}",Log message for gaining experience
+log_card_add_duplicate,카드,로그,"이미 소유한 카드 ID({0})를 추가하려고 합니다. 중복 카드는 허용되지 않습니다.","Attempting to add a duplicate card ID ({0}). Duplicate cards are not allowed.","既に所有しているカードID({0})を追加しようとしています。重複カードは許可されていません。","试图添加重复的卡牌ID({0})。不允许重复的卡牌。",Log for trying to add a duplicate card by instance ID
+log_card_acquire_duplicate,카드,로그,"이미 소유한 설계도(ID: {0})의 카드를 획득하려고 합니다. 중복 획득은 현재 비활성화되어 있습니다.","Attempting to acquire a card from a blueprint ({0}) that is already owned. Duplicate acquisition is currently disabled.","既に所有している設計図(ID: {0})のカードを獲得しようとしています。重複獲得は現在無効です。","试图从已拥有的蓝图({0})获取卡牌。重复获取当前被禁用。",Log for trying to acquire a card from an already owned blueprint
+log_card_acquired_new,카드,로그,"새로운 카드 획득: {0} (Blueprint ID: {1}, Instance ID: {2})","New card acquired: {0} (Blueprint ID: {1}, Instance ID: {2})","新しいカード獲得: {0} (Blueprint ID: {1}, Instance ID: {2})","获得新卡牌: {0} (蓝图ID: {1}, 实例ID: {2})",Log for acquiring a new card
+skill_basic_attack_name,스킬,기본,기본 공격,Basic Attack,基本攻撃,普通攻击,Name for the basic attack skill
+skill_basic_attack_desc,스킬,기본,기본적인 물리 공격을 가합니다.,Deals basic physical damage.,基本的な物理攻撃を与えます。,造成基本的物理伤害。,Description for the basic attack skill
+scaling_desc_none,스케일링,설명,"스케일링 없음 - 레벨에 상관없이 고정값","No Scaling - Fixed value regardless of level","スケーリングなし - レベルに関係なく固定値","无缩放 - 等级无关的固定值",Description for None scaling strategy
+scaling_desc_linear,스케일링,설명,"선형 증가 - 레벨당 일정량씩 증가","Linear - Increases by a set amount per level","線形増加 - レベルごとに一定量増加","线性增长 - 每级增加固定量",Description for Linear scaling strategy
+scaling_desc_exponential,스케일링,설명,"지수 증가 - 레벨이 높아질수록 가속적으로 증가","Exponential - Increases exponentially as level rises","指数増加 - レベルが上がるほど加速的に増加","指数增长 - 等级越高增长越快",Description for Exponential scaling strategy
+scaling_desc_logarithmic,스케일링,설명,"로그 증가 - 초반 빠르게 증가, 후반 완만하게 증가","Logarithmic - Increases quickly at first, then slows down","対数増加 - 序盤は速く増加し、後半は緩やかに増加","对数增长 - 初期增长快，后期放缓",Description for Logarithmic scaling strategy
+scaling_desc_step,스케일링,설명,"단계별 증가 - 특정 레벨에서만 증가","Step - Increases only at specific levels","段階的増加 - 特定のレベルでのみ増加","阶梯增长 - 仅在特定等级增加",Description for Step scaling strategy
+scaling_desc_custom,스케일링,설명,"커스텀 - 직접 설정한 배수 테이블 사용","Custom - Uses a custom multiplier table","カスタム - カスタム倍率テーブルを使用","自定义 - 使用自定义乘数表",Description for Custom scaling strategy
+scaling_desc_unknown,스케일링,설명,알 수 없음,Unknown,不明,未知,Description for an unknown scaling strategy
+effect_unique_info_format,장비,UI,"{0}\n<size=80%>{1}</size>","{0}\n<size=80%>{1}</size>","{0}\n<size=80%>{1}</size>","{0}\n<size=80%>{1}</size>",Format for unique effect info with name and description
+// --- Gemini Added/Updated Keys Start ---
+buff_name_placeholder,버프,UI,이름 없는 버프,Unnamed Buff,,,Placeholder for a buff's name
+buff_description_placeholder,버프,UI,설명이 없습니다.,No description available.,,,Placeholder for a buff's description
+monster_name_unknown,캐릭터,UI,알 수 없음,Unknown,,,Fallback name for a monster
+ui_name_level,캐릭터,UI,"{0} (Lv.{1})","{0} (Lv.{1})",,,"Format for displaying monster name and level"
+log_damage_received,로그,전투,"{0}이(가) {1}의 데미지를 받았습니다! (View)","{0} received {1} damage! (View)",,,"Log message for monster damage (View)"
+log_healed,로그,전투,"{0}이(가) {1}만큼 회복했습니다! (View)","{0} recovered {1} health! (View)",,,"Log message for monster healing (View)"
+log_buff_applied,로그,전투,"{0}에게 버프 {1}가 적용되었습니다! (View)","Buff {1} applied to {0}! (View)",,,"Log message for buff application (View)"
+log_buff_removed,로그,전투,"{0}의 버프 {1}가 제거되었습니다! (View)","Buff {1} removed from {0}! (View)",,,"Log message for buff removal (View)"
+log_death,로그,전투,"{0}이(가) 사망했습니다! (View)","{0} has died! (View)",,,"Log message for monster death (View)"
+error_growth_data_not_found,로그,오류,"[GradeGrowthConfig] 등급 '{0}'에 대한 성장 데이터를 찾을 수 없습니다!","[GradeGrowthConfig] Growth data for grade '{0}' not found!",,,"Error log for missing grade growth data"
+log_exp_gained,로그,캐릭터,"카드({0}) 경험치 +{1}, 현재 경험치: {2}","Card({0}) +{1} EXP, Current EXP: {2}",,,"Log for EXP gain"
+log_levelup_start,로그,캐릭터,"카드({0}) 레벨업 시작. 현재 레벨: {1}, 레벨업: {2}","Card({0}) Level Up Start. Current: {1}, Gaining: {2}",,,"Log for level up start"
+error_levelup_missing_data,로그,오류,"레벨업에 필요한 Blueprint 또는 GrowthConfig를 찾을 수 없습니다.","Could not find Blueprint or GrowthConfig for level up.",,,"Error log for missing level up data"
+error_no_growth_data_for_grade,로그,오류,"등급({0})에 대한 성장 데이터가 없습니다.","No growth data for grade ({0}).",,,"Error log for missing growth data for a grade"
+log_levelup_complete,로그,캐릭터,"카드({0}) 레벨업 완료. 최종 레벨: {1}","Card({0}) Level Up Complete. Final Level: {1}",,,"Log for level up completion"
+log_stat_gained,로그,캐릭터," - {0}: +{1} (총 {2})"," - {0}: +{1} (Total {2})",,,"Log for stat increase during level up"
+// --- Gemini Added/Updated Keys End ---
+// --- From BlueprintDatabase.cs ---
+error_blueprint_db_not_found,로그,오류,"BlueprintDatabase를 Resources/Data 폴더에서 찾을 수 없습니다!","BlueprintDatabase not found in Resources/Data folder!",,,"Error log when BlueprintDatabase asset is missing"
+warn_no_blueprints_configured,로그,경고,"몬스터 설계도가 설정되지 않았습니다!","No monster blueprints have been configured!",,,"Warning log when the blueprint list is empty"
+warn_duplicate_blueprint_id,로그,경고,"중복된 Blueprint ID({0})가 감지되었습니다. '{1}' 몬스터를 건너뜁니다.","Duplicate Blueprint ID ({0}) detected. Skipping monster '{1}'.",,,"Warning log for duplicate blueprint IDs"
+info_blueprint_db_initialized,로그,정보,"BlueprintDatabase 초기화 완료: {0}개 설계도 캐싱됨","BlueprintDatabase initialized: {0} blueprints cached.",,,"Info log for successful database initialization"
+// --- From LevelingConfig.cs ---
+error_leveling_config_not_found,로그,오류,"LevelingConfig 에셋을 'Resources/Settings' 폴더에서 찾을 수 없습니다! 에셋을 생성하고 올바른 경로에 배치했는지 확인하세요.","LevelingConfig asset not found in 'Resources/Settings' folder! Please ensure the asset is created and placed correctly.",,,"Error log for missing LevelingConfig asset"
+warn_invalid_level_request,로그,경고,"잘못된 레벨({0})이 요청되었습니다. 1 이상의 레벨만 유효합니다.","Invalid level ({0}) requested. Only levels 1 and higher are valid.",,,"Warning log for requesting an invalid level"
+error_exp_table_empty,로그,오류,"필요 경험치 테이블이 비어있습니다! LevelingConfig 에셋을 확인하세요.","The required experience table is empty! Please check the LevelingConfig asset.",,,"Error log for empty experience table"
+// --- From ResourceManager.cs ---
+error_user_data_null,로그,오류,"UserData가 null입니다!","UserData is null!",,,"Error log when UserData is null"
+// --- From SaveDataManager.cs ---
+error_no_data_to_save,로그,오류,"저장할 유저 데이터가 없습니다!","No user data to save!",,,"Error log when trying to save null UserData"
+info_user_data_saved,로그,정보,"유저 데이터 저장 완료: {0}","User data saved successfully: {0}",,,"Info log for successful user data save"
+error_user_data_save_failed,로그,오류,"유저 데이터 저장 실패: {0}","Failed to save user data: {0}",,,"Error log for user data save failure"
+info_user_data_loaded,로그,정보,"유저 데이터 로드 완료: {0}","User data loaded successfully: {0}",,,"Info log for successful user data load"
+info_new_user_data_created,로그,정보,"저장 파일이 없어 새로운 유저 데이터 생성","No save file found, creating new user data.",,,"Info log for creating new user data when save file is not found"
+error_user_data_load_failed,로그,오류,"유저 데이터 로드 실패: {0}","Failed to load user data: {0}",,,"Error log for user data load failure"
+info_creating_new_data_due_to_load_fail,로그,정보,"유저 데이터 로드 실패로 새로운 데이터 생성","Creating new user data due to load failure.",,,"Info log for creating new user data after a load failure"
+info_save_file_deleted,로그,정보,"저장 파일 삭제 완료","Save file deleted successfully.",,,"Info log for successful save file deletion"
+error_save_file_delete_failed,로그,오류,"저장 파일 삭제 실패: {0}","Failed to delete save file: {0}",,,"Error log for save file delete failure"
+info_backup_created,로그,정보,"백업 생성 완료: {0}","Backup created successfully: {0}",,,"Info log for successful backup creation"
+error_backup_create_failed,로그,오류,"백업 생성 실패: {0}","Failed to create backup: {0}",,,"Error log for backup creation failure"
+info_restored_from_backup,로그,정보,"백업에서 복원 완료","Restored from backup successfully.",,,"Info log for successful restore from backup"
+warn_backup_file_not_exist,로그,경고,"백업 파일이 존재하지 않습니다.","Backup file does not exist.",,,"Warning log when backup file doesn't exist"
+error_restore_from_backup_failed,로그,오류,"백업 복원 실패: {0}","Failed to restore from backup: {0}",,,"Error log for restore from backup failure"
+// --- From StarterCardProvider.cs ---
+error_null_user_data_for_starter_cards,로그,오류,"UserData가 null입니다! 시작 카드를 지급할 수 없습니다.","UserData is null! Cannot provide starter cards.",,,"Error log when UserData is null for providing starter cards"
+warn_no_starter_blueprints,로그,경고,"데이터베이스에 시작 카드로 설정된 설계도가 없습니다.","No blueprints are configured as starter cards in the database.",,,"Warning log when no starter blueprints are found"
+info_providing_starter_cards,로그,정보,"시작 카드를 지급합니다...","Providing starter cards...",,,"Info log for starting the process of providing starter cards"
+info_starter_card_provided,로그,정보,"시작 카드 지급: {0} (ID: {1})","Starter card provided: {0} (ID: {1})",,,"Info log for providing a specific starter card"
+info_total_starter_cards_provided,로그,정보,"총 {0}개의 시작 카드가 지급되었습니다.","A total of {0} starter cards have been provided.",,,"Info log for the total number of starter cards provided"
+// --- From UserCardCollection.cs ---
+error_blueprint_not_found_for_id,로그,오류,"[UserCardCollection] BlueprintId({0})에 해당하는 설계도를 찾을 수 없습니다!","[UserCardCollection] Blueprint for ID ({0}) not found!",,,"Error log when a blueprint is not found by ID"
+info_innate_growth_rate_initialized,로그,정보,"카드({0})의 {1} 고유 성장률 초기화: 100%","Innate growth rate for card({0})'s {1} initialized: 100%",,,"Info log for initializing innate growth rate"
+// --- From UserDataManager.cs ---
+error_blueprint_database_not_found,로그,오류,"BlueprintDatabase를 찾을 수 없습니다! Resources/Data 폴더에 BlueprintDatabase.asset이 있는지 확인하세요.","BlueprintDatabase not found! Check if BlueprintDatabase.asset exists in the Resources/Data folder.",,,"Error when the blueprint database asset is missing"
+info_user_data_manager_initialized,로그,정보,"UserDataManager 초기화 완료","UserDataManager initialized successfully.",,,"Info log for successful UserDataManager initialization"
+info_user_data_saved,로그,정보,"유저 데이터 저장 완료","User data saved successfully.",,,"Info log for successful user data saving"
+info_user_data_loaded,로그,정보,"유저 데이터 로드 완료 - {0}","User data loaded successfully - {0}",,,"Info log for successful user data loading, with resource status"
+error_card_blueprint_not_found,로그,오류,"[UserDataManager] '{0}'에 해당하는 카드 설계도를 찾을 수 없습니다.","[UserDataManager] Card blueprint for '{0}' not found.",,,"Error log when a card blueprint is not found by name"
+info_game_quit_data_saved,로그,정보,"게임 종료 시 데이터 저장 완료","Data saved on game quit.",,,"Info log for saving data upon application quit"
+info_user_data_reset_completed,로그,정보,"유저 데이터 초기화 완료","User data reset completed.",,,"Info log for successful user data reset"
+info_user_data_not_found,로그,정보,"UserData가 없습니다!","User data not found!",,,"Info log when user data is null"
+debug_header_user_data,디버그,정보,"=== 유저 데이터 디버그 정보 ===","=== User Data Debug Info ===",,, "Header for user data debug output"
+debug_label_user_id,디버그,정보,"사용자 ID: {0}","User ID: {0}",,, "Label for User ID in debug output"
+debug_label_user_name,디버그,정보,"사용자 이름: {0}","User Name: {0}",,, "Label for User Name in debug output"
+debug_label_user_level,디버그,정보,"레벨: {0}","Level: {0}",,, "Label for Level in debug output"
+debug_label_user_experience,디버그,정보,"경험치: {0}","Experience: {0}",,, "Label for Experience in debug output"
+debug_label_resources,디버그,정보,"자원: {0}","Resources: {0}",,, "Label for Resources in debug output"
+debug_label_card_collection,디버그,정보,"카드 컬렉션: {0}","Card Collection: {0}",,, "Label for Card Collection in debug output"
+debug_label_starter_card_status,디버그,정보,"시작 카드 상태: {0}","Starter Card Status: {0}",,, "Label for Starter Card Status in debug output"
+debug_label_last_access_time,디버그,정보,"마지막 접속: {0}","Last Access: {0}",,, "Label for Last Access Time in debug output"
+debug_label_created_time,디버그,정보,"생성 시간: {0}","Created Time: {0}",,, "Label for Created Time in debug output"
+default_new_player_name,UI,일반,"새로운 플레이어","New Player",,,"Default name for a new player"
+// --- From BaseMonsterEquipment.cs ---
+equip_const_unknown,장비,일반,"알 수 없는 장비","Unknown Equipment",,,"Default name for equipment when its name key is missing"
+equip_const_no_desc,장비,일반,"설명 없음","No description available.",,,"Default description for equipment when its key is missing"
+equip_log_error_apply_target_null,로그,오류,"{0} 장비 적용 실패: 대상 캐릭터 데이터가 null이거나 Stats가 없습니다.","Failed to apply equipment {0}: Target character data or stats are null.",,,"Error log when trying to apply equipment to a null target"
+equip_log_error_apply_validation_failed,로그,오류,"{0} 장비 적용 실패: 장비 유효성 검증 실패","Failed to apply equipment {0}: Equipment validation failed.",,,"Error log for failed equipment validation during application"
+equip_log_info_apply_success,로그,정보,"{0}에게 {1} (레벨 {2}, {3}) 장착 완료","Successfully equipped {1} (Level {2}, {3}) to {0}.",,,"Info log for successful equipment application"
+equip_log_error_apply_exception,로그,오류,"{0} 장비 적용 중 오류 발생: {1}","Error applying equipment {0}: {1}",,,"Error log for exceptions during equipment application"
+equip_log_error_remove_target_null,로그,오류,"{0} 장비 해제 실패: 대상 캐릭터 데이터가 null이거나 Stats가 없습니다.","Failed to remove equipment {0}: Target character data or stats are null.",,,"Error log when trying to remove equipment from a null target"
+equip_log_info_remove_success,로그,정보,"{0}에게서 {1} 해제 완료","Successfully unequipped {1} from {0}.",,,"Info log for successful equipment removal"
+equip_log_error_remove_exception,로그,오류,"{0} 장비 해제 중 오류 발생: {1}","Error removing equipment {0}: {1}",,,"Error log for exceptions during equipment removal"
+equip_log_warn_unique_effect_on_icharacter,로그,경고,"{0}의 고유 효과는 ICharacter에 적용할 수 없습니다. DeterministicCharacterData를 사용하세요.","Unique effect of {0} cannot be applied to ICharacter. Use DeterministicCharacterData.",,,"Warning when a unique effect cannot be applied to a non-deterministic character"
+equip_log_info_apply_effect,로그,정보,"{0} '{1}' 적용 ({2})","Applying {0} '{1}' ({2})",,,"Log for applying a specific equipment effect"
+equip_log_info_remove_effect,로그,정보,"{0} '{1}' 해제","Removing {0} '{1}'",,,"Log for removing a specific equipment effect"
+equip_validate_error_invalid_id,로그,오류,"장비 ID가 유효하지 않습니다.","Equipment ID is invalid.",,,"Validation error for an invalid equipment ID"
+equip_validate_error_empty_name,로그,오류,"장비 이름 키가 비어있습니다.","Equipment name key is empty.",,,"Validation error for a missing equipment name key"
+equip_validate_warn_unique_effect_grade_mismatch,로그,경고,"고유 효과가 있으나 등급이 에픽 미만입니다. 고유 효과는 적용되지 않습니다.","A unique effect exists but the grade is below Epic. The effect will not be applied.",,,"Validation warning for unique effect on a sub-epic item"
+equip_validate_warn_additional_effects_exceeded,로그,경고,"추가 효과 개수가 권장치를 초과했습니다.","The number of additional effects exceeds the recommendation.",,,"Validation warning when bonus effects count is over the recommendation"
+equip_upgrade_warn_max_grade,로그,경고,"이미 최고 등급입니다.","Already at the highest grade.",,,"Warning when trying to upgrade a max-grade equipment"
+equip_unique_effect_warn_grade_too_low,로그,경고,"에픽 등급 미만이라 고유 효과를 설정할 수 없습니다.","Cannot set a unique effect because the grade is below Epic.",,,"Warning when trying to set a unique effect on a sub-epic item"
+equip_ui_label_base_effects,UI,라벨,"기본 효과","Base Effects",,,"UI Label for Base Effects"
+equip_ui_label_additional_effects,UI,라벨,"추가 효과","Additional Effects",,,"UI Label for Additional Effects"
+equip_ui_label_unique_effect,UI,라벨,"고유 효과","Unique Effect",,,"UI Label for Unique Effect"
+equip_ui_label_no_effect,UI,라벨,"효과 없음","No Effect",,,"UI Label for when there is no effect"
+equip_ui_format_tostring,UI,포맷,"{0} (Lv.{1} {2}) - {3}","{0} (Lv.{1} {2}) - {3}",,,"Format for equipment's ToString method (Name, Level, Grade, Description)"
+equip_ui_format_unique_effect_info,UI,포맷,"<b>{0}</b>: {1}","<b>{0}</b>: {1}",,,"Format for displaying unique effect info (Name, Description)"
+equip_ui_header_base_effects,UI,헤더,"<b>기본 효과:</b>","<b>Base Effects:</b>",,,"Header for Base Effects in UI"
+equip_ui_header_additional_effects,UI,헤더,"<b>추가 효과:</b>","<b>Additional Effects:</b>",,,"Header for Additional Effects in UI"
+equip_ui_header_unique_effect,UI,헤더,"<b>고유 효과:</b>","<b>Unique Effect:</b>",,,"Header for Unique Effect in UI"
+equip_upgrade_warn_max_level,로그,경고,"{0} 레벨 업그레이드 실패: 최대 레벨에 도달했습니다. (현재: {1}/{2})","Failed to upgrade level for {0}: Max level reached. (Current: {1}/{2})",,,"Warning when trying to upgrade a max-level equipment"
+equip_upgrade_info_level_up,로그,정보,"{0} 레벨 업그레이드 완료: {1} → {2}","{0} level upgrade complete: {1} → {2}",,,"Info log for successful level upgrade"
+equip_log_info_set_unique_effect,로그,정보,"{0}에 고유 효과 설정: {1}","Set unique effect on {0}: {1}",,,"Info log for setting a unique effect"
+// --- From EquipmentEffect.cs ---
+effect_error_target_null,로그,오류,"{0} 적용/해제 실패: 대상 또는 대상의 Stats가 null입니다.","Failed to apply/remove {0}: Target or its stats are null.",,,"Error log when the target of an effect is null"
+effect_error_apply_exception,로그,오류,"{0} 적용 중 오류 발생: {1}","Error applying {0}: {1}",,,"Error log for an exception during effect application"
+effect_error_remove_exception,로그,오류,"{0} 해제 중 오류 발생: {1}","Error removing {0}: {1}",,,"Error log for an exception during effect removal"
+effect_log_apply_stat_modifier,로그,정보,"{0}에게 {1} 적용: {2} +{3:F1}","Applied {1} to {0}: {2} +{3:F1}",,,"Log for applying a stat modifier effect"
+effect_log_remove_stat_modifier,로그,정보,"{0}에게서 {1} 해제: {2} -{3:F1}","Removed {1} from {0}: {2} -{3:F1}",,,"Log for removing a stat modifier effect"
+effect_log_apply_percent_stat_modifier,로그,정보,"{0}에게 {1} 적용: {2} +{3:F1}%","Applied {1} to {0}: {2} +{3:F1}%",,,"Log for applying a percent stat modifier effect"
+effect_log_remove_percent_stat_modifier,로그,정보,"{0}에게서 {1} 해제: {2} -{3:F1}%","Removed {1} from {0}: {2} -{3:F1}%",,,"Log for removing a percent stat modifier effect"
+effect_format_stat_modifier_desc,UI,포맷,"{0} {1:+0;-#.#} (레벨당 {2:+0.0;-#.#})","{0} {1:+0;-#.#} (per level {2:+0.0;-#.#})",,,"Format for stat modifier description (StatType, BaseValue, LevelScaling)"
+effect_format_percent_stat_modifier_desc,UI,포맷,"{0} {1:+0;-#.#}% (레벨당 {2:+0.0;-#.#}%)","{0} {1:+0;-#.#}% (per level {2:+0.0;-#.#}%)",,,"Format for percent stat modifier description (StatType, PercentValue, LevelScaling)"
+// --- From UniqueEffect.cs ---
+// Names
+effect_unique_berserker_name,장비,고유 효과,"광전사","Berserker",,,"Name for Berserker unique effect"
+effect_unique_vampire_name,장비,고유 효과,"흡혈귀","Vampire",,,"Name for Vampire unique effect"
+effect_unique_guardian_name,장비,고유 효과,"수호자","Guardian",,,"Name for Guardian unique effect"
+effect_unique_assassin_name,장비,고유 효과,"암살자","Assassin",,,"Name for Assassin unique effect"
+effect_unique_elemental_name,장비,고유 효과,"원소술사","Elemental",,,"Name for Elemental unique effect"
+effect_unique_rapid_name,장비,고유 효과,"신속","Rapid",,,"Name for Rapid unique effect"
+effect_unique_fortress_name,장비,고유 효과,"요새","Fortress",,,"Name for Fortress unique effect"
+effect_unique_custom_name,장비,고유 효과,"사용자 정의","Custom",,,"Name for Custom unique effect"
+// Descriptions
+effect_unique_berserker_desc,장비,고유 효과,"체력이 50% 이하일 때, 잃은 체력 1%당 최종 피해량이 {0}% 증가합니다. (최대 {1}%)","When HP is below 50%, final damage increases by {0}% for every 1% of missing HP. (Max {1}%)",,,"Description for Berserker unique effect"
+effect_unique_vampire_desc,장비,고유 효과,"공격 시 피해량의 {0}%를 흡혈합니다. 치명타 시 흡혈량이 {1}%로 증가합니다.","Lifesteal {0}% of damage dealt. On critical hits, lifesteal increases to {1}%.",,,"Description for Vampire unique effect"
+effect_unique_guardian_desc,장비,고유 효과,"방어력의 {0}%만큼 최대 체력이 증가합니다.","Increases Max HP by {0}% of Defense.",,,"Description for Guardian unique effect"
+effect_unique_assassin_desc,장비,고유 효과,"치명타 확률이 {0}% 증가하고, 치명타 발생 시 모든 스킬의 재사용 대기시간이 {1}초 감소합니다.","Increases Critical Hit Chance by {0}%. Critical hits reduce all skill cooldowns by {1} seconds.",,,"Description for Assassin unique effect"
+effect_unique_elemental_desc,장비,고유 효과,"모든 속성 피해가 {0}만큼 증가하고, 속성 관통력이 {1}만큼 증가합니다.","Increases all elemental damage by {0} and elemental penetration by {1}.",,,"Description for Elemental unique effect"
+effect_unique_rapid_desc,장비,고유 효과,"공격 속도가 {0}% 증가하고, 증가된 공격 속도의 {1}%만큼 공격력이 추가로 증가합니다.","Increases Attack Speed by {0}%. Additionally increases Attack by {1}% of the bonus Attack Speed.",,,"Description for Rapid unique effect"
+effect_unique_fortress_desc,장비,고유 효과,"받는 모든 피해량이 {0}% 감소하고, 감소된 피해량의 {1}%를 공격자에게 반사합니다.","Reduces all incoming damage by {0}% and reflects {1}% of the reduced damage back to the attacker.",,,"Description for Fortress unique effect"
+effect_unique_custom_desc,장비,고유 효과,"사용자 정의 효과: {0}","Custom Effect: {0}",,,"Description for Custom unique effect"
+// Logs and Errors
+effect_unique_log_error_target_null,로그,오류,"고유 효과 '{0}' 적용/해제 실패: 대상 또는 대상의 Stats가 null입니다.","Failed to apply/remove unique effect '{0}': Target or its stats are null.",,,"Error log when the target of a unique effect is null"
+effect_unique_log_warn_invalid_level,로그,경고,"고유 효과 '{0}' 적용/해제 시 장비 레벨이 유효하지 않습니다: {1}. 1로 보정합니다.","Invalid equipment level for unique effect '{0}': {1}. Correcting to 1.",,,"Warning log for an invalid equipment level for a unique effect"
+effect_unique_log_info_applied,로그,정보,"{0}에게 고유 효과 {1} 적용 (값: {2:F1}/{3:F1})","Applied unique effect {1} to {0} (Values: {2:F1}/{3:F1})",,,"Info log for applying a unique effect"
+effect_unique_log_error_apply_exception,로그,오류,"고유 효과 '{0}' 적용 중 오류: {1}","Error applying unique effect '{0}': {1}",,,"Error log for an exception during unique effect application"
+effect_unique_log_info_removed,로그,정보,"{0}에게서 고유 효과 {1} 해제","Removed unique effect {1} from {0}",,,"Info log for removing a unique effect"
+effect_unique_log_error_remove_exception,로그,오류,"고유 효과 '{0}' 해제 중 오류: {1}","Error removing unique effect '{0}': {1}",,,"Error log for an exception during unique effect removal"
+effect_unique_log_error_unknown_type,로그,오류,"알 수 없는 고유 효과 타입: {0}","Unknown unique effect type: {0}",,,"Error log for an unknown unique effect type"
+effect_unique_log_error_berserker_apply,로그,오류,"광전사 효과 적용 중 오류: {0}","Error applying Berserker effect: {0}",,,"Error log for an exception during Berserker effect application"
+effect_unique_log_error_berserker_remove,로그,오류,"광전사 효과 해제 중 오류: {0}","Error removing Berserker effect: {0}",,,"Error log for an exception during Berserker effect removal"
+effect_unique_log_error_vampire_apply,로그,오류,"흡혈귀 효과 적용 중 오류: {0}","Error applying Vampire effect: {0}",,,"Error log for an exception during Vampire effect application"
+effect_unique_log_error_vampire_remove,로그,오류,"흡혈귀 효과 해제 중 오류: {0}","Error removing Vampire effect: {0}",,,"Error log for an exception during Vampire effect removal"
+effect_unique_log_error_guardian_apply,로그,오류,"수호자 효과 적용 중 오류: {0}","Error applying Guardian effect: {0}",,,"Error log for an exception during Guardian effect application"
+effect_unique_log_error_guardian_remove,로그,오류,"수호자 효과 해제 중 오류: {0}","Error removing Guardian effect: {0}",,,"Error log for an exception during Guardian effect removal"
+effect_unique_log_error_assassin_apply,로그,오류,"암살자 효과 적용 중 오류: {0}","Error applying Assassin effect: {0}",,,"Error log for an exception during Assassin effect application"
+effect_unique_log_error_assassin_remove,로그,오류,"암살자 효과 해제 중 오류: {0}","Error removing Assassin effect: {0}",,,"Error log for an exception during Assassin effect removal"
+effect_unique_log_error_elemental_apply,로그,오류,"원소술사 효과 적용 중 오류: {0}","Error applying Elemental effect: {0}",,,"Error log for an exception during Elemental effect application"
+effect_unique_log_error_elemental_remove,로그,오류,"원소술사 효과 해제 중 오류: {0}","Error removing Elemental effect: {0}",,,"Error log for an exception during Elemental effect removal"
+effect_unique_log_error_rapid_apply,로그,오류,"신속 효과 적용 중 오류: {0}","Error applying Rapid effect: {0}",,,"Error log for an exception during Rapid effect application"
+effect_unique_log_error_rapid_remove,로그,오류,"신속 효과 해제 중 오류: {0}","Error removing Rapid effect: {0}",,,"Error log for an exception during Rapid effect removal"
+effect_unique_log_error_fortress_apply,로그,오류,"요새 효과 적용 중 오류: {0}","Error applying Fortress effect: {0}",,,"Error log for an exception during Fortress effect application"
+effect_unique_log_error_fortress_remove,로그,오류,"요새 효과 해제 중 오류: {0}","Error removing Fortress effect: {0}",,,"Error log for an exception during Fortress effect removal"
+effect_unique_log_error_custom_apply,로그,오류,"커스텀 효과 적용 중 오류: {0}","Error applying Custom effect: {0}",,,"Error log for an exception during Custom effect application"
+effect_unique_log_error_custom_remove,로그,오류,"커스텀 효과 해제 중 오류: {0}","Error removing Custom effect: {0}",,,"Error log for an exception during Custom effect removal"
+effect_unique_validate_error_missing_type,로그,오류,"고유 효과 타입이 지정되지 않았습니다.","Unique effect type is not specified.",,,"Validation error for a missing unique effect type"
+effect_unique_validate_error_invalid_value,로그,오류,"{0} 효과의 값이 유효하지 않습니다: Primary={1}, Secondary={2}","Invalid values for {0} effect: Primary={1}, Secondary={2}",,,"Validation error for invalid values in a unique effect"
+element_normal,공통,속성,무,Normal,無,无,Element Type Name: Normal
+element_fire,공통,속성,화염,Fire,炎,火,Element Type Name: Fire
+element_water,공통,속성,물,Water,水,水,Element Type Name: Water
+element_wind,공통,속성,바람,Wind,風,风,Element Type Name: Wind
+element_earth,공통,속성,대지,Earth,地,土,Element Type Name: Earth
+element_light,공통,속성,빛,Light,光,光,Element Type Name: Light
+element_dark,공통,속성,어둠,Dark,闇,暗,Element Type Name: Dark
+effect_unique_elemental_specific_desc,장비,고유 효과,"{0} 속성 피해가 {1}, 관통력이 {2} 증가합니다.","Increases {0} damage by {1} and Penetration by {2}.","{0}属性ダメージが{1}、貫通力が{2}増加します。","{0}属性伤害增加{1}，穿透增加{2}。",Description for a specific elemental unique effect 

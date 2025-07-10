@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using DungeonMaster.Character;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 using UnityEngine;
 
 namespace DungeonMaster.Data
@@ -28,7 +30,7 @@ namespace DungeonMaster.Data
                     _instance = Resources.Load<BlueprintDatabase>("Data/BlueprintDatabase");
                     if (_instance == null)
                     {
-                        Debug.LogError("BlueprintDatabase를 Resources/Data 폴더에서 찾을 수 없습니다!");
+                        GameLogger.LogError(LocalizationManager.Instance.GetText("error_blueprint_db_not_found"));
                     }
                     else
                     {
@@ -51,7 +53,7 @@ namespace DungeonMaster.Data
 
             if (cardBlueprints == null)
             {
-                Debug.LogWarning("몬스터 설계도가 설정되지 않았습니다!");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("warn_no_blueprints_configured"));
                 _isInitialized = true;
                 return;
             }
@@ -67,7 +69,7 @@ namespace DungeonMaster.Data
                 }
                 else
                 {
-                    Debug.LogWarning($"중복된 Blueprint ID({blueprint.BlueprintId})가 감지되었습니다. '{blueprint.Name}' 몬스터를 건너뜁니다.");
+                    GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("warn_duplicate_blueprint_id", blueprint.BlueprintId, blueprint.Name));
                 }
 
                 // 등급 기반 딕셔너리 채우기
@@ -79,7 +81,7 @@ namespace DungeonMaster.Data
             }
             
             _isInitialized = true;
-            Debug.Log($"BlueprintDatabase 초기화 완료: {_blueprintById.Count}개 설계도 캐싱됨");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_blueprint_db_initialized", _blueprintById.Count));
         }
 
         /// <summary>

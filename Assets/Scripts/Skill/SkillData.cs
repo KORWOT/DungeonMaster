@@ -251,17 +251,18 @@ namespace DungeonMaster.Skill
                 float scaledCooldown = GetScaledCooldown(skillLevel);
                 if (scaledCooldown > 0)
                 {
-                    sb.Append(lm.GetText("skill_label_cooldown")).Append(": ").Append(scaledCooldown.ToString("F1")).AppendLine(lm.GetText("unit_seconds"));
+                    sb.Append(lm.GetText("skill_label_cooldown")).Append(": ").Append(scaledCooldown.ToString("F1"))
+                      .Append(lm.GetText("unit_seconds")).AppendLine();
                 }
-                
-                // 마나 소모 표시 (0이 아닐 때만)
+
+                // 마나 소모량 표시 (0이 아닐 때만)
                 float scaledManaCost = GetScaledManaCost(skillLevel);
-                if (scaledManaCost > 0)
+                if (manaCost > 0)
                 {
                     sb.Append(lm.GetText("skill_label_mana_cost")).Append(": ").AppendLine(scaledManaCost.ToString("F0"));
                 }
                 
-                // 필요 레벨 표시 (0이 아닐 때만)
+                // 필요 레벨 표시 (0 이상일 때만)
                 if (requiredLevel > 0)
                 {
                     sb.Append(lm.GetText("skill_label_required_level")).Append(": ").AppendLine(requiredLevel.ToString());
@@ -283,7 +284,7 @@ namespace DungeonMaster.Skill
                     sb.AppendLine();
                 }
                 
-                return sb.ToString();
+                return sb.ToString().Trim();
             });
         }
 
@@ -309,9 +310,10 @@ namespace DungeonMaster.Skill
         /// </summary>
         public string GetLevelUpPreview(int currentLevel)
         {
+            var lm = LocalizationManager.Instance;
             if (currentLevel >= maxLevel)
-                return "최대 레벨에 도달했습니다.";
-                
+                return lm.GetText("skill_level_max");
+
             return GetCompletePreview(currentLevel);
         }
 

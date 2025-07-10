@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DungeonMaster.Utility;
 using DungeonMaster.Data;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Equipment
 {
@@ -15,8 +16,8 @@ namespace DungeonMaster.Equipment
         [SerializeField] protected string effectName;
         [SerializeField] protected string description;
         
-        public string EffectName => effectName;
-        public string Description => description;
+        public virtual string EffectName => effectName;
+        public virtual string Description => description;
         
         public abstract void Apply(DeterministicCharacterData target, int equipmentLevel);
         public abstract void Remove(DeterministicCharacterData target, int equipmentLevel);
@@ -38,12 +39,14 @@ namespace DungeonMaster.Equipment
         [SerializeField] private float baseValue;
         [SerializeField] private float levelScaling;
         
+        public override string EffectName => LocalizationManager.Instance.GetText(effectName);
+
         public StatType StatType => statType;
         public float BaseValue => baseValue;
         public float LevelScaling => levelScaling;
         
         public StatModifierEffect(string name, StatType statType, float baseValue, float levelScaling = 1f) 
-            : base(name, $"{statType} {baseValue:+0;-0} (레벨당 {levelScaling:+0.0;-0.0})")
+            : base(name, LocalizationManager.Instance.GetTextFormatted("effect_format_stat_modifier_desc", statType, baseValue, levelScaling))
         {
             this.statType = statType;
             this.baseValue = baseValue;
@@ -54,7 +57,7 @@ namespace DungeonMaster.Equipment
         {
             if (target?.Stats == null)
             {
-                Debug.LogError($"StatModifierEffect 적용 실패: target 또는 Stats가 null입니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_target_null", "StatModifierEffect"));
                 return;
             }
             
@@ -62,11 +65,11 @@ namespace DungeonMaster.Equipment
             {
                 float totalValue = baseValue + (levelScaling * Mathf.Max(0, equipmentLevel - 1));
                 target.Stats[statType] = target.Stats.GetValueOrDefault(statType, 0) + (long)totalValue;
-                Debug.Log($"{target.Name}에게 {effectName} 적용: {statType} +{totalValue:F1}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("effect_log_apply_stat_modifier", target.Name, effectName, statType, totalValue));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"StatModifierEffect 적용 중 오류: {e.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_apply_exception", "StatModifierEffect", e.Message));
             }
         }
         
@@ -74,7 +77,7 @@ namespace DungeonMaster.Equipment
         {
             if (target?.Stats == null)
             {
-                Debug.LogError($"StatModifierEffect 해제 실패: target 또는 Stats가 null입니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_target_null", "StatModifierEffect"));
                 return;
             }
             
@@ -82,11 +85,11 @@ namespace DungeonMaster.Equipment
             {
                 float totalValue = baseValue + (levelScaling * Mathf.Max(0, equipmentLevel - 1));
                 target.Stats[statType] = target.Stats.GetValueOrDefault(statType, 0) - (long)totalValue;
-                Debug.Log($"{target.Name}에게서 {effectName} 해제: {statType} -{totalValue:F1}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("effect_log_remove_stat_modifier", target.Name, effectName, statType, totalValue));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"StatModifierEffect 해제 중 오류: {e.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_remove_exception", "StatModifierEffect", e.Message));
             }
         }
     }
@@ -101,6 +104,8 @@ namespace DungeonMaster.Equipment
         [SerializeField] private float percentValue;
         [SerializeField] private float levelScaling;
         
+        public override string EffectName => LocalizationManager.Instance.GetText(effectName);
+
         // 전역 퍼센트 효과 추적
         private static Dictionary<DeterministicCharacterData, Dictionary<StatType, List<PercentEffectData>>> activePercentEffects 
             = new Dictionary<DeterministicCharacterData, Dictionary<StatType, List<PercentEffectData>>>();
@@ -123,32 +128,21 @@ namespace DungeonMaster.Equipment
         /// <summary>
         /// 고유 효과 ID (런타임에만 사용)
         /// </summary>
-        private string EffectId
-        {
-            get
-            {
-                if (string.IsNullOrEmpty(effectId))
-                {
-                    effectId = System.Guid.NewGuid().ToString();
-                }
-                return effectId;
-            }
-        }
+        private string EffectId => effectId ??= System.Guid.NewGuid().ToString();
         
         public PercentStatModifierEffect(string name, StatType statType, float percentValue, float levelScaling = 0.5f) 
-            : base(name, $"{statType} {percentValue:+0;-0}% (레벨당 {levelScaling:+0.0;-0.0}%)")
+            : base(name, LocalizationManager.Instance.GetTextFormatted("effect_format_percent_stat_modifier_desc", statType, percentValue, levelScaling))
         {
             this.statType = statType;
             this.percentValue = percentValue;
             this.levelScaling = levelScaling;
-            // effectId는 EffectId 프로퍼티에서 지연 초기화
         }
         
         public override void Apply(DeterministicCharacterData target, int equipmentLevel)
         {
             if (target?.Stats == null)
             {
-                Debug.LogError($"PercentStatModifierEffect 적용 실패: target 또는 Stats가 null입니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_target_null", "PercentStatModifierEffect"));
                 return;
             }
             
@@ -156,17 +150,14 @@ namespace DungeonMaster.Equipment
             {
                 float totalPercent = percentValue + (levelScaling * Mathf.Max(0, equipmentLevel - 1));
                 
-                // 퍼센트 효과 등록
                 RegisterPercentEffect(target, statType, EffectId, totalPercent);
-                
-                // 전체 퍼센트 효과 재계산 및 적용
                 RecalculatePercentEffect(target, statType);
                 
-                Debug.Log($"{target.Name}에게 {effectName} 적용: {statType} +{totalPercent:F1}%");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("effect_log_apply_percent_stat_modifier", target.Name, effectName, statType, totalPercent));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"PercentStatModifierEffect 적용 중 오류: {e.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_apply_exception", "PercentStatModifierEffect", e.Message));
             }
         }
         
@@ -174,25 +165,21 @@ namespace DungeonMaster.Equipment
         {
             if (target?.Stats == null)
             {
-                Debug.LogError($"PercentStatModifierEffect 해제 실패: target 또는 Stats가 null입니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_target_null", "PercentStatModifierEffect"));
                 return;
             }
             
             try
             {
-                float totalPercent = percentValue + (levelScaling * Mathf.Max(0, equipmentLevel - 1));
-                
-                // 퍼센트 효과 해제
                 UnregisterPercentEffect(target, statType, EffectId);
-                
-                // 전체 퍼센트 효과 재계산 및 적용
                 RecalculatePercentEffect(target, statType);
                 
-                Debug.Log($"{target.Name}에게서 {effectName} 해제: {statType} -{totalPercent:F1}%");
+                float totalPercent = percentValue + (levelScaling * Mathf.Max(0, equipmentLevel - 1));
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("effect_log_remove_percent_stat_modifier", target.Name, effectName, statType, totalPercent));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"PercentStatModifierEffect 해제 중 오류: {e.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("effect_error_remove_exception", "PercentStatModifierEffect", e.Message));
             }
         }
         

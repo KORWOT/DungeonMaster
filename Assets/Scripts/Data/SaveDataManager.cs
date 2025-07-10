@@ -1,5 +1,7 @@
 using System;
 using System.IO;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 using UnityEngine;
 
 namespace DungeonMaster.Data
@@ -20,7 +22,7 @@ namespace DungeonMaster.Data
             {
                 if (userData == null)
                 {
-                    Debug.LogError("저장할 유저 데이터가 없습니다!");
+                    GameLogger.LogError(LocalizationManager.Instance.GetText("error_no_data_to_save"));
                     return false;
                 }
 
@@ -33,12 +35,12 @@ namespace DungeonMaster.Data
                 // 파일로 저장
                 File.WriteAllText(SaveFilePath, jsonData);
                 
-                Debug.Log($"유저 데이터 저장 완료: {SaveFilePath}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_user_data_saved", SaveFilePath));
                 return true;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"유저 데이터 저장 실패: {ex.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_user_data_save_failed", ex.Message));
                 return false;
             }
         }
@@ -59,22 +61,22 @@ namespace DungeonMaster.Data
                     // 마지막 접속 시간 업데이트
                     userData.LastAccessTime = DateTime.Now;
                     
-                    Debug.Log($"유저 데이터 로드 완료: {SaveFilePath}");
+                    GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_user_data_loaded", SaveFilePath));
                     return userData;
                 }
                 else
                 {
                     // 새로운 유저 데이터 생성
-                    Debug.Log("저장 파일이 없어 새로운 유저 데이터 생성");
+                    GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_new_user_data_created"));
                     return new UserData();
                 }
             }
             catch (Exception ex)
             {
-                Debug.LogError($"유저 데이터 로드 실패: {ex.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_user_data_load_failed", ex.Message));
                 
                 // 실패 시 새로운 데이터 생성
-                Debug.Log("유저 데이터 로드 실패로 새로운 데이터 생성");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_creating_new_data_due_to_load_fail"));
                 return new UserData();
             }
         }
@@ -97,14 +99,14 @@ namespace DungeonMaster.Data
                 if (File.Exists(SaveFilePath))
                 {
                     File.Delete(SaveFilePath);
-                    Debug.Log("저장 파일 삭제 완료");
+                    GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_save_file_deleted"));
                     return true;
                 }
                 return false;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"저장 파일 삭제 실패: {ex.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_save_file_delete_failed", ex.Message));
                 return false;
             }
         }
@@ -120,12 +122,12 @@ namespace DungeonMaster.Data
                 string jsonData = JsonUtility.ToJson(userData, true);
                 File.WriteAllText(backupPath, jsonData);
                 
-                Debug.Log($"백업 생성 완료: {backupPath}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_backup_created", backupPath));
                 return true;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"백업 생성 실패: {ex.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_backup_create_failed", ex.Message));
                 return false;
             }
         }
@@ -143,16 +145,16 @@ namespace DungeonMaster.Data
                     string jsonData = File.ReadAllText(backupPath);
                     var userData = JsonUtility.FromJson<UserData>(jsonData);
                     
-                    Debug.Log("백업에서 복원 완료");
+                    GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_restored_from_backup"));
                     return userData;
                 }
                 
-                Debug.LogWarning("백업 파일이 존재하지 않습니다.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("warn_backup_file_not_exist"));
                 return null;
             }
             catch (Exception ex)
             {
-                Debug.LogError($"백업 복원 실패: {ex.Message}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_restore_from_backup_failed", ex.Message));
                 return null;
             }
         }

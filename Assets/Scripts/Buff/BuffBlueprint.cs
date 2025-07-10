@@ -1,6 +1,7 @@
 using UnityEngine;
 using DungeonMaster.Character; // StatType을 위해 추가
 using DungeonMaster.Shared.Scaling;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Buffs
 {
@@ -37,8 +38,8 @@ namespace DungeonMaster.Buffs
         // 예: public ScalingInfo effectValueScaling;
 
         public long BuffId => buffId;
-        public string BuffName => buffName;
-        public string Description => description;
+        public string BuffName => LocalizationManager.Instance.GetText(buffName);
+        public string Description => LocalizationManager.Instance.GetText(description);
         public Sprite Icon => icon;
         public BuffEffectType EffectType => effectType;
         public float BaseDurationSeconds => baseDurationSeconds;

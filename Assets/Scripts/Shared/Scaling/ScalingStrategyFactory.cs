@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Shared.Scaling
 {
@@ -122,28 +123,29 @@ namespace DungeonMaster.Shared.Scaling
         /// <returns>설명 문자열</returns>
         public static string GetDescription(ScalingType scalingType)
         {
+            var lm = LocalizationManager.Instance;
             switch (scalingType)
             {
                 case ScalingType.None:
-                    return "스케일링 없음 - 레벨에 상관없이 고정값";
+                    return lm.GetText("scaling_desc_none");
                     
                 case ScalingType.Linear:
-                    return "선형 증가 - 레벨당 일정량씩 증가";
+                    return lm.GetText("scaling_desc_linear");
                     
                 case ScalingType.Exponential:
-                    return "지수 증가 - 레벨이 높아질수록 가속적으로 증가";
+                    return lm.GetText("scaling_desc_exponential");
                     
                 case ScalingType.Logarithmic:
-                    return "로그 증가 - 초반 빠르게 증가, 후반 완만하게 증가";
+                    return lm.GetText("scaling_desc_logarithmic");
                     
                 case ScalingType.Step:
-                    return "단계별 증가 - 특정 레벨에서만 증가";
+                    return lm.GetText("scaling_desc_step");
                     
                 case ScalingType.Custom:
-                    return "커스텀 - 직접 설정한 배수 테이블 사용";
+                    return lm.GetText("scaling_desc_custom");
                     
                 default:
-                    return "알 수 없음";
+                    return lm.GetText("scaling_desc_unknown");
             }
         }
 

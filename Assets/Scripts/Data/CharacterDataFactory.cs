@@ -66,23 +66,20 @@ namespace DungeonMaster.Data
 
                     // 3-1. 장비의 스탯 보너스를 합산합니다.
                     var statBonuses = equipment.GetAllStatBonuses(userCard.Level); // 캐릭터 레벨 기준으로 스탯 계산
-                    foreach (var bonus in statBonuses)
+                    foreach (var statBonus in statBonuses)
                     {
-                        if (characterData.Stats.ContainsKey(bonus.Key))
+                        if (characterData.Stats.ContainsKey(statBonus.Key))
                         {
-                            characterData.Stats[bonus.Key] += bonus.Value;
+                            characterData.Stats[statBonus.Key] += statBonus.Value;
                         }
                         else
                         {
-                            characterData.Stats[bonus.Key] = bonus.Value;
+                            characterData.Stats[statBonus.Key] = statBonus.Value;
                         }
                     }
-
-                    // 3-2. 장비의 고유 효과 (IDamageModifier)를 추가합니다.
-                    if (equipment.UniqueEffect is DungeonMaster.Battle.IDamageModifier modifier)
-                    {
-                        characterData.AddDamageModifier(modifier);
-                    }
+                    
+                    // 장비 자체를 IDamageModifier로 등록합니다.
+                    characterData.AddDamageModifier(equipment);
                 }
             }
 

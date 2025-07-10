@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 
 namespace DungeonMaster.Data
 {
@@ -27,7 +29,7 @@ namespace DungeonMaster.Data
                     _instance = Resources.Load<LevelingConfig>("Settings/LevelingConfig");
                     if (_instance == null)
                     {
-                        Debug.LogError("LevelingConfig 에셋을 'Resources/Settings' 폴더에서 찾을 수 없습니다! 에셋을 생성하고 올바른 경로에 배치했는지 확인하세요.");
+                        GameLogger.LogError(LocalizationManager.Instance.GetText("error_leveling_config_not_found"));
                     }
                 }
                 return _instance;
@@ -46,14 +48,14 @@ namespace DungeonMaster.Data
 
             if (index < 0)
             {
-                Debug.LogWarning($"잘못된 레벨({currentLevel})이 요청되었습니다. 1 이상의 레벨만 유효합니다.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("warn_invalid_level_request", currentLevel));
                 // 잘못된 입력에 대해 기본값 또는 가장 낮은 레벨의 요구 사항을 반환할 수 있습니다.
                 return experienceRequiredPerLevel.Count > 0 ? experienceRequiredPerLevel[0] : 0;
             }
 
             if (experienceRequiredPerLevel == null || experienceRequiredPerLevel.Count == 0)
             {
-                Debug.LogError("필요 경험치 테이블이 비어있습니다! LevelingConfig 에셋을 확인하세요.");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("error_exp_table_empty"));
                 return long.MaxValue; // 레벨업을 방지하기 위해 큰 값을 반환
             }
 

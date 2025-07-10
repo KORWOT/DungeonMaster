@@ -5,6 +5,7 @@ using DungeonMaster.Data;
 using DungeonMaster.Battle;
 using DungeonMaster.Utility;
 using System.Collections.Generic;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Character
 {
@@ -30,7 +31,7 @@ namespace DungeonMaster.Character
         /// </summary>
         public long InstanceId => _data?.InstanceId ?? 0;
 
-        public string Name => _data?.Name ?? "Unknown";
+        public string Name => _data?.Name ?? LocalizationManager.Instance.GetText("monster_name_unknown");
 
         public Dictionary<StatType, long> Stats => _data?.Stats;
 
@@ -53,7 +54,7 @@ namespace DungeonMaster.Character
             // 이름, 레벨 등 전투 중에 변하지 않는 초기 정보를 설정합니다.
             if (nameText != null)
             {
-                nameText.text = $"{initialData.Name} (Lv.{initialData.Level})";
+                nameText.text = LocalizationManager.Instance.GetTextFormatted("ui_name_level", initialData.Name, initialData.Level);
             }
 
             // ApplyState를 호출하여 HP바 등 변하는 정보의 초기 상태를 설정합니다.
@@ -85,7 +86,7 @@ namespace DungeonMaster.Character
         public void PlayTakeDamageEffect()
         {
             // 향후 피격 시 색상 변경, 파티클 효과 등 구현 예정
-            Debug.Log($"{nameText.text} received damage!");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_monster_damaged", nameText.text));
         }
 
         /// <summary>
@@ -95,7 +96,7 @@ namespace DungeonMaster.Character
         {
             if (gameObject.activeInHierarchy)
             {
-                Debug.Log($"{nameText.text} has died!");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_monster_died", nameText.text));
                 gameObject.SetActive(false); // 간단하게 비활성화 처리
             }
         }
@@ -110,7 +111,7 @@ namespace DungeonMaster.Character
         public void OnDamageReceived(long damage)
         {
             // 데미지 텍스트 팝업, 피격 애니메이션 재생, 사운드 재생 등
-            Debug.Log($"{_data.Name}이(가) {damage}의 데미지를 받았습니다! (View)");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_damage_received", Name, damage));
             // PlayHitAnimation();
             // ShowDamageText(damage);
         }
@@ -118,28 +119,28 @@ namespace DungeonMaster.Character
         public void OnHealed(long healAmount)
         {
             // 힐 이펙트 재생, 힐 텍스트 팝업 등
-            Debug.Log($"{_data.Name}이(가) {healAmount}만큼 회복했습니다! (View)");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_healed", Name, healAmount));
             // PlayHealEffect();
         }
 
         public void OnBuffApplied(long buffId)
         {
             // 버프 아이콘 생성/업데이트, 버프 이펙트 재생 등
-            Debug.Log($"{_data.Name}에게 버프 {buffId}가 적용되었습니다! (View)");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_buff_applied", Name, buffId));
             // _buffUIManager.AddBuffIcon(buffId);
         }
 
         public void OnBuffRemoved(long buffId)
         {
             // 버프 아이콘 제거 등
-            Debug.Log($"{_data.Name}의 버프 {buffId}가 제거되었습니다! (View)");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_buff_removed", Name, buffId));
             // _buffUIManager.RemoveBuffIcon(buffId);
         }
 
         public void OnDeath()
         {
             // 사망 애니메이션 재생, 모델 비활성화 등
-            Debug.Log($"{_data.Name}이(가) 사망했습니다! (View)");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_death", Name));
             // PlayDeathAnimation();
             // gameObject.SetActive(false);
         }

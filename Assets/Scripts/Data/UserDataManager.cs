@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 using DungeonMaster.Character;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 
 namespace DungeonMaster.Data
 {
@@ -35,7 +37,7 @@ namespace DungeonMaster.Data
             // 데이터베이스 초기화 (최초 접근 시 자동 초기화되지만 명시적으로 호출 가능)
             if (BlueprintDatabase.Instance == null)
             {
-                Debug.LogError("BlueprintDatabase를 찾을 수 없습니다! Resources/Data 폴더에 BlueprintDatabase.asset이 있는지 확인하세요.");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("error_blueprint_database_not_found"));
                 return;
             }
             
@@ -48,7 +50,7 @@ namespace DungeonMaster.Data
                 SaveUserData(); // 시작 카드 지급 시 저장
             }
             
-            Debug.Log("UserDataManager 초기화 완료");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_user_data_manager_initialized"));
         }
 
         /// <summary>
@@ -58,7 +60,7 @@ namespace DungeonMaster.Data
         {
             if (SaveDataManager.SaveUserData(CurrentUserData))
             {
-                Debug.Log("유저 데이터 저장 완료");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_user_data_saved"));
             }
         }
 
@@ -68,7 +70,8 @@ namespace DungeonMaster.Data
         public static void LoadUserData()
         {
             CurrentUserData = SaveDataManager.LoadUserData();
-            Debug.Log($"유저 데이터 로드 완료 - {ResourceManager.GetResourceStatus(CurrentUserData)}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_user_data_loaded", 
+                ResourceManager.GetResourceStatus(CurrentUserData)));
         }
 
         /// <summary>
@@ -79,7 +82,7 @@ namespace DungeonMaster.Data
             var blueprint = BlueprintDatabase.Instance.GetBlueprint(cardName);
             if (blueprint == null)
             {
-                Debug.LogError($"[UserDataManager] '{cardName}'에 해당하는 카드 설계도를 찾을 수 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_card_blueprint_not_found", cardName));
                 return;
             }
             CurrentUserData.CardCollection.AcquireCard(blueprint.BlueprintId);
@@ -180,7 +183,7 @@ namespace DungeonMaster.Data
         public static void OnApplicationQuit()
         {
             SaveUserData();
-            Debug.Log("게임 종료 시 데이터 저장 완료");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_game_quit_data_saved"));
         }
 
         /// <summary>
@@ -192,7 +195,7 @@ namespace DungeonMaster.Data
             if (SaveDataManager.DeleteSaveFile())
             {
                 _currentUserData = null;
-                Debug.Log("유저 데이터 초기화 완료");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_user_data_reset_completed"));
                 
                 // 새로운 데이터로 초기화
                 Initialize();
@@ -229,20 +232,20 @@ namespace DungeonMaster.Data
         {
             if (CurrentUserData == null)
             {
-                Debug.Log("UserData가 없습니다!");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_user_data_not_found"));
                 return;
             }
 
-            Debug.Log("=== 유저 데이터 디버그 정보 ===");
-            Debug.Log($"사용자 ID: {CurrentUserData.UserId}");
-            Debug.Log($"사용자 이름: {CurrentUserData.UserName}");
-            Debug.Log($"레벨: {CurrentUserData.UserLevel}");
-            Debug.Log($"경험치: {CurrentUserData.UserExperience}");
-            Debug.Log($"자원: {ResourceManager.GetResourceStatus(CurrentUserData)}");
-            Debug.Log($"카드 컬렉션: {CurrentUserData.CardCollection}");
-            Debug.Log($"시작 카드 상태: {GetStarterCardStatus()}");
-            Debug.Log($"마지막 접속: {CurrentUserData.LastAccessTime}");
-            Debug.Log($"생성 시간: {CurrentUserData.CreatedTime}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetText("debug_header_user_data"));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_id", CurrentUserData.UserId));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_name", CurrentUserData.UserName));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_level", CurrentUserData.UserLevel));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_experience", CurrentUserData.UserExperience));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_resources", ResourceManager.GetResourceStatus(CurrentUserData)));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_card_collection", CurrentUserData.CardCollection));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_starter_card_status", GetStarterCardStatus()));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_last_access_time", CurrentUserData.LastAccessTime));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_created_time", CurrentUserData.CreatedTime));
         }
     }
 
@@ -260,7 +263,7 @@ namespace DungeonMaster.Data
         /// <summary>
         /// 사용자 이름
         /// </summary>
-        public string UserName { get; set; } = "새로운 플레이어";
+        public string UserName { get; set; }
 
         /// <summary>
         /// 사용자 레벨
@@ -300,7 +303,7 @@ namespace DungeonMaster.Data
         public UserData()
         {
             UserId = System.Guid.NewGuid().ToString();
-            UserName = "새로운 플레이어";
+            UserName = LocalizationManager.Instance.GetText("default_new_player_name");
             UserLevel = 1;
             UserExperience = 0;
             Gold = 1000;

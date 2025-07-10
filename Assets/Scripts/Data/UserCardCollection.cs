@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using DungeonMaster.Character;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 
 namespace DungeonMaster.Data
 {
@@ -63,7 +65,7 @@ namespace DungeonMaster.Data
 
             if (_cardsById.ContainsKey(newCard.Id))
             {
-                Debug.LogWarning($"이미 소유한 카드 ID({newCard.Id})를 추가하려고 합니다. 중복 카드는 허용되지 않습니다.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("log_card_add_duplicate", newCard.Id));
                 return;
             }
 
@@ -95,14 +97,14 @@ namespace DungeonMaster.Data
         {
             if (HasCard(blueprintId))
             {
-                Debug.LogWarning($"이미 소유한 설계도(ID: {blueprintId})의 카드를 획득하려고 합니다. 중복 획득은 현재 비활성화되어 있습니다.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("log_card_acquire_duplicate", blueprintId));
                 return _cards.First(c => c.BlueprintId == blueprintId);
             }
 
             var blueprint = BlueprintDatabase.Instance.GetBlueprint(blueprintId);
             if (blueprint == null)
             {
-                Debug.LogError($"[UserCardCollection] BlueprintId({blueprintId})에 해당하는 설계도를 찾을 수 없습니다!");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_blueprint_not_found_for_id", blueprintId));
                 return null;
             }
             
@@ -113,8 +115,8 @@ namespace DungeonMaster.Data
             
             AddCard(newCard);
             
-            var cardName = blueprint.Name;
-            Debug.Log($"새로운 카드 획득: {cardName} (Blueprint ID: {blueprintId}, Instance ID: {newCard.Id})");
+            var cardName = blueprint.Name; // 이름은 blueprint에서 직접 가져옵니다.
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_card_acquired_new", cardName, blueprintId, newCard.Id));
 
             return newCard;
         }
@@ -137,7 +139,7 @@ namespace DungeonMaster.Data
             foreach (var statType in blueprint.GrowableStatTypes)
             {
                 card.InnateGrowthRates_x100[statType] = 100;
-                Debug.Log($"카드({card.Id})의 {statType} 고유 성장률 초기화: 100%");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_innate_growth_rate_initialized", card.Id, statType));
             }
         }
 

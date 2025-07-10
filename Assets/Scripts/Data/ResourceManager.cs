@@ -1,4 +1,6 @@
 using UnityEngine;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 
 namespace DungeonMaster.Data
 {
@@ -15,7 +17,7 @@ namespace DungeonMaster.Data
             if (userData == null) return;
             
             userData.Gold += amount;
-            Debug.Log($"골드 {amount} 추가됨. 현재 골드: {userData.Gold}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_gold_added", amount, userData.Gold));
         }
         
         /// <summary>
@@ -26,7 +28,7 @@ namespace DungeonMaster.Data
             if (userData == null) return;
             
             userData.Gems += amount;
-            Debug.Log($"젬 {amount} 추가됨. 현재 젬: {userData.Gems}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_gems_added", amount, userData.Gems));
         }
         
         /// <summary>
@@ -36,19 +38,19 @@ namespace DungeonMaster.Data
         {
             if (userData == null)
             {
-                Debug.LogError("UserData가 null입니다!");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("error_user_data_null"));
                 return false;
             }
             
             if (userData.Gold >= amount)
             {
                 userData.Gold -= amount;
-                Debug.Log($"골드 {amount} 소모됨. 현재 골드: {userData.Gold}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_gold_spent", amount, userData.Gold));
                 return true;
             }
             else
             {
-                Debug.LogWarning($"골드가 부족합니다! 필요: {amount}, 보유: {userData.Gold}");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("log_gold_insufficient", amount, userData.Gold));
                 return false;
             }
         }
@@ -60,19 +62,19 @@ namespace DungeonMaster.Data
         {
             if (userData == null)
             {
-                Debug.LogError("UserData가 null입니다!");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("error_user_data_null"));
                 return false;
             }
             
             if (userData.Gems >= amount)
             {
                 userData.Gems -= amount;
-                Debug.Log($"젬 {amount} 소모됨. 현재 젬: {userData.Gems}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_gems_spent", amount, userData.Gems));
                 return true;
             }
             else
             {
-                Debug.LogWarning($"젬이 부족합니다! 필요: {amount}, 보유: {userData.Gems}");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("log_gems_insufficient", amount, userData.Gems));
                 return false;
             }
         }
@@ -114,9 +116,10 @@ namespace DungeonMaster.Data
         /// </summary>
         public static string GetResourceStatus(UserData userData)
         {
-            if (userData == null) return "데이터 없음";
+            if (userData == null) return LocalizationManager.Instance.GetText("status_no_data");
             
-            return $"골드: {userData.Gold:N0}, 젬: {userData.Gems:N0}";
+            // "골드: {0:N0}, 젬: {1:N0}" 형식의 키를 가져와서 포맷팅
+            return LocalizationManager.Instance.GetTextFormatted("status_resource", userData.Gold, userData.Gems);
         }
         
         /// <summary>
@@ -138,7 +141,7 @@ namespace DungeonMaster.Data
                 userData.UserLevel++;
                 leveledUp = true;
                 
-                Debug.Log($"레벨업! 현재 레벨: {userData.UserLevel}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_level_up", userData.UserLevel));
                 
                 // 레벨업 보상 (골드)
                 AddGold(userData, userData.UserLevel * 10);
@@ -147,7 +150,7 @@ namespace DungeonMaster.Data
                 requiredExp = userData.UserLevel * 100;
             }
             
-            Debug.Log($"경험치 {amount} 획득. 현재: {userData.UserExperience}/{requiredExp}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_exp_gained", amount, userData.UserExperience, requiredExp));
             return leveledUp;
         }
         

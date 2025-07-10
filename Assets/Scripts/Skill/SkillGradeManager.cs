@@ -1,5 +1,6 @@
 using UnityEngine;
 using System.Collections.Generic;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Skill
 {
@@ -62,13 +63,15 @@ namespace DungeonMaster.Skill
         // 등급별 이름 가져오기
         public static string GetGradeName(SkillGrade grade)
         {
-            return Config?.GetGradeName(grade) ?? "알 수 없음";
+            var name = Config?.GetGradeName(grade);
+            return string.IsNullOrEmpty(name) ? LocalizationManager.Instance.GetText("skill_grade_unknown_name") : name;
         }
         
         // 등급별 설명 가져오기
         public static string GetGradeDescription(SkillGrade grade)
         {
-            return Config?.GetGradeDescription(grade) ?? "알 수 없는 등급입니다.";
+            var desc = Config?.GetGradeDescription(grade);
+            return string.IsNullOrEmpty(desc) ? LocalizationManager.Instance.GetText("skill_grade_unknown_desc") : desc;
         }
     }
 } 

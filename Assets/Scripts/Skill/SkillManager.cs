@@ -106,10 +106,12 @@ namespace DungeonMaster.Skill
                         field.SetValue(basicAttackSkill, 0L);
                         break;
                     case "skillName":
-                        field.SetValue(basicAttackSkill, "기본 공격");
+                        // 지역화 키를 사용합니다.
+                        field.SetValue(basicAttackSkill, "skill_basic_attack_name");
                         break;
                     case "descriptionTemplate":
-                        field.SetValue(basicAttackSkill, "기본적인 물리 공격을 가합니다.");
+                        // 지역화 키를 사용합니다.
+                        field.SetValue(basicAttackSkill, "skill_basic_attack_desc");
                         break;
                     case "skillType":
                         field.SetValue(basicAttackSkill, SkillType.Active);

@@ -1,6 +1,8 @@
 using DungeonMaster.Data;
 using System;
 using System.Collections.Generic;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 using UnityEngine;
 
 namespace DungeonMaster.Character
@@ -23,7 +25,7 @@ namespace DungeonMaster.Character
         public static void GrantExperienceAndLevelUp(UserCardData card, long expGained)
         {
             card.Experience += expGained;
-            Debug.Log($"카드({card.BlueprintId}) 경험치 +{expGained}, 현재 경험치: {card.Experience}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_exp_gained", card.BlueprintId, expGained, card.Experience));
 
             while (_expTable.TryGetValue(card.Level, out long requiredExp) && card.Experience >= requiredExp)
             {
@@ -39,20 +41,20 @@ namespace DungeonMaster.Character
         {
             if (levelsToGain <= 0) return;
 
-            Debug.Log($"카드({card.BlueprintId}) 레벨업 시작. 현재 레벨: {card.Level}, 레벨업: {levelsToGain}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_levelup_start", card.BlueprintId, card.Level, levelsToGain));
 
             var blueprint = BlueprintDatabase.Instance.GetBlueprint(card.BlueprintId);
             var growthConfig = Resources.Load<GradeGrowthConfig>("GrowthGradeConfig");
             if (blueprint == null || growthConfig == null)
             {
-                Debug.LogError("레벨업에 필요한 Blueprint 또는 GrowthConfig를 찾을 수 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("error_levelup_missing_data"));
                 return;
             }
 
             var gradeGrowth = growthConfig.GetGradeGrowthData(blueprint.Grade);
             if (gradeGrowth == null)
             {
-                Debug.LogError($"등급({blueprint.Grade})에 대한 성장 데이터가 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_no_growth_data_for_grade", blueprint.Grade));
                 return;
             }
 
@@ -71,7 +73,7 @@ namespace DungeonMaster.Character
             }
 
             card.Level += levelsToGain;
-            Debug.Log($"카드({card.BlueprintId}) 레벨업 완료. 최종 레벨: {card.Level}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_levelup_complete", card.BlueprintId, card.Level));
         }
         
         /// <summary>
@@ -104,7 +106,7 @@ namespace DungeonMaster.Character
                 if (!card.CurrentStats.ContainsKey(statType)) card.CurrentStats[statType] = 0;
                 card.CurrentStats[statType] += totalStatGain;
                 
-                Debug.Log($" - {statType}: +{totalStatGain} (총 {card.CurrentStats[statType]})");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_stat_gained", statType, totalStatGain, card.CurrentStats[statType]));
             }
         }
     }

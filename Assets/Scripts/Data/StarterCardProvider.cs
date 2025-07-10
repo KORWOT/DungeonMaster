@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 using UnityEngine;
 
 namespace DungeonMaster.Data
@@ -18,14 +20,14 @@ namespace DungeonMaster.Data
         {
             if (userData == null)
             {
-                Debug.LogError("UserData가 null입니다! 시작 카드를 지급할 수 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("error_null_user_data_for_starter_cards"));
                 return false;
             }
             
             var starterBlueprints = BlueprintDatabase.Instance.GetStarterBlueprints().ToList();
             if (starterBlueprints.Count == 0)
             {
-                Debug.LogWarning("데이터베이스에 시작 카드로 설정된 설계도가 없습니다.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("warn_no_starter_blueprints"));
                 return false;
             }
 
@@ -34,7 +36,7 @@ namespace DungeonMaster.Data
 
             if (needsStarterCards)
             {
-                Debug.Log("시작 카드를 지급합니다...");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_providing_starter_cards"));
                 int cardsGiven = 0;
                 foreach (var blueprint in starterBlueprints)
                 {
@@ -42,13 +44,13 @@ namespace DungeonMaster.Data
                     {
                         collection.AcquireCard(blueprint.BlueprintId);
                         cardsGiven++;
-                        Debug.Log($"시작 카드 지급: {blueprint.Name} (ID: {blueprint.BlueprintId})");
+                        GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_starter_card_provided", blueprint.Name, blueprint.BlueprintId));
                     }
                 }
                 
                 if (cardsGiven > 0)
                 {
-                    Debug.Log($"총 {cardsGiven}개의 시작 카드가 지급되었습니다.");
+                    GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_total_starter_cards_provided", cardsGiven));
                     return true;
                 }
             }

@@ -1,544 +1,413 @@
 using System.Collections.Generic;
+using System.Text;
 using DungeonMaster.Character;
-using DungeonMaster.Data;  // DeterministicCharacterData를 위해 추가
+using DungeonMaster.Data;
+using DungeonMaster.Battle; // IDamageModifier, DamageContext를 위해 추가
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 using UnityEngine;
 
 namespace DungeonMaster.Equipment
 {
     /// <summary>
     /// 몬스터 장비 기본 ScriptableObject
-    /// 작업원칙에 따라 데이터 계층과 뷰 계층을 모두 지원
     /// </summary>
-    public abstract class BaseMonsterEquipment : ScriptableObject, IMonsterEquipment
+    public abstract class BaseMonsterEquipment : ScriptableObject, IMonsterEquipment, IDamageModifier
     {
+        private const string UnknownEquipmentKey = "equip_const_unknown";
+        private const string NoDescriptionKey = "equip_const_no_desc";
+
         [Header("기본 정보")]
         [SerializeField] private long equipmentId;
         [SerializeField] private string equipmentName;
         [SerializeField] private string description;
         [SerializeField] private MonsterEquipmentType equipmentType;
-        
+
         [Header("등급과 레벨")]
         [SerializeField] private EquipmentGrade grade = EquipmentGrade.Normal;
         [SerializeField] private int level = 1;
         [SerializeField] private int maxLevel = 20;
-        
+
         [Header("기본 효과 (장비 타입별 고정)")]
         [SerializeField] private List<EquipmentEffect> baseEffects = new List<EquipmentEffect>();
-        
+
         [Header("추가 효과 (등급에 따라 증가)")]
         [SerializeField] private List<EquipmentEffect> additionalEffects = new List<EquipmentEffect>();
-        
+
         [Header("고유 효과 (에픽 이상)")]
-        [SerializeField] private UniqueEffect uniqueEffect;
-        
-        /// <summary>
-        /// 지정된 레벨에 대한 모든 스탯 보너스를 계산하여 반환합니다.
-        /// 이 메서드는 결정론적 데이터 생성에 사용됩니다.
-        /// </summary>
-        /// <param name="atLevel">계산의 기준이 될 레벨</param>
-        /// <returns>스탯 타입과 보너스 값의 딕셔너리</returns>
+        [SerializeField] private UniqueEffectSO uniqueEffectSO;
+        public float UniqueEffectPrimaryValue;
+        public float UniqueEffectSecondaryValue;
+
+        #region IDamageModifier Implementation
+
+        public int Priority => uniqueEffectSO != null ? 100 : int.MaxValue; // 유니크 효과가 없으면 우선순위를 최하로
+
+        public long ModifyDamage(long damage, DeterministicCharacterData attacker, DeterministicCharacterData defender, DamageContext context)
+        {
+            if (uniqueEffectSO != null)
+            {
+                return uniqueEffectSO.ModifyDamage(damage, attacker, defender, this, context);
+            }
+            return damage;
+        }
+
+        #endregion
+
         public Dictionary<StatType, long> GetAllStatBonuses(int atLevel)
         {
             var totalBonuses = new Dictionary<StatType, long>();
+            var calculatedLevel = Mathf.Max(0, atLevel - 1);
 
-            // 기본 효과 합산
-            foreach (var effect in BaseEffects)
-            {
-                if (effect is StatModifierEffect statEffect)
-                {
-                    long value = (long)(statEffect.BaseValue + (statEffect.LevelScaling * Mathf.Max(0, atLevel - 1)));
-                    if (totalBonuses.ContainsKey(statEffect.StatType))
-                    {
-                        totalBonuses[statEffect.StatType] += value;
-                    }
-                    else
-                    {
-                        totalBonuses[statEffect.StatType] = value;
-                    }
-                }
-            }
+            ProcessEffectList(BaseEffects, calculatedLevel, totalBonuses);
+            ProcessEffectList(AdditionalEffects, calculatedLevel, totalBonuses);
 
-            // 추가 효과 합산
-            foreach (var effect in AdditionalEffects)
-            {
-                if (effect is StatModifierEffect statEffect)
-                {
-                    long value = (long)(statEffect.BaseValue + (statEffect.LevelScaling * Mathf.Max(0, atLevel - 1)));
-                    if (totalBonuses.ContainsKey(statEffect.StatType))
-                    {
-                        totalBonuses[statEffect.StatType] += value;
-                    }
-                    else
-                    {
-                        totalBonuses[statEffect.StatType] = value;
-                    }
-                }
-            }
-            
             return totalBonuses;
         }
-        
-        // 프로퍼티
+
+        private void ProcessEffectList(IEnumerable<EquipmentEffect> effects, int calculatedLevel, IDictionary<StatType, long> totalBonuses)
+        {
+            foreach (var effect in effects)
+            {
+                if (effect is not StatModifierEffect statEffect) continue;
+                
+                long value = (long)(statEffect.BaseValue + (statEffect.LevelScaling * calculatedLevel));
+                totalBonuses.TryGetValue(statEffect.StatType, out var currentValue);
+                totalBonuses[statEffect.StatType] = currentValue + value;
+            }
+        }
+
         public long EquipmentId => equipmentId;
-        public string Name => string.IsNullOrEmpty(equipmentName) ? "알 수 없는 장비" : equipmentName;
-        public string Description => string.IsNullOrEmpty(description) ? "설명이 없습니다." : description;
+        public string Name => LocalizationManager.Instance.GetText(string.IsNullOrEmpty(equipmentName) ? UnknownEquipmentKey : equipmentName);
+        public string Description => LocalizationManager.Instance.GetText(string.IsNullOrEmpty(description) ? NoDescriptionKey : description);
         public MonsterEquipmentType EquipmentType => equipmentType;
         public EquipmentGrade Grade => grade;
         public int Level => level;
         public int MaxLevel => maxLevel;
-        public List<EquipmentEffect> BaseEffects => baseEffects ?? new List<EquipmentEffect>();
-        public List<EquipmentEffect> AdditionalEffects => additionalEffects ?? new List<EquipmentEffect>();
-        public UniqueEffect UniqueEffect => uniqueEffect;
-        
-        /// <summary>
-        /// 현재 등급에서 권장되는 추가 효과 개수 (참고용, 실제 제한 없음)
-        /// 향후 밸런싱을 위해 제한을 걸 수도 있는 가이드라인
-        /// </summary>
+        public List<EquipmentEffect> BaseEffects => baseEffects ??= new List<EquipmentEffect>();
+        public List<EquipmentEffect> AdditionalEffects => additionalEffects ??= new List<EquipmentEffect>();
+        public UniqueEffectSO UniqueEffectSO => uniqueEffectSO;
+
         public int RecommendedAdditionalEffects => grade switch
         {
             EquipmentGrade.Normal => 0,
             EquipmentGrade.Magic => 1,
             EquipmentGrade.Rare => 3,
-            EquipmentGrade.Epic => 6, // 고유 효과 1개 + 추가 효과 5개 권장
-            EquipmentGrade.Legendary => 10, // 고유 효과 1개 + 추가 효과 9개 권장
+            EquipmentGrade.Epic => 6,
+            EquipmentGrade.Legendary => 10,
             _ => 0
         };
-        
-        /// <summary>
-        /// 고유 효과 사용 가능 여부
-        /// </summary>
+
         public bool CanHaveUniqueEffect => grade >= EquipmentGrade.Epic;
-        
-        /// <summary>
-        /// 장비 효과 적용 - DeterministicCharacterData에 적용 (데이터 계층)
-        /// 작업원칙에 따라 데이터 계층과 뷰 계층을 분리
-        /// </summary>
+
         public virtual void ApplyTo(DeterministicCharacterData characterData)
         {
             if (characterData?.Stats == null)
             {
-                Debug.LogError($"{Name} 장비 적용 실패: 대상 캐릭터 데이터가 null이거나 Stats가 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_apply_target_null", Name));
                 return;
             }
-            
+
             if (!ValidateEquipment())
             {
-                Debug.LogError($"{Name} 장비 적용 실패: 장비 유효성 검증 실패");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_apply_validation_failed", Name));
                 return;
             }
-            
+
             try
             {
-                // 기본 효과 적용
-                ApplyEffectList(BaseEffects, characterData, "기본 효과");
-                
-                // 등급에 따른 추가 효과 적용 (제한 없음)
-                ApplyEffectList(AdditionalEffects, characterData, "추가 효과");
-                
-                // 고유 효과 적용 (에픽 이상)
-                if (CanHaveUniqueEffect && uniqueEffect != null)
+                var lm = LocalizationManager.Instance;
+                ApplyEffectList(BaseEffects, characterData, lm.GetText("equip_ui_label_base_effects"));
+                ApplyEffectList(AdditionalEffects, characterData, lm.GetText("equip_ui_label_additional_effects"));
+
+                if (CanHaveUniqueEffect && uniqueEffectSO != null)
                 {
-                    uniqueEffect.Apply(characterData, level);
+                    uniqueEffectSO.OnApply(characterData, this);
                 }
-                
-                Debug.Log($"{characterData.Name}에게 {Name} (레벨{level}, {grade}) 장착 완료");
+
+                GameLogger.LogInfo(lm.GetTextFormatted("equip_log_info_apply_success", characterData.Name, Name, level, grade));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"{Name} 장비 적용 중 오류 발생: {e.Message}");
-                Debug.LogException(e);
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_apply_exception", Name, e.Message));
+                UnityEngine.Debug.LogException(e);
             }
         }
-        
-        /// <summary>
-        /// 장비 효과 해제 - DeterministicCharacterData에서만 해제
-        /// </summary>
+
         public virtual void RemoveFrom(DeterministicCharacterData characterData)
         {
             if (characterData?.Stats == null)
             {
-                Debug.LogError($"{Name} 장비 해제 실패: 대상 캐릭터 데이터가 null이거나 Stats가 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_remove_target_null", Name));
                 return;
             }
-            
+
             try
             {
-                // 기본 효과 해제
-                RemoveEffectList(BaseEffects, characterData, "기본 효과");
-                
-                // 추가 효과 해제 (제한 없음)
-                RemoveEffectList(AdditionalEffects, characterData, "추가 효과");
-                
-                // 고유 효과 해제
-                if (CanHaveUniqueEffect && uniqueEffect != null)
+                var lm = LocalizationManager.Instance;
+                RemoveEffectList(BaseEffects, characterData, lm.GetText("equip_ui_label_base_effects"));
+                RemoveEffectList(AdditionalEffects, characterData, lm.GetText("equip_ui_label_additional_effects"));
+
+                if (CanHaveUniqueEffect && uniqueEffectSO != null)
                 {
-                    uniqueEffect.Remove(characterData, level);
+                    uniqueEffectSO.OnRemove(characterData, this);
                 }
-                
-                Debug.Log($"{characterData.Name}에게서 {Name} 해제 완료");
+
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_log_info_remove_success", characterData.Name, Name));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"{Name} 장비 해제 중 오류 발생: {e.Message}");
-                Debug.LogException(e);
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_remove_exception", Name, e.Message));
+                UnityEngine.Debug.LogException(e);
             }
         }
-        
-        /// <summary>
-        /// 장비 효과 적용 - ICharacter에 적용 (뷰 계층 호환성)
-        /// 기존 코드와의 호환성을 위해 유지
-        /// </summary>
+
         public virtual void ApplyTo(ICharacter monster)
         {
             if (monster?.Stats == null)
             {
-                Debug.LogError($"{Name} 장비 적용 실패: 대상 몬스터가 null이거나 Stats가 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_apply_target_null", Name));
                 return;
             }
-            
+
             if (!ValidateEquipment())
             {
-                Debug.LogError($"{Name} 장비 적용 실패: 장비 유효성 검증 실패");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_apply_validation_failed", Name));
                 return;
             }
             
             try
             {
-                // 기본 효과 적용
-                ApplyEffectListToCharacter(BaseEffects, monster, "기본 효과");
-                
-                // 등급에 따른 추가 효과 적용 (제한 없음)
-                ApplyEffectListToCharacter(AdditionalEffects, monster, "추가 효과");
-                
-                // 고유 효과는 ICharacter에서 지원하지 않음 (데이터 계층 전용)
-                if (CanHaveUniqueEffect && uniqueEffect != null)
+                var lm = LocalizationManager.Instance;
+                ApplyEffectListToCharacter(BaseEffects, monster, lm.GetText("equip_ui_label_base_effects"));
+                ApplyEffectListToCharacter(AdditionalEffects, monster, lm.GetText("equip_ui_label_additional_effects"));
+
+                if (CanHaveUniqueEffect && uniqueEffectSO != null)
                 {
-                    Debug.LogWarning($"{Name}의 고유 효과는 ICharacter에 적용할 수 없습니다. DeterministicCharacterData를 사용하세요.");
+                    GameLogger.LogWarning(lm.GetTextFormatted("equip_log_warn_unique_effect_on_icharacter", Name));
                 }
-                
-                Debug.Log($"{monster.Name}에게 {Name} (레벨{level}, {grade}) 장착 완료");
+
+                GameLogger.LogInfo(lm.GetTextFormatted("equip_log_info_apply_success", monster.Name, Name, level, grade));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"{Name} 장비 적용 중 오류 발생: {e.Message}");
-                Debug.LogException(e);
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_apply_exception", Name, e.Message));
+                UnityEngine.Debug.LogException(e);
             }
         }
-        
-        /// <summary>
-        /// 장비 효과 해제 - ICharacter에서 해제 (뷰 계층 호환성)
-        /// </summary>
+
         public virtual void RemoveFrom(ICharacter monster)
         {
             if (monster?.Stats == null)
             {
-                Debug.LogError($"{Name} 장비 해제 실패: 대상 몬스터가 null이거나 Stats가 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_remove_target_null", Name));
                 return;
             }
-            
+
             try
             {
-                // 기본 효과 해제
-                RemoveEffectListFromCharacter(BaseEffects, monster, "기본 효과");
-                
-                // 추가 효과 해제 (제한 없음)
-                RemoveEffectListFromCharacter(AdditionalEffects, monster, "추가 효과");
-                
-                // 고유 효과는 ICharacter에서 지원하지 않음
-                
-                Debug.Log($"{monster.Name}에게서 {Name} 해제 완료");
+                var lm = LocalizationManager.Instance;
+                RemoveEffectListFromCharacter(BaseEffects, monster, lm.GetText("equip_ui_label_base_effects"));
+                RemoveEffectListFromCharacter(AdditionalEffects, monster, lm.GetText("equip_ui_label_additional_effects"));
+
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_log_info_remove_success", monster.Name, Name));
             }
             catch (System.Exception e)
             {
-                Debug.LogError($"{Name} 장비 해제 중 오류 발생: {e.Message}");
-                Debug.LogException(e);
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("equip_log_error_remove_exception", Name, e.Message));
+                UnityEngine.Debug.LogException(e);
             }
         }
-        
-        /// <summary>
-        /// 효과 리스트 적용 헬퍼 메서드 - DeterministicCharacterData용
-        /// </summary>
-        private void ApplyEffectList(List<EquipmentEffect> effects, DeterministicCharacterData characterData, string effectType)
+
+        private void ApplyEffectList(IEnumerable<EquipmentEffect> effects, DeterministicCharacterData characterData, string effectType)
         {
-            if (effects == null) return;
-            
             foreach (var effect in effects)
             {
-                if (effect == null)
-                {
-                    Debug.LogWarning($"{Name}의 {effectType} 중 null 효과가 발견되었습니다.");
-                    continue;
-                }
-                
-                try
-                {
-                    effect.Apply(characterData, level);
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"{Name}의 {effectType} '{effect.EffectName}' 적용 중 오류: {e.Message}");
-                }
+                if (effect == null) continue;
+                effect.Apply(characterData, level);
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_log_info_apply_effect", effectType, effect.EffectName, effect.Description));
             }
         }
-        
-        /// <summary>
-        /// 효과 리스트 해제 헬퍼 메서드 - DeterministicCharacterData용
-        /// </summary>
-        private void RemoveEffectList(List<EquipmentEffect> effects, DeterministicCharacterData characterData, string effectType)
+
+        private void RemoveEffectList(IEnumerable<EquipmentEffect> effects, DeterministicCharacterData characterData, string effectType)
         {
-            if (effects == null) return;
-            
             foreach (var effect in effects)
             {
-                if (effect == null)
-                {
-                    Debug.LogWarning($"{Name}의 {effectType} 중 null 효과가 발견되었습니다.");
-                    continue;
-                }
-                
-                try
-                {
-                    effect.Remove(characterData, level);
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"{Name}의 {effectType} '{effect.EffectName}' 해제 중 오류: {e.Message}");
-                }
+                if (effect == null) continue;
+                effect.Remove(characterData, level);
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_log_info_remove_effect", effectType, effect.EffectName));
             }
         }
-        
-        /// <summary>
-        /// 효과 리스트 적용 헬퍼 메서드 - ICharacter용
-        /// </summary>
-        private void ApplyEffectListToCharacter(List<EquipmentEffect> effects, ICharacter monster, string effectType)
+
+        private void ApplyEffectListToCharacter(IEnumerable<EquipmentEffect> effects, ICharacter monster, string effectType)
         {
-            if (effects == null) return;
-            
             foreach (var effect in effects)
             {
-                if (effect == null)
-                {
-                    Debug.LogWarning($"{Name}의 {effectType} 중 null 효과가 발견되었습니다.");
-                    continue;
-                }
+                if (effect is not StatModifierEffect statEffect) continue;
                 
-                try
-                {
-                    // ICharacter는 EquipmentEffect를 직접 지원하지 않으므로, 
-                    // StatModifierEffect만 처리
-                    if (effect is StatModifierEffect statEffect)
-                    {
-                        float totalValue = statEffect.BaseValue + (statEffect.LevelScaling * Mathf.Max(0, level - 1));
-                        if (monster.Stats.ContainsKey(statEffect.StatType))
-                        {
-                            monster.Stats[statEffect.StatType] += (long)totalValue;
-                        }
-                        else
-                        {
-                            monster.Stats[statEffect.StatType] = (long)totalValue;
-                        }
-                    }
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"{Name}의 {effectType} '{effect.EffectName}' 적용 중 오류: {e.Message}");
-                }
+                long value = (long)(statEffect.BaseValue + (statEffect.LevelScaling * Mathf.Max(0, level - 1)));
+                monster.Stats[statEffect.StatType] += value;
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_log_info_apply_effect", effectType, effect.EffectName, effect.Description));
             }
         }
-        
-        /// <summary>
-        /// 효과 리스트 해제 헬퍼 메서드 - ICharacter용
-        /// </summary>
-        private void RemoveEffectListFromCharacter(List<EquipmentEffect> effects, ICharacter monster, string effectType)
+
+        private void RemoveEffectListFromCharacter(IEnumerable<EquipmentEffect> effects, ICharacter monster, string effectType)
         {
-            if (effects == null) return;
-            
             foreach (var effect in effects)
             {
-                if (effect == null)
-                {
-                    Debug.LogWarning($"{Name}의 {effectType} 중 null 효과가 발견되었습니다.");
-                    continue;
-                }
+                if (effect is not StatModifierEffect statEffect) continue;
                 
-                try
-                {
-                    if (effect is StatModifierEffect statEffect)
-                    {
-                        float totalValue = statEffect.BaseValue + (statEffect.LevelScaling * Mathf.Max(0, level - 1));
-                        if (monster.Stats.ContainsKey(statEffect.StatType))
-                        {
-                            monster.Stats[statEffect.StatType] -= (long)totalValue;
-                        }
-                    }
-                }
-                catch (System.Exception e)
-                {
-                    Debug.LogError($"{Name}의 {effectType} '{effect.EffectName}' 해제 중 오류: {e.Message}");
-                }
+                long value = (long)(statEffect.BaseValue + (statEffect.LevelScaling * Mathf.Max(0, level - 1)));
+                monster.Stats[statEffect.StatType] -= value;
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_log_info_remove_effect", effectType, effect.EffectName));
             }
         }
-        
-        /// <summary>
-        /// 장비 유효성 검증
-        /// </summary>
+
         private bool ValidateEquipment()
         {
+            var lm = LocalizationManager.Instance;
+            if (equipmentId == 0)
+            {
+                GameLogger.LogError(lm.GetText("equip_validate_error_invalid_id"));
+                return false;
+            }
+
             if (string.IsNullOrEmpty(equipmentName))
             {
-                Debug.LogError("장비 이름이 설정되지 않았습니다.");
+                GameLogger.LogError(lm.GetText("equip_validate_error_empty_name"));
                 return false;
             }
-            
-            if (level < 1 || level > maxLevel)
+
+            if (uniqueEffectSO != null && !CanHaveUniqueEffect)
             {
-                Debug.LogError($"장비 레벨이 유효하지 않습니다: {level} (1~{maxLevel} 범위)");
-                return false;
+                GameLogger.LogWarning(lm.GetText("equip_validate_warn_unique_effect_grade_mismatch"));
             }
-            
+
+            if (AdditionalEffects.Count > RecommendedAdditionalEffects)
+            {
+                GameLogger.LogWarning(lm.GetText("equip_validate_warn_additional_effects_exceeded"));
+            }
+
             return true;
         }
-        
-        /// <summary>
-        /// 레벨 업그레이드 가능 여부 확인
-        /// </summary>
-        public virtual bool CanUpgrade()
-        {
-            return level < maxLevel;
-        }
-        
-        /// <summary>
-        /// 레벨 업그레이드
-        /// </summary>
-        public virtual void UpgradeLevel()
+
+        public bool CanUpgrade() => level < maxLevel;
+
+        public void UpgradeLevel()
         {
             if (!CanUpgrade())
             {
-                Debug.LogWarning($"{Name} 레벨 업그레이드 실패: 최대 레벨에 도달했습니다. (현재: {level}/{maxLevel})");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("equip_upgrade_warn_max_level", Name, level, maxLevel));
                 return;
             }
-            
             level++;
-            Debug.Log($"{Name} 레벨 업그레이드 완료: {level - 1} → {level}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_upgrade_info_level_up", Name, level - 1, level));
         }
-        
-        /// <summary>
-        /// 등급 업그레이드
-        /// </summary>
-        public virtual void UpgradeGrade()
+
+        public void UpgradeGrade()
         {
             if (grade >= EquipmentGrade.Legendary)
             {
-                Debug.LogWarning($"{Name} 등급 업그레이드 실패: 이미 최고 등급입니다. (현재: {grade})");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("equip_upgrade_warn_max_grade"));
                 return;
             }
             
             var oldGrade = grade;
-            grade = (EquipmentGrade)((int)grade + 1);
-            
-            Debug.Log($"{Name} 등급 업그레이드 완료: {oldGrade} → {grade}");
+            grade++;
+            // TODO: 등급업 로직에 대한 로컬라이제이션 키 추가 필요
+            GameLogger.LogInfo($"[TODO: Localize] {Name} 등급 업그레이드 완료: {oldGrade} → {grade}");
         }
-        
-        /// <summary>
-        /// 고유 효과 설정
-        /// </summary>
-        public virtual bool SetUniqueEffect(UniqueEffect effect)
+
+        public bool SetUniqueEffect(UniqueEffectSO effect, float primaryValue, float secondaryValue)
         {
             if (!CanHaveUniqueEffect)
             {
-                Debug.LogWarning($"{Name} 고유 효과 설정 실패: {grade} 등급은 고유 효과를 가질 수 없습니다. (Epic 이상 필요)");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("equip_unique_effect_warn_grade_too_low"));
                 return false;
             }
-            
-            uniqueEffect = effect;
-            Debug.Log($"{Name}에 고유 효과 설정: {effect?.EffectName ?? "없음"}");
+            uniqueEffectSO = effect;
+            UniqueEffectPrimaryValue = primaryValue;
+            UniqueEffectSecondaryValue = secondaryValue;
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("equip_log_info_set_unique_effect", Name, effect?.name ?? "null"));
             return true;
         }
-        
-        /// <summary>
-        /// 장비 정보를 문자열로 반환
-        /// </summary>
+
         public override string ToString()
         {
-            var uniqueText = CanHaveUniqueEffect && uniqueEffect != null ? $" + {uniqueEffect.EffectName}" : "";
-            var additionalText = AdditionalEffects.Count > 0 ? $" (+{AdditionalEffects.Count}개 추가효과)" : "";
-            
-            return $"[{grade}] {Name} Lv.{level}/{maxLevel} ({EquipmentType}){additionalText}{uniqueText}";
+            return LocalizationManager.Instance.GetTextFormatted("equip_ui_format_tostring", Name, level, grade, Description);
         }
-        
-        /// <summary>
-        /// Inspector에서 값이 변경될 때 호출 (에디터 전용)
-        /// </summary>
+
         protected virtual void OnValidate()
         {
-            // 레벨 범위 검증
             if (level < 1) level = 1;
-            if (level > maxLevel) level = maxLevel;
             if (maxLevel < 1) maxLevel = 1;
-            
-            // 등급에 따른 고유 효과 검증
-            if (!CanHaveUniqueEffect && uniqueEffect != null)
+            if (level > maxLevel) level = maxLevel;
+
+            if (!CanHaveUniqueEffect && uniqueEffectSO != null)
             {
-                Debug.LogWarning($"{name}: {grade} 등급은 고유 효과를 가질 수 없어 제거됩니다.");
-                uniqueEffect = null;
+                // OnValidate는 에디터에서만 호출되므로 UnityEngine.Debug를 명시적으로 사용합니다.
+                UnityEngine.Debug.LogWarning(LocalizationManager.Instance.GetText("equip_validate_warn_unique_effect_grade_mismatch"));
+                uniqueEffectSO = null;
             }
         }
-        
-        /// <summary>
-        /// 고유 효과 이름 반환
-        /// </summary>
+
         public string GetUniqueEffectName()
         {
-            return uniqueEffect?.EffectName ?? "없음";
+            var lm = LocalizationManager.Instance;
+            if (uniqueEffectSO != null && !string.IsNullOrEmpty(uniqueEffectSO.effectNameKey))
+            {
+                return lm.GetText(uniqueEffectSO.effectNameKey);
+            }
+            return lm.GetText("equip_ui_label_no_effect");
         }
-        
-        /// <summary>
-        /// 고유 효과 설명 반환
-        /// </summary>
+
         public string GetUniqueEffectDescription()
         {
-            return uniqueEffect?.Description ?? "고유 효과가 없습니다.";
+            if (uniqueEffectSO != null)
+            {
+                return uniqueEffectSO.GetDescription(this);
+            }
+            return LocalizationManager.Instance.GetText("equip_ui_label_no_effect");
         }
-        
-        /// <summary>
-        /// 고유 효과 상세 정보 반환
-        /// </summary>
+
         public string GetUniqueEffectInfo()
         {
-            if (uniqueEffect == null)
-                return "고유 효과 없음";
-            
-            return $"고유 효과: {uniqueEffect.EffectName}\n설명: {uniqueEffect.Description}";
+            if (uniqueEffectSO == null) return GetUniqueEffectName();
+            return LocalizationManager.Instance.GetTextFormatted("equip_ui_format_unique_effect_info", GetUniqueEffectName(), GetUniqueEffectDescription());
         }
-        
-        /// <summary>
-        /// 모든 효과 정보 반환
-        /// </summary>
+
         public string GetAllEffectsInfo()
         {
-            var info = new System.Text.StringBuilder();
-            
-            // 기본 효과들
-            if (baseEffects != null && baseEffects.Count > 0)
+            var sb = new StringBuilder();
+            var lm = LocalizationManager.Instance;
+
+            if (BaseEffects.Count > 0)
             {
-                info.AppendLine("기본 효과:");
-                foreach (var effect in baseEffects)
+                sb.AppendLine(lm.GetText("equip_ui_header_base_effects"));
+                foreach (var effect in BaseEffects)
                 {
-                    if (effect != null)
-                    {
-                        info.AppendLine($"  - {effect.EffectName}: {effect.Description}");
-                    }
+                    sb.AppendLine(effect.ToString());
                 }
             }
-            
-            // 고유 효과
-            if (uniqueEffect != null)
+
+            if (AdditionalEffects.Count > 0)
             {
-                info.AppendLine($"고유 효과: {uniqueEffect.EffectName}");
-                info.AppendLine($"  설명: {uniqueEffect.Description}");
+                if (sb.Length > 0) sb.AppendLine();
+                sb.AppendLine(lm.GetText("equip_ui_header_additional_effects"));
+                foreach (var effect in AdditionalEffects)
+                {
+                    sb.AppendLine(effect.ToString());
+                }
             }
-            
-            return info.ToString();
+
+            if (CanHaveUniqueEffect && uniqueEffectSO != null)
+            {
+                if (sb.Length > 0) sb.AppendLine();
+                sb.AppendLine(lm.GetText("equip_ui_header_unique_effect"));
+                sb.AppendLine(GetUniqueEffectInfo());
+            }
+
+            return sb.ToString();
         }
     }
 }
