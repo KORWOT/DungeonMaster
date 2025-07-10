@@ -1,0 +1,724 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b6cb4a031a862034d9e966c82100e529, type: 3}
+  m_Name: StringTable
+  m_EditorClassIdentifier: 
+  tableName: Main
+  description: "\uBA54\uC778 \uC9C0\uC5ED\uD654 \uD14C\uC774\uBE14"
+  entries:
+  - key: skill_target_self
+    texts:
+    - language: 0
+      text: "\uC790\uC2E0"
+    - language: 1
+      text: Self
+    - language: 2
+      text: "\u81EA\u5206"
+    - language: 3
+      text: "\u81EA\u8EAB"
+    description: 
+  - key: skill_target_ally
+    texts:
+    - language: 0
+      text: "\uC544\uAD70"
+    - language: 1
+      text: Ally
+    - language: 2
+      text: "\u5473\u65B9"
+    - language: 3
+      text: "\u53CB\u519B"
+    description: 
+  - key: skill_target_all_enemies
+    texts:
+    - language: 0
+      text: "\uBAA8\uB4E0 \uC801"
+    - language: 1
+      text: All Enemies
+    - language: 2
+      text: "\u5168\u3066\u306E\u6575"
+    - language: 3
+      text: "\u6240\u6709\u654C\u4EBA"
+    description: 
+  - key: skill_target_all_allies
+    texts:
+    - language: 0
+      text: "\uBAA8\uB4E0 \uC544\uAD70"
+    - language: 1
+      text: All Allies
+    - language: 2
+      text: "\u5168\u3066\u306E\u5473\u65B9"
+    - language: 3
+      text: "\u6240\u6709\u53CB\u519B"
+    description: 
+  - key: skill_target_all
+    texts:
+    - language: 0
+      text: "\uBAA8\uB4E0 \uB300\uC0C1"
+    - language: 1
+      text: All Targets
+    - language: 2
+      text: "\u5168\u3066\u306E\u5BFE\u8C61"
+    - language: 3
+      text: "\u6240\u6709\u76EE\u6807"
+    description: 
+  - key: skill_target_unknown
+    texts:
+    - language: 0
+      text: "\uC54C \uC218 \uC5C6\uC74C"
+    - language: 1
+      text: Unknown
+    - language: 2
+      text: "\u4E0D\u660E"
+    - language: 3
+      text: "\u672A\u77E5"
+    description: 
+  - key: skill_effect_damage
+    texts:
+    - language: 0
+      text: "\uD53C\uD574"
+    - language: 1
+      text: Damage
+    - language: 2
+      text: "\u30C0\u30E1\u30FC\u30B8"
+    - language: 3
+      text: "\u4F24\u5BB3"
+    description: 
+  - key: skill_effect_heal
+    texts:
+    - language: 0
+      text: "\uD68C\uBCF5"
+    - language: 1
+      text: Heal
+    - language: 2
+      text: "\u56DE\u5FA9"
+    - language: 3
+      text: "\u6062\u590D"
+    description: 
+  - key: skill_effect_attack_buff
+    texts:
+    - language: 0
+      text: "\uACF5\uACA9\uB825 \uC99D\uAC00"
+    - language: 1
+      text: Attack Buff
+    - language: 2
+      text: "\u653B\u6483\u529B\u5897\u52A0"
+    - language: 3
+      text: "\u653B\u51FB\u529B\u589E\u76CA"
+    description: 
+  - key: skill_effect_defense_buff
+    texts:
+    - language: 0
+      text: "\uBC29\uC5B4\uB825 \uC99D\uAC00"
+    - language: 1
+      text: Defense Buff
+    - language: 2
+      text: "\u9632\u5FA1\u529B\u5897\u52A0"
+    - language: 3
+      text: "\u9632\u5FA1\u529B\u589E\u76CA"
+    description: 
+  - key: skill_effect_speed_buff
+    texts:
+    - language: 0
+      text: "\uC18D\uB3C4 \uC99D\uAC00"
+    - language: 1
+      text: Speed Buff
+    - language: 2
+      text: "\u901F\u5EA6\u5897\u52A0"
+    - language: 3
+      text: "\u901F\u5EA6\u589E\u76CA"
+    description: 
+  - key: skill_effect_attack_debuff
+    texts:
+    - language: 0
+      text: "\uACF5\uACA9\uB825 \uAC10\uC18C"
+    - language: 1
+      text: Attack Debuff
+    - language: 2
+      text: "\u653B\u6483\u529B\u6E1B\u5C11"
+    - language: 3
+      text: "\u653B\u51FB\u529B\u51CF\u76CA"
+    description: 
+  - key: skill_effect_defense_debuff
+    texts:
+    - language: 0
+      text: "\uBC29\uC5B4\uB825 \uAC10\uC18C"
+    - language: 1
+      text: Defense Debuff
+    - language: 2
+      text: "\u9632\u5FA1\u529B\u6E1B\u5C11"
+    - language: 3
+      text: "\u9632\u5FA1\u529B\u51CF\u76CA"
+    description: 
+  - key: skill_effect_speed_debuff
+    texts:
+    - language: 0
+      text: "\uC18D\uB3C4 \uAC10\uC18C"
+    - language: 1
+      text: Speed Debuff
+    - language: 2
+      text: "\u901F\u5EA6\u6E1B\u5C11"
+    - language: 3
+      text: "\u901F\u5EA6\u51CF\u76CA"
+    description: 
+  - key: skill_effect_stun
+    texts:
+    - language: 0
+      text: "\uAE30\uC808"
+    - language: 1
+      text: Stun
+    - language: 2
+      text: "\u30B9\u30BF\u30F3"
+    - language: 3
+      text: "\u51FB\u6655"
+    description: 
+  - key: skill_effect_poison
+    texts:
+    - language: 0
+      text: "\uB3C5"
+    - language: 1
+      text: Poison
+    - language: 2
+      text: "\u6BD2"
+    - language: 3
+      text: "\u4E2D\u6BD2"
+    description: 
+  - key: skill_effect_shield
+    texts:
+    - language: 0
+      text: "\uBCF4\uD638\uB9C9"
+    - language: 1
+      text: Shield
+    - language: 2
+      text: "\u30B7\u30FC\u30EB\u30C9"
+    - language: 3
+      text: "\u62A4\u76FE"
+    description: 
+  - key: skill_effect_unknown
+    texts:
+    - language: 0
+      text: "\uC54C \uC218 \uC5C6\uC74C"
+    - language: 1
+      text: Unknown
+    - language: 2
+      text: "\u4E0D\u660E"
+    - language: 3
+      text: "\u672A\u77E5"
+    description: 
+  - key: skill_hit_text
+    texts:
+    - language: 0
+      text: "{0}\uBC88"
+    - language: 1
+      text: '{0} times'
+    - language: 2
+      text: "{0}\u56DE"
+    - language: 3
+      text: "{0}\u6B21"
+    description: 
+  - key: skill_hit_suffix
+    texts:
+    - language: 0
+      text: " x{0}\uD788\uD2B8"
+    - language: 1
+      text: ' x{0} Hits'
+    - language: 2
+      text: " x{0}\u30D2\u30C3\u30C8"
+    - language: 3
+      text: " x{0}\u6B21\u547D\u4E2D"
+    description: 
+  - key: skill_target_enemy
+    texts:
+    - language: 0
+      text: "\uC801"
+    - language: 1
+      text: Enemy
+    - language: 2
+      text: "\u6575"
+    - language: 3
+      text: "\u654C\u4EBA"
+    description: 
+  - key: skill_grade_f_name
+    texts:
+    - language: 0
+      text: "\uCD5C\uD558\uAE09"
+    - language: 1
+      text: F Grade
+    - language: 2
+      text: "F\u7D1A"
+    - language: 3
+      text: "F\u7EA7"
+    description: 
+  - key: skill_grade_e_name
+    texts:
+    - language: 0
+      text: "\uD558\uAE09"
+    - language: 1
+      text: E Grade
+    - language: 2
+      text: "E\u7D1A"
+    - language: 3
+      text: "E\u7EA7"
+    description: 
+  - key: skill_grade_d_name
+    texts:
+    - language: 0
+      text: "\uC77C\uBC18\uAE09"
+    - language: 1
+      text: D Grade
+    - language: 2
+      text: "D\u7D1A"
+    - language: 3
+      text: "D\u7EA7"
+    description: 
+  - key: skill_grade_c_name
+    texts:
+    - language: 0
+      text: "\uC911\uAE09"
+    - language: 1
+      text: C Grade
+    - language: 2
+      text: "C\u7D1A"
+    - language: 3
+      text: "C\u7EA7"
+    description: 
+  - key: skill_grade_b_name
+    texts:
+    - language: 0
+      text: "\uC0C1\uAE09"
+    - language: 1
+      text: B Grade
+    - language: 2
+      text: "B\u7D1A"
+    - language: 3
+      text: "B\u7EA7"
+    description: 
+  - key: skill_grade_a_name
+    texts:
+    - language: 0
+      text: "\uACE0\uAE09"
+    - language: 1
+      text: A Grade
+    - language: 2
+      text: "A\u7D1A"
+    - language: 3
+      text: "A\u7EA7"
+    description: 
+  - key: skill_grade_s_name
+    texts:
+    - language: 0
+      text: "\uCD5C\uACE0\uAE09"
+    - language: 1
+      text: S Grade
+    - language: 2
+      text: "S\u7D1A"
+    - language: 3
+      text: "S\u7EA7"
+    description: 
+  - key: skill_grade_f_desc
+    texts:
+    - language: 0
+      text: "\uAE30\uBCF8\uC801\uC778 \uD6A8\uACFC."
+    - language: 1
+      text: Basic effects.
+    - language: 2
+      text: "\u57FA\u672C\u7684\u306A\u52B9\u679C\u3002"
+    - language: 3
+      text: "\u57FA\u672C\u6548\u679C\u3002"
+    description: 
+  - key: skill_grade_e_desc
+    texts:
+    - language: 0
+      text: "\uC57D\uD558\uC9C0\uB9CC \uC548\uC815\uC801."
+    - language: 1
+      text: Weak but stable.
+    - language: 2
+      text: "\u5F31\u3044\u304C\u5B89\u5B9A\u7684\u3002"
+    - language: 3
+      text: "\u867D\u7136\u5F31\u4F46\u5F88\u7A33\u5B9A\u3002"
+    description: 
+  - key: skill_grade_d_desc
+    texts:
+    - language: 0
+      text: "\uD3C9\uADE0\uC801\uC778 \uC131\uB2A5."
+    - language: 1
+      text: Average performance.
+    - language: 2
+      text: "\u5E73\u5747\u7684\u306A\u6027\u80FD\u3002"
+    - language: 3
+      text: "\u5E73\u5747\u6027\u80FD\u3002"
+    description: 
+  - key: skill_grade_c_desc
+    texts:
+    - language: 0
+      text: "\uAD1C\uCC2E\uC740 \uC131\uB2A5."
+    - language: 1
+      text: Decent performance.
+    - language: 2
+      text: "\u307E\u3042\u307E\u3042\u306E\u6027\u80FD\u3002"
+    - language: 3
+      text: "\u4E0D\u9519\u7684\u6027\u80FD\u3002"
+    description: 
+  - key: skill_grade_b_desc
+    texts:
+    - language: 0
+      text: "\uC88B\uC740 \uC131\uB2A5."
+    - language: 1
+      text: Good performance.
+    - language: 2
+      text: "\u826F\u3044\u6027\u80FD\u3002"
+    - language: 3
+      text: "\u6027\u80FD\u826F\u597D\u3002"
+    description: 
+  - key: skill_grade_a_desc
+    texts:
+    - language: 0
+      text: "\uAC15\uB825\uD55C \uC131\uB2A5."
+    - language: 1
+      text: Powerful performance.
+    - language: 2
+      text: "\u5F37\u529B\u306A\u6027\u80FD\u3002"
+    - language: 3
+      text: "\u6027\u80FD\u5F3A\u5927\u3002"
+    description: 
+  - key: skill_grade_s_desc
+    texts:
+    - language: 0
+      text: "\uCD5C\uAC15\uC758 \uC131\uB2A5."
+    - language: 1
+      text: The best performance.
+    - language: 2
+      text: "\u6700\u5F37\u306E\u6027\u80FD\u3002"
+    - language: 3
+      text: "\u6700\u5F3A\u6027\u80FD\u3002"
+    description: 
+  - key: skill_grade_unknown_name
+    texts:
+    - language: 0
+      text: "\uC54C \uC218 \uC5C6\uC74C"
+    - language: 1
+      text: Unknown
+    - language: 2
+      text: "\u4E0D\u660E"
+    - language: 3
+      text: "\u672A\u77E5"
+    description: 
+  - key: skill_grade_unknown_desc
+    texts:
+    - language: 0
+      text: "\uC54C \uC218 \uC5C6\uB294 \uB4F1\uAE09\uC785\uB2C8\uB2E4."
+    - language: 1
+      text: This is an unknown grade.
+    - language: 2
+      text: "\u4E0D\u660E\u306A\u7B49\u7D1A\u3067\u3059\u3002"
+    - language: 3
+      text: "\u662F\u672A\u77E5\u7684\u7B49\u7EA7\u3002"
+    description: 
+  - key: skill_level_max
+    texts:
+    - language: 0
+      text: "\uCD5C\uB300 \uB808\uBCA8\uC785\uB2C8\uB2E4."
+    - language: 1
+      text: Already at max level.
+    - language: 2
+      text: "\u6700\u5927\u30EC\u30D9\u30EB\u3067\u3059\u3002"
+    - language: 3
+      text: "\u5DF2\u8FBE\u6700\u9AD8\u7B49\u7EA7\u3002"
+    description: 
+  - key: skill_level_up_preview_title
+    texts:
+    - language: 0
+      text: "\uB808\uBCA8 {0} \u2192 {1}"
+    - language: 1
+      text: "Level {0} \u2192 {1}"
+    - language: 2
+      text: "\u30EC\u30D9\u30EB {0} \u2192 {1}"
+    - language: 3
+      text: "\u7B49\u7EA7 {0} \u2192 {1}"
+    description: 
+  - key: skill_label_cooldown
+    texts:
+    - language: 0
+      text: "\uCFE8\uB2E4\uC6B4"
+    - language: 1
+      text: Cooldown
+    - language: 2
+      text: "\u30AF\u30FC\u30EB\u30C0\u30A6\u30F3"
+    - language: 3
+      text: "\u51B7\u5374\u65F6\u95F4"
+    description: 
+  - key: skill_label_mana_cost
+    texts:
+    - language: 0
+      text: "\uB9C8\uB098 \uC18C\uBAA8"
+    - language: 1
+      text: Mana Cost
+    - language: 2
+      text: "\u30DE\u30CA\u6D88\u8CBB"
+    - language: 3
+      text: "\u6CD5\u529B\u6D88\u8017"
+    description: 
+  - key: unit_seconds
+    texts:
+    - language: 0
+      text: "\uCD08"
+    - language: 1
+      text: s
+    - language: 2
+      text: "\u79D2"
+    - language: 3
+      text: "\u79D2"
+    description: 
+  - key: skill_level_indicator
+    texts:
+    - language: 0
+      text: (Lv.{0})
+    - language: 1
+      text: (Lv.{0})
+    - language: 2
+      text: (Lv.{0})
+    - language: 3
+      text: (Lv.{0})
+    description: 
+  - key: skill_label_target
+    texts:
+    - language: 0
+      text: "\uB300\uC0C1"
+    - language: 1
+      text: Target
+    - language: 2
+      text: "\u5BFE\u8C61"
+    - language: 3
+      text: "\u76EE\u6807"
+    description: 
+  - key: skill_label_required_level
+    texts:
+    - language: 0
+      text: "\uD544\uC694 \uB808\uBCA8"
+    - language: 1
+      text: Required Level
+    - language: 2
+      text: "\u5FC5\u8981\u30EC\u30D9\u30EB"
+    - language: 3
+      text: "\u9700\u8981\u7B49\u7EA7"
+    description: 
+  - key: skill_label_effects
+    texts:
+    - language: 0
+      text: "[\uD6A8\uACFC]"
+    - language: 1
+      text: '[Effects]'
+    - language: 2
+      text: "[\u52B9\u679C]"
+    - language: 3
+      text: "[\u6548\u679C]"
+    description: 
+  - key: unique_effect_berserker_name
+    texts:
+    - language: 0
+      text: "\uAD11\uC804\uC0AC"
+    - language: 1
+      text: Berserker
+    - language: 2
+      text: "\u30D0\u30FC\u30B5\u30FC\u30AB\u30FC"
+    - language: 3
+      text: "\u72C2\u6218\u58EB"
+    description: 
+  - key: unique_effect_berserker_desc
+    texts:
+    - language: 0
+      text: "\uCCB4\uB825\uC774 \uB0AE\uC744\uC218\uB85D \uACF5\uACA9\uB825 \uC99D\uAC00
+        (\uCD5C\uB300 {0}%)"
+    - language: 1
+      text: Attack increases as health gets lower (Max {0}%)
+    - language: 2
+      text: "\u4F53\u529B\u304C\u4F4E\u3044\u307B\u3069\u653B\u6483\u529B\u5897\u52A0(\u6700\u5927{0}%)"
+    - language: 3
+      text: "\u751F\u547D\u503C\u8D8A\u4F4E\u653B\u51FB\u529B\u8D8A\u9AD8(\u6700\u591A{0}%)"
+    description: 
+  - key: unique_effect_vampire_name
+    texts:
+    - language: 0
+      text: "\uD761\uD608\uADC0"
+    - language: 1
+      text: Vampire
+    - language: 2
+      text: "\u5438\u8840\u9B3C"
+    - language: 3
+      text: "\u5438\u8840\u9B3C"
+    description: 
+  - key: unique_effect_vampire_desc
+    texts:
+    - language: 0
+      text: "\uD761\uD608 {0}% + \uCE58\uBA85\uD0C0 \uC2DC \uCD94\uAC00 \uD761\uD608
+        {1}%"
+    - language: 1
+      text: Lifesteal {0}% + extra lifesteal {1}% on critical hit
+    - language: 2
+      text: "\u5438\u8840{0}% + \u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u6642\u3001\u8FFD\u52A0\u5438\u8840{1}\uFF05"
+    - language: 3
+      text: "\u5438\u8840{0}% + \u66B4\u51FB\u65F6\u989D\u5916\u5438\u8840{1}%"
+    description: 
+  - key: unique_effect_guardian_name
+    texts:
+    - language: 0
+      text: "\uC218\uD638\uC790"
+    - language: 1
+      text: Guardian
+    - language: 2
+      text: "\u5B88\u8B77\u8005"
+    - language: 3
+      text: "\u5B88\u62A4\u8005"
+    description: 
+  - key: unique_effect_guardian_desc
+    texts:
+    - language: 0
+      text: "\uBC29\uC5B4\uB825\uC758 {0}%\uB9CC\uD07C \uCCB4\uB825 \uC99D\uAC00"
+    - language: 1
+      text: Increases HP by {0}% of Defense
+    - language: 2
+      text: "\u9632\u5FA1\u529B\u306E{0}%\u5206\u3001\u4F53\u529B\u5897\u52A0"
+    - language: 3
+      text: "\u589E\u52A0\u76F8\u5F53\u4E8E\u9632\u5FA1\u529B{0}%\u7684\u751F\u547D\u503C"
+    description: 
+  - key: unique_effect_assassin_name
+    texts:
+    - language: 0
+      text: "\uC554\uC0B4\uC790"
+    - language: 1
+      text: Assassin
+    - language: 2
+      text: "\u6697\u6BBA\u8005"
+    - language: 3
+      text: "\u523A\u5BA2"
+    description: 
+  - key: unique_effect_assassin_desc
+    texts:
+    - language: 0
+      text: "\uCE58\uBA85\uD0C0 \uD655\uB960 {0}% + \uCE58\uBA85\uD0C0 \uC2DC \uCFE8\uD0C0\uC784
+        {1}% \uAC10\uC18C"
+    - language: 1
+      text: Critical chance {0}% + cooldown reduction {1}% on critical hit
+    - language: 2
+      text: "\u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u7387{0}% + \u30AF\u30EA\u30C6\u30A3\u30AB\u30EB\u6642\u3001\u30AF\u30FC\u30EB\u30BF\u30A4\u30E0{1}%\u6E1B\u5C11"
+    - language: 3
+      text: "\u66B4\u51FB\u7387{0}% + \u66B4\u51FB\u65F6\u51B7\u5374\u65F6\u95F4\u51CF\u5C11{1}%"
+    description: 
+  - key: unique_effect_elemental_name
+    texts:
+    - language: 0
+      text: "\uC6D0\uC18C\uC220\uC0AC"
+    - language: 1
+      text: Elemental
+    - language: 2
+      text: "\u5143\u7D20\u8853\u5E2B"
+    - language: 3
+      text: "\u5143\u7D20\u4F7F"
+    description: 
+  - key: unique_effect_elemental_desc
+    texts:
+    - language: 0
+      text: "\uC18D\uC131 \uD53C\uD574 {0}% + \uAD00\uD1B5\uB825 {1}"
+    - language: 1
+      text: Elemental damage {0}% + Penetration {1}
+    - language: 2
+      text: "\u5C5E\u6027\u30C0\u30E1\u30FC\u30B8{0}% + \u8CAB\u901A\u529B{1}"
+    - language: 3
+      text: "\u5C5E\u6027\u4F24\u5BB3{0}% + \u7A7F\u900F\u529B{1}"
+    description: 
+  - key: unique_effect_rapid_name
+    texts:
+    - language: 0
+      text: "\uC2E0\uC18D\uD568"
+    - language: 1
+      text: Rapid
+    - language: 2
+      text: "\u8FC5\u901F"
+    - language: 3
+      text: "\u8FC5\u901F"
+    description: 
+  - key: unique_effect_rapid_desc
+    texts:
+    - language: 0
+      text: "\uACF5\uACA9\uC18D\uB3C4 {0}% + \uD53C\uD574 \uC99D\uAC00 {1}%"
+    - language: 1
+      text: Attack speed {0}% + Damage increase {1}%
+    - language: 2
+      text: "\u653B\u6483\u901F\u5EA6{0}% + \u30C0\u30E1\u30FC\u30B8\u5897\u52A0{1}%"
+    - language: 3
+      text: "\u653B\u51FB\u901F\u5EA6{0}% + \u4F24\u5BB3\u589E\u52A0{1}%"
+    description: 
+  - key: unique_effect_fortress_name
+    texts:
+    - language: 0
+      text: "\uC694\uC0C8"
+    - language: 1
+      text: Fortress
+    - language: 2
+      text: "\u8981\u585E"
+    - language: 3
+      text: "\u8981\u585E"
+    description: 
+  - key: unique_effect_fortress_desc
+    texts:
+    - language: 0
+      text: "\uD53C\uD574 \uAC10\uC18C {0}% + \uBC18\uC0AC \uD53C\uD574 {1}%"
+    - language: 1
+      text: Damage reduction {0}% + Reflect damage {1}%
+    - language: 2
+      text: "\u30C0\u30E1\u30FC\u30B8\u6E1B\u5C11{0}% + \u53CD\u5C04\u30C0\u30E1\u30FC\u30B8{1}%"
+    - language: 3
+      text: "\u4F24\u5BB3\u51CF\u5C11{0}% + \u53CD\u5C04\u4F24\u5BB3{1}%"
+    description: 
+  - key: unique_effect_custom_name
+    texts:
+    - language: 0
+      text: "\uC0AC\uC6A9\uC790 \uC815\uC758 \uD6A8\uACFC"
+    - language: 1
+      text: Custom Effect
+    - language: 2
+      text: "\u30AB\u30B9\u30BF\u30E0\u52B9\u679C"
+    - language: 3
+      text: "\u81EA\u5B9A\u4E49\u6548\u679C"
+    description: 
+  - key: unique_effect_custom_desc
+    texts:
+    - language: 0
+      text: "\uC0AC\uC6A9\uC790 \uC815\uC758 \uC124\uBA85\uC785\uB2C8\uB2E4."
+    - language: 1
+      text: This is a custom description.
+    - language: 2
+      text: "\u3053\u308C\u306F\u30AB\u30B9\u30BF\u30E0\u8AAC\u660E\u3067\u3059\u3002"
+    - language: 3
+      text: "\u8FD9\u662F\u81EA\u5B9A\u4E49\u63CF\u8FF0\u3002"
+    description: 
+  - key: unique_effect_unknown_desc
+    texts:
+    - language: 0
+      text: "\uC54C \uC218 \uC5C6\uB294 \uACE0\uC720 \uD6A8\uACFC\uC785\uB2C8\uB2E4."
+    - language: 1
+      text: This is an unknown unique effect.
+    - language: 2
+      text: "\u4E0D\u660E\u306A\u56FA\u6709\u52B9\u679C\u3067\u3059\u3002"
+    - language: 3
+      text: "\u662F\u672A\u77E5\u7684\u56FA\u6709\u6548\u679C\u3002"
+    description: 
+  - key: unique_effect_error_desc
+    texts:
+    - language: 0
+      text: "\uC124\uBA85 \uC0DD\uC131 \uC911 \uC624\uB958\uAC00 \uBC1C\uC0DD\uD588\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: An error occurred while generating the description.
+    - language: 2
+      text: "\u8AAC\u660E\u306E\u751F\u6210\u4E2D\u306B\u30A8\u30E9\u30FC\u304C\u767A\u751F\u3057\u307E\u3057\u305F\u3002"
+    - language: 3
+      text: "\u751F\u6210\u63CF\u8FF0\u65F6\u53D1\u751F\u9519\u8BEF\u3002"
+    description: 

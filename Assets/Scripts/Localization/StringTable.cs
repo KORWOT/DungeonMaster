@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using System.Collections.Generic; // Added for IEnumerable
+using System.Linq; // Added for Select and HashSet
 
 namespace DungeonMaster.Localization
 {
@@ -78,6 +80,34 @@ namespace DungeonMaster.Localization
         }
 
 #if UNITY_EDITOR
+        /// <summary>
+        /// 에디터 전용: 여러 항목을 한 번에 추가합니다. (성능 최적화)
+        /// </summary>
+        public void AddEntries(System.Collections.Generic.IEnumerable<LocalizedEntry> entriesToAdd)
+        {
+            if (entriesToAdd == null) return;
+            
+            var newEntryList = new System.Collections.Generic.List<LocalizedEntry>();
+            var existingKeys = new System.Collections.Generic.HashSet<string>(entries.Select(e => e.Key));
+            
+            foreach (var newEntry in entriesToAdd)
+            {
+                if (newEntry != null && newEntry.IsValid() && !existingKeys.Contains(newEntry.Key))
+                {
+                    newEntryList.Add(newEntry);
+                    existingKeys.Add(newEntry.Key); // 추가된 목록 내 중복 방지
+                }
+            }
+            
+            if (newEntryList.Count == 0) return;
+
+            var currentEntries = new System.Collections.Generic.List<LocalizedEntry>(entries);
+            currentEntries.AddRange(newEntryList);
+            entries = currentEntries.ToArray();
+            
+            UnityEditor.EditorUtility.SetDirty(this);
+        }
+
         /// <summary>
         /// 에디터 전용: 새 항목 추가
         /// </summary>

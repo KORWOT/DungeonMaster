@@ -1,0 +1,65 @@
+Key,Category1,Category2,Korean,English,Japanese,Chinese,Description
+skill_target_enemy,스킬,타겟,적,Enemy,敵,敌人,Skill Target Type: Enemy
+skill_target_self,스킬,타겟,자신,Self,自分,自身,Skill Target Type: Self
+skill_target_ally,스킬,타겟,아군,Ally,味方,友军,Skill Target Type: Ally
+skill_target_all_enemies,스킬,타겟,모든 적,All Enemies,全ての敵,所有敌人,Skill Target Type: All Enemies
+skill_target_all_allies,스킬,타겟,모든 아군,All Allies,全ての味方,所有友军,Skill Target Type: All Allies
+skill_target_all,스킬,타겟,모든 대상,All Targets,全ての対象,所有目标,Skill Target Type: All
+skill_target_unknown,스킬,타겟,알 수 없음,Unknown,不明,未知,Skill Target Type: Unknown
+skill_effect_damage,스킬,효과,피해,Damage,ダメージ,伤害,Skill Effect Type: Damage
+skill_effect_heal,스킬,효과,회복,Heal,回復,恢复,Skill Effect Type: Heal
+skill_effect_attack_buff,스킬,효과,공격력 증가,Attack Buff,攻撃力増加,攻击力增益,Skill Effect Type: Attack Buff
+skill_effect_defense_buff,스킬,효과,방어력 증가,Defense Buff,防御力増加,防御力增益,Skill Effect Type: Defense Buff
+skill_effect_speed_buff,스킬,효과,속도 증가,Speed Buff,速度増加,速度增益,Skill Effect Type: Speed Buff
+skill_effect_attack_debuff,스킬,효과,공격력 감소,Attack Debuff,攻撃力減少,攻击力减益,Skill Effect Type: Attack Debuff
+skill_effect_defense_debuff,스킬,효과,방어력 감소,Defense Debuff,防御力減少,防御力减益,Skill Effect Type: Defense Debuff
+skill_effect_speed_debuff,스킬,효과,속도 감소,Speed Debuff,速度減少,速度减益,Skill Effect Type: Speed Debuff
+skill_effect_stun,스킬,효과,기절,Stun,スタン,击晕,Skill Effect Type: Stun
+skill_effect_poison,스킬,효과,독,Poison,毒,中毒,Skill Effect Type: Poison
+skill_effect_shield,스킬,효과,보호막,Shield,シールド,护盾,Skill Effect Type: Shield
+skill_effect_unknown,스킬,효과,알 수 없음,Unknown,不明,未知,Skill Effect Type: Unknown
+skill_hit_text,스킬,UI,"{0}번","{0} times","{0}回","{0}次",Hit count text, for example: 3번
+skill_hit_suffix,스킬,UI," x{0}히트"," x{0} Hits"," x{0}ヒット"," x{0}次命中",Hit count suffix, for example: x3 히트
+skill_grade_f_name,스킬,등급,최하급,F Grade,F級,F级,Skill Grade Name: F
+skill_grade_e_name,스킬,등급,하급,E Grade,E級,E级,Skill Grade Name: E
+skill_grade_d_name,스킬,등급,일반급,D Grade,D級,D级,Skill Grade Name: D
+skill_grade_c_name,스킬,등급,중급,C Grade,C級,C级,Skill Grade Name: C
+skill_grade_b_name,스킬,등급,상급,B Grade,B級,B级,Skill Grade Name: B
+skill_grade_a_name,스킬,등급,고급,A Grade,A級,A级,Skill Grade Name: A
+skill_grade_s_name,스킬,등급,최고급,S Grade,S級,S级,Skill Grade Name: S
+skill_grade_f_desc,스킬,등급,기본적인 효과.,Basic effects.,基本的な効果。,基本效果。,Skill Grade Description: F
+skill_grade_e_desc,스킬,등급,약하지만 안정적.,Weak but stable.,弱いが安定的。,虽然弱但很稳定。,Skill Grade Description: E
+skill_grade_d_desc,스킬,등급,평균적인 성능.,Average performance.,平均的な性能。,平均性能。,Skill Grade Description: D
+skill_grade_c_desc,스킬,등급,괜찮은 성능.,Decent performance.,まあまあの性能。,不错的性能。,Skill Grade Description: C
+skill_grade_b_desc,스킬,등급,좋은 성능.,Good performance.,良い性能。,性能良好。,Skill Grade Description: B
+skill_grade_a_desc,스킬,등급,강력한 성능.,Powerful performance.,強力な性能。,性能强大。,Skill Grade Description: A
+skill_grade_s_desc,스킬,등급,최강의 성능.,The best performance.,最強の性能。,最强性能。,Skill Grade Description: S
+skill_grade_unknown_name,스킬,등급,알 수 없음,Unknown,不明,未知,Skill Grade Name: Unknown
+skill_grade_unknown_desc,스킬,등급,알 수 없는 등급입니다.,This is an unknown grade.,不明な等級です。,是未知的等级。,Skill Grade Description: Unknown
+skill_level_max,스킬,UI,최대 레벨입니다.,Already at max level.,最大レベルです。,已达最高等级。,Message for max level preview
+skill_level_up_preview_title,스킬,UI,"레벨 {0} → {1}","Level {0} → {1}","レベル {0} → {1}","等级 {0} → {1}",Title for skill level up preview
+skill_label_cooldown,스킬,UI,쿨다운,Cooldown,クールダウン,冷却时间,Label for Cooldown
+skill_label_mana_cost,스킬,UI,마나 소모,Mana Cost,マナ消費,法力消耗,Label for Mana Cost
+unit_seconds,공통,단위,초,s,秒,秒,Unit for seconds
+skill_level_indicator,스킬,UI,"(Lv.{0})","(Lv.{0})","(Lv.{0})","(Lv.{0})",Indicator for skill level, e.g., (Lv.5)
+skill_label_target,스킬,UI,대상,Target,対象,目标,Label for Target
+skill_label_required_level,스킬,UI,필요 레벨,Required Level,必要レベル,需要等级,Label for Required Level
+skill_label_effects,스킬,UI,[효과],[Effects],[効果],[效果],Label for Effects section
+unique_effect_berserker_name,장비,고유 효과,광전사,Berserker,バーサーカー,狂战士,Name for Berserker unique effect
+unique_effect_berserker_desc,장비,고유 효과,"체력이 낮을수록 공격력 증가 (최대 {0}%)","Attack increases as health gets lower (Max {0}%)","体力が低いほど攻撃力増加(最大{0}%)","生命值越低攻击力越高(最多{0}%)",Description for Berserker unique effect
+unique_effect_vampire_name,장비,고유 효과,흡혈귀,Vampire,吸血鬼,吸血鬼,Name for Vampire unique effect
+unique_effect_vampire_desc,장비,고유 효과,"흡혈 {0}% + 치명타 시 추가 흡혈 {1}%","Lifesteal {0}% + extra lifesteal {1}% on critical hit","吸血{0}% + クリティカル時、追加吸血{1}％","吸血{0}% + 暴击时额外吸血{1}%",Description for Vampire unique effect
+unique_effect_guardian_name,장비,고유 효과,수호자,Guardian,守護者,守护者,Name for Guardian unique effect
+unique_effect_guardian_desc,장비,고유 효과,"방어력의 {0}%만큼 체력 증가","Increases HP by {0}% of Defense","防御力の{0}%分、体力増加","增加相当于防御力{0}%的生命值",Description for Guardian unique effect
+unique_effect_assassin_name,장비,고유 효과,암살자,Assassin,暗殺者,刺客,Name for Assassin unique effect
+unique_effect_assassin_desc,장비,고유 효과,"치명타 확률 {0}% + 치명타 시 쿨타임 {1}% 감소","Critical chance {0}% + cooldown reduction {1}% on critical hit","クリティカル率{0}% + クリティカル時、クールタイム{1}%減少","暴击率{0}% + 暴击时冷却时间减少{1}%",Description for Assassin unique effect
+unique_effect_elemental_name,장비,고유 효과,원소술사,Elemental,元素術師,元素使,Name for Elemental unique effect
+unique_effect_elemental_desc,장비,고유 효과,"속성 피해 {0}% + 관통력 {1}","Elemental damage {0}% + Penetration {1}","属性ダメージ{0}% + 貫通力{1}","属性伤害{0}% + 穿透力{1}",Description for Elemental unique effect
+unique_effect_rapid_name,장비,고유 효과,신속함,Rapid,迅速,迅速,Name for Rapid unique effect
+unique_effect_rapid_desc,장비,고유 효과,"공격속도 {0}% + 피해 증가 {1}%","Attack speed {0}% + Damage increase {1}%","攻撃速度{0}% + ダメージ増加{1}%","攻击速度{0}% + 伤害增加{1}%",Description for Rapid unique effect
+unique_effect_fortress_name,장비,고유 효과,요새,Fortress,要塞,要塞,Name for Fortress unique effect
+unique_effect_fortress_desc,장비,고유 효과,"피해 감소 {0}% + 반사 피해 {1}%","Damage reduction {0}% + Reflect damage {1}%","ダメージ減少{0}% + 反射ダメージ{1}%","伤害减少{0}% + 反射伤害{1}%",Description for Fortress unique effect
+unique_effect_custom_name,장비,고유 효과,사용자 정의 효과,Custom Effect,カスタム効果,自定义效果,Name for Custom unique effect
+unique_effect_custom_desc,장비,고유 효과,사용자 정의 설명입니다.,This is a custom description.,これはカスタム説明です。,这是自定义描述。,Description for Custom unique effect
+unique_effect_unknown_desc,장비,고유 효과,알 수 없는 고유 효과입니다.,This is an unknown unique effect.,不明な固有効果です。,是未知的固有效果。,Description for unknown unique effect
+unique_effect_error_desc,장비,고유 효과,설명 생성 중 오류가 발생했습니다.,An error occurred while generating the description.,説明の生成中にエラーが発生しました。,生成描述时发生错误。,Description for error case 

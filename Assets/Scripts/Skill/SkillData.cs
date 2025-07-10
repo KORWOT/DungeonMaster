@@ -4,6 +4,7 @@ using DungeonMaster.Character;
 using DungeonMaster.Shared.Scaling;
 using UnityEngine;
 using System.Text;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Skill
 {
@@ -145,8 +146,9 @@ namespace DungeonMaster.Skill
         /// </summary>
         public string GetCompletePreview(int currentLevel)
         {
+            var lm = LocalizationManager.Instance;
             if (currentLevel >= maxLevel)
-                return "최대 레벨입니다.";
+                return lm.GetText("skill_level_max");
 
             return SkillDataCache.GetOrComputeDescription(this, currentLevel, "CompletePreview", () =>
             {
@@ -154,7 +156,7 @@ namespace DungeonMaster.Skill
                 var sb = new StringBuilder(256);
                 
                 // 제목
-                sb.Append("레벨 ").Append(currentLevel).Append(" → ").Append(nextLevel)
+                sb.Append(lm.GetTextFormatted("skill_level_up_preview_title", currentLevel, nextLevel))
                   .AppendLine(":").AppendLine();
 
                 // 쿨다운 변화 (0이 아닐 때만 표시)
@@ -162,8 +164,9 @@ namespace DungeonMaster.Skill
                 float nextCooldown = GetScaledCooldown(nextLevel);
                 if (cooldown > 0 && Mathf.Abs(currentCooldown - nextCooldown) > 0.01f)
                 {
-                    sb.Append("쿨다운: ").Append(currentCooldown.ToString("F1")).Append("초 → ")
-                      .Append(nextCooldown.ToString("F1")).AppendLine("초");
+                    var unit = lm.GetText("unit_seconds");
+                    sb.Append(lm.GetText("skill_label_cooldown")).Append(": ").Append(currentCooldown.ToString("F1")).Append(unit).Append(" → ")
+                      .Append(nextCooldown.ToString("F1")).AppendLine(unit);
                 }
 
                 // 마나 소모량 변화 (0이 아닐 때만 표시)
@@ -171,7 +174,7 @@ namespace DungeonMaster.Skill
                 float nextMana = GetScaledManaCost(nextLevel);
                 if (manaCost > 0 && Mathf.Abs(currentMana - nextMana) > 0.01f)
                 {
-                    sb.Append("마나 소모: ").Append(currentMana.ToString("F0")).Append(" → ")
+                    sb.Append(lm.GetText("skill_label_mana_cost")).Append(": ").Append(currentMana.ToString("F0")).Append(" → ")
                       .Append(nextMana.ToString("F0")).AppendLine();
                 }
 
@@ -228,44 +231,45 @@ namespace DungeonMaster.Skill
         public string GetDetailedDescription(int skillLevel)
         {
             skillLevel = Mathf.Clamp(skillLevel, 1, maxLevel);
+            var lm = LocalizationManager.Instance;
             
             return SkillDataCache.GetOrComputeDescription(this, skillLevel, "DetailedDescription", () =>
             {
                 var sb = new StringBuilder(512);
                 
                 // 제목
-                sb.Append(skillName).Append(" (Lv.").Append(skillLevel).AppendLine(")");
+                sb.Append(skillName).Append(" ").Append(lm.GetTextFormatted("skill_level_indicator", skillLevel)).AppendLine();
                 
                 // 동적 템플릿 처리된 설명
                 string processedDescription = ProcessDescriptionTemplate(descriptionTemplate, skillLevel);
                 sb.Append(processedDescription).AppendLine().AppendLine();
                 
                 // 스킬 스펙 (스케일링 적용)
-                sb.Append("대상: ").AppendLine(SkillDescriptionProcessor.GetTargetTypeString(targetType));
+                sb.Append(lm.GetText("skill_label_target")).Append(": ").AppendLine(SkillDescriptionProcessor.GetTargetTypeString(targetType));
                 
                 // 쿨다운 표시 (0이 아닐 때만)
                 float scaledCooldown = GetScaledCooldown(skillLevel);
                 if (scaledCooldown > 0)
                 {
-                    sb.Append("쿨다운: ").Append(scaledCooldown.ToString("F1")).AppendLine("초");
+                    sb.Append(lm.GetText("skill_label_cooldown")).Append(": ").Append(scaledCooldown.ToString("F1")).AppendLine(lm.GetText("unit_seconds"));
                 }
                 
                 // 마나 소모 표시 (0이 아닐 때만)
                 float scaledManaCost = GetScaledManaCost(skillLevel);
                 if (scaledManaCost > 0)
                 {
-                    sb.Append("마나 소모: ").AppendLine(scaledManaCost.ToString("F0"));
+                    sb.Append(lm.GetText("skill_label_mana_cost")).Append(": ").AppendLine(scaledManaCost.ToString("F0"));
                 }
                 
                 // 필요 레벨 표시 (0이 아닐 때만)
                 if (requiredLevel > 0)
                 {
-                    sb.Append("필요 레벨: ").AppendLine(requiredLevel.ToString());
+                    sb.Append(lm.GetText("skill_label_required_level")).Append(": ").AppendLine(requiredLevel.ToString());
                 }
                 
                 // 레벨별 효과
                 var scaledEffects = GetScaledEffects(skillLevel);
-                sb.AppendLine().AppendLine("[효과]");
+                sb.AppendLine().AppendLine(lm.GetText("skill_label_effects"));
                 
                 foreach (var effect in scaledEffects)
                 {

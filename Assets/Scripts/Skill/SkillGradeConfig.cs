@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using DungeonMaster.Skill;
 using UnityEngine;
 using System.Linq;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Skill
 {
@@ -11,8 +12,8 @@ namespace DungeonMaster.Skill
     [System.Serializable]
     public class SkillGradeData
     {
-        public string Name = "일반급";
-        [TextArea] public string Description = "평균적인 성능을 가집니다.";
+        public string NameKey = "skill_grade_d_name";
+        [TextArea] public string DescriptionKey = "skill_grade_d_desc";
         public Color GradeColor = Color.white;
         public float AppearanceRate = 50f;
     }
@@ -70,13 +71,13 @@ namespace DungeonMaster.Skill
         {
             gradeMappings = new List<SkillGradeMapping>
             {
-                new() { Grade = SkillGrade.F, Data = new SkillGradeData { Name = "최하급", Description = "기본적인 효과.", GradeColor = new Color(0.3f, 0.3f, 0.3f), AppearanceRate = 100f }},
-                new() { Grade = SkillGrade.E, Data = new SkillGradeData { Name = "하급", Description = "약하지만 안정적.", GradeColor = new Color(0.5f, 0.5f, 0.5f), AppearanceRate = 80f }},
-                new() { Grade = SkillGrade.D, Data = new SkillGradeData { Name = "일반급", Description = "평균적인 성능.", GradeColor = new Color(0.7f, 0.7f, 0.7f), AppearanceRate = 60f }},
-                new() { Grade = SkillGrade.C, Data = new SkillGradeData { Name = "중급", Description = "괜찮은 성능.", GradeColor = new Color(0.2f, 0.6f, 1f), AppearanceRate = 40f }},
-                new() { Grade = SkillGrade.B, Data = new SkillGradeData { Name = "상급", Description = "좋은 성능.", GradeColor = new Color(0.8f, 0.2f, 0.8f), AppearanceRate = 20f }},
-                new() { Grade = SkillGrade.A, Data = new SkillGradeData { Name = "고급", Description = "강력한 성능.", GradeColor = new Color(0.2f, 0.8f, 0.2f), AppearanceRate = 8f }},
-                new() { Grade = SkillGrade.S, Data = new SkillGradeData { Name = "최고급", Description = "최강의 성능.", GradeColor = new Color(1f, 0.8f, 0f), AppearanceRate = 2f }}
+                new() { Grade = SkillGrade.F, Data = new SkillGradeData { NameKey = "skill_grade_f_name", DescriptionKey = "skill_grade_f_desc", GradeColor = new Color(0.3f, 0.3f, 0.3f), AppearanceRate = 100f }},
+                new() { Grade = SkillGrade.E, Data = new SkillGradeData { NameKey = "skill_grade_e_name", DescriptionKey = "skill_grade_e_desc", GradeColor = new Color(0.5f, 0.5f, 0.5f), AppearanceRate = 80f }},
+                new() { Grade = SkillGrade.D, Data = new SkillGradeData { NameKey = "skill_grade_d_name", DescriptionKey = "skill_grade_d_desc", GradeColor = new Color(0.7f, 0.7f, 0.7f), AppearanceRate = 60f }},
+                new() { Grade = SkillGrade.C, Data = new SkillGradeData { NameKey = "skill_grade_c_name", DescriptionKey = "skill_grade_c_desc", GradeColor = new Color(0.2f, 0.6f, 1f), AppearanceRate = 40f }},
+                new() { Grade = SkillGrade.B, Data = new SkillGradeData { NameKey = "skill_grade_b_name", DescriptionKey = "skill_grade_b_desc", GradeColor = new Color(0.8f, 0.2f, 0.8f), AppearanceRate = 20f }},
+                new() { Grade = SkillGrade.A, Data = new SkillGradeData { NameKey = "skill_grade_a_name", DescriptionKey = "skill_grade_a_desc", GradeColor = new Color(0.2f, 0.8f, 0.2f), AppearanceRate = 8f }},
+                new() { Grade = SkillGrade.S, Data = new SkillGradeData { NameKey = "skill_grade_s_name", DescriptionKey = "skill_grade_s_desc", GradeColor = new Color(1f, 0.8f, 0f), AppearanceRate = 2f }}
             };
             Initialize();
             Debug.Log("스킬 등급 기본 설정이 적용되었습니다.");
@@ -106,13 +107,13 @@ namespace DungeonMaster.Skill
         public string GetGradeName(SkillGrade grade)
         {
             var data = GetGradeData(grade);
-            return data?.Name ?? "알 수 없음";
+            return data != null ? LocalizationManager.Instance.GetText(data.NameKey) : LocalizationManager.Instance.GetText("skill_grade_unknown_name");
         }
 
         public string GetGradeDescription(SkillGrade grade)
         {
             var data = GetGradeData(grade);
-            return data?.Description ?? "알 수 없는 등급입니다.";
+            return data != null ? LocalizationManager.Instance.GetText(data.DescriptionKey) : LocalizationManager.Instance.GetText("skill_grade_unknown_desc");
         }
     }
 } 

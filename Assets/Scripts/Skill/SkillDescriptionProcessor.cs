@@ -170,10 +170,11 @@ namespace DungeonMaster.Skill
         /// </summary>
         private static void ProcessHitExpressionPlaceholders(StringBuilder sb, SkillEffectData effect)
         {
+            var lm = Localization.LocalizationManager.Instance;
             if (effect.HitCount() > 1)
             {
-                sb.Replace("{hittext}", $"{effect.HitCount()}번");
-                sb.Replace("{hitsuffix}", $" x{effect.HitCount()}히트");
+                sb.Replace("{hittext}", lm.GetTextFormatted("skill_hit_text", effect.HitCount()));
+                sb.Replace("{hitsuffix}", lm.GetTextFormatted("skill_hit_suffix", effect.HitCount()));
             }
             else
             {
@@ -205,16 +206,17 @@ namespace DungeonMaster.Skill
         /// </summary>
         public static string GetTargetTypeString(SkillTargetType targetType)
         {
-            switch (targetType)
+            var key = targetType switch
             {
-                case SkillTargetType.Enemy: return "적";
-                case SkillTargetType.Self: return "자신";
-                case SkillTargetType.Ally: return "아군";
-                case SkillTargetType.AllEnemies: return "모든 적";
-                case SkillTargetType.AllAllies: return "모든 아군";
-                case SkillTargetType.All: return "모든 대상";
-                default: return "알 수 없음";
-            }
+                SkillTargetType.Enemy => "skill_target_enemy",
+                SkillTargetType.Self => "skill_target_self",
+                SkillTargetType.Ally => "skill_target_ally",
+                SkillTargetType.AllEnemies => "skill_target_all_enemies",
+                SkillTargetType.AllAllies => "skill_target_all_allies",
+                SkillTargetType.All => "skill_target_all",
+                _ => "skill_target_unknown"
+            };
+            return Localization.LocalizationManager.Instance.GetText(key);
         }
 
         /// <summary>
@@ -222,21 +224,22 @@ namespace DungeonMaster.Skill
         /// </summary>
         public static string GetEffectTypeString(SkillEffectType effectType)
         {
-            switch (effectType)
+            var key = effectType switch
             {
-                case SkillEffectType.Damage: return "피해";
-                case SkillEffectType.Heal: return "회복";
-                case SkillEffectType.AttackBuff: return "공격력 증가";
-                case SkillEffectType.DefenseBuff: return "방어력 증가";
-                case SkillEffectType.SpeedBuff: return "속도 증가";
-                case SkillEffectType.AttackDebuff: return "공격력 감소";
-                case SkillEffectType.DefenseDebuff: return "방어력 감소";
-                case SkillEffectType.SpeedDebuff: return "속도 감소";
-                case SkillEffectType.Stun: return "기절";
-                case SkillEffectType.Poison: return "독";
-                case SkillEffectType.Shield: return "보호막";
-                default: return "알 수 없음";
-            }
+                SkillEffectType.Damage => "skill_effect_damage",
+                SkillEffectType.Heal => "skill_effect_heal",
+                SkillEffectType.AttackBuff => "skill_effect_attack_buff",
+                SkillEffectType.DefenseBuff => "skill_effect_defense_buff",
+                SkillEffectType.SpeedBuff => "skill_effect_speed_buff",
+                SkillEffectType.AttackDebuff => "skill_effect_attack_debuff",
+                SkillEffectType.DefenseDebuff => "skill_effect_defense_debuff",
+                SkillEffectType.SpeedDebuff => "skill_effect_speed_debuff",
+                SkillEffectType.Stun => "skill_effect_stun",
+                SkillEffectType.Poison => "skill_effect_poison",
+                SkillEffectType.Shield => "skill_effect_shield",
+                _ => "skill_effect_unknown"
+            };
+            return Localization.LocalizationManager.Instance.GetText(key);
         }
 
         /// <summary>

@@ -4,6 +4,7 @@ using UnityEngine;
 using DungeonMaster.Battle;
 using DungeonMaster.Data;
 using DungeonMaster.Utility;
+using DungeonMaster.Localization;
 
 namespace DungeonMaster.Equipment
 {
@@ -64,11 +65,14 @@ namespace DungeonMaster.Equipment
         public float SecondaryValue => secondaryValue;
         
         public UniqueEffect(UniqueEffectType type, float primaryValue, float secondaryValue = 0f, string customDescription = "") 
-            : base($"고유: {GetEffectName(type)}", customDescription)
+            : base("", "") // 기본 이름과 설명을 비워둡니다.
         {
             this.effectType = type;
             this.primaryValue = primaryValue;
             this.secondaryValue = secondaryValue;
+            
+            // 이름과 설명을 지역화 시스템을 통해 생성합니다.
+            this.effectName = LocalizationManager.Instance.GetText(GetKey("name"));
             this.customDescription = string.IsNullOrEmpty(customDescription) ? GenerateDescription() : customDescription;
         }
         
@@ -405,15 +409,7 @@ namespace DungeonMaster.Equipment
         
         private void RemoveCustomEffect(DeterministicCharacterData target, float value1, float value2)
         {
-            try
-            {
-                // 커스텀 효과 해제 (사용자 정의)
-                Debug.Log($"커스텀 효과 해제: {value1}, {value2}");
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"커스텀 효과 해제 중 오류: {e.Message}");
-            }
+            // 사용자 정의 효과 제거 로직
         }
         
         #endregion
@@ -424,48 +420,28 @@ namespace DungeonMaster.Equipment
         {
             try
             {
-                return effectType switch
+                var lm = LocalizationManager.Instance;
+                var descriptionKey = GetKey("desc");
+                
+                // 'desc_custom' 같은 키가 없을 때를 대비한 폴백
+                if (!lm.ContainsKey(descriptionKey))
                 {
-                    UniqueEffectType.Berserker => $"체력이 낮을수록 공격력 증가 ({primaryValue:F1})",
-                    UniqueEffectType.Vampire => $"흡혈 {primaryValue:F1}% + 치명타 시 추가 흡혈 {secondaryValue:F1}%",
-                    UniqueEffectType.Guardian => $"방어력의 {primaryValue:F1}%만큼 체력 증가",
-                    UniqueEffectType.Assassin => $"치명타 확률 {primaryValue:F1}% + 치명타 시 쿨타임 {secondaryValue:F1}% 감소",
-                    UniqueEffectType.Elemental => $"속성 피해 {primaryValue:F1}% + 관통력 {secondaryValue:F1}",
-                    UniqueEffectType.Rapid => $"공격속도 {primaryValue:F1}% + 피해 증가 {secondaryValue:F1}%",
-                    UniqueEffectType.Fortress => $"피해 감소 {primaryValue:F1}% + 반사 피해 {secondaryValue:F1}%",
-                    UniqueEffectType.Custom => customDescription ?? "사용자 정의 효과",
-                    _ => "알 수 없는 고유 효과"
-                };
+                    return lm.GetText("unique_effect_unknown_desc");
+                }
+                
+                return lm.GetTextFormatted(descriptionKey, primaryValue, secondaryValue);
             }
             catch (System.Exception e)
             {
                 Debug.LogError($"고유 효과 설명 생성 중 오류: {e.Message}");
-                return "설명 생성 오류";
+                return LocalizationManager.Instance.GetText("unique_effect_error_desc");
             }
         }
         
-        private static string GetEffectName(UniqueEffectType type)
+        private string GetKey(string type)
         {
-            try
-            {
-                return type switch
-                {
-                    UniqueEffectType.Berserker => "광전사",
-                    UniqueEffectType.Vampire => "흡혈귀",
-                    UniqueEffectType.Guardian => "수호자",
-                    UniqueEffectType.Assassin => "암살자",
-                    UniqueEffectType.Elemental => "원소술사",
-                    UniqueEffectType.Rapid => "신속함",
-                    UniqueEffectType.Fortress => "요새",
-                    UniqueEffectType.Custom => "커스텀",
-                    _ => "알 수 없음"
-                };
-            }
-            catch (System.Exception e)
-            {
-                Debug.LogError($"고유 효과 이름 조회 중 오류: {e.Message}");
-                return "오류";
-            }
+            var effectName = effectType.ToString().ToLower();
+            return $"unique_effect_{effectName}_{type}";
         }
         
         /// <summary>
