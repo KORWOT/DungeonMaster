@@ -14,7 +14,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   effectNameKey: 
   baseDescriptionKey: 
-  Rules: []
+  Rules:
+  - Trigger: 0
+    Conditions: []
+    Actions: []
   DamageRules: []
   references:
     version: 2
