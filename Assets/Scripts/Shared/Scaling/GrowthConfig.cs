@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using DungeonMaster.Character;
+using DungeonMaster.Localization;
 using DungeonMaster.Utility;
 using UnityEngine;
 
@@ -37,7 +38,7 @@ namespace DungeonMaster.Shared.Scaling
         {
             if (targetLevel < 0 || targetLevel >= GoldCostPerLevel.Length || targetLevel >= GemCostPerLevel.Length)
             {
-                GameLogger.LogError($"Invalid target level for cost lookup: {targetLevel}");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("warn_invalid_level_request", targetLevel));
                 return (-1, -1); // Indicating an error
             }
             return (GoldCostPerLevel[targetLevel], GemCostPerLevel[targetLevel]);
@@ -47,7 +48,7 @@ namespace DungeonMaster.Shared.Scaling
         {
             if (_gradeGrowthConfig == null)
             {
-                GameLogger.LogError("GradeGrowthConfig is not assigned in the GrowthConfig asset.");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("log_growth_config_not_assigned"));
                 return new Dictionary<StatType, int>();
             }
             

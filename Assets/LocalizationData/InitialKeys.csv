@@ -248,10 +248,13 @@ effect_unique_log_error_rapid_apply,로그,오류,"신속 효과 적용 중 오�
 effect_unique_log_error_rapid_remove,로그,오류,"신속 효과 해제 중 오류: {0}","Error removing Rapid effect: {0}",,,"Error log for an exception during Rapid effect removal"
 effect_unique_log_error_fortress_apply,로그,오류,"요새 효과 적용 중 오류: {0}","Error applying Fortress effect: {0}",,,"Error log for an exception during Fortress effect application"
 effect_unique_log_error_fortress_remove,로그,오류,"요새 효과 해제 중 오류: {0}","Error removing Fortress effect: {0}",,,"Error log for an exception during Fortress effect removal"
-effect_unique_log_error_custom_apply,로그,오류,"커스텀 효과 적용 중 오류: {0}","Error applying Custom effect: {0}",,,"Error log for an exception during Custom effect application"
-effect_unique_log_error_custom_remove,로그,오류,"커스텀 효과 해제 중 오류: {0}","Error removing Custom effect: {0}",,,"Error log for an exception during Custom effect removal"
-effect_unique_validate_error_missing_type,로그,오류,"고유 효과 타입이 지정되지 않았습니다.","Unique effect type is not specified.",,,"Validation error for a missing unique effect type"
-effect_unique_validate_error_invalid_value,로그,오류,"{0} 효과의 값이 유효하지 않습니다: Primary={1}, Secondary={2}","Invalid values for {0} effect: Primary={1}, Secondary={2}",,,"Validation error for invalid values in a unique effect"
+log_growth_invalid_input,로그,성장,"성장 서비스 입력값 오류: 카드 또는 경험치 양이 유효하지 않습니다.","Growth service input error: Card or experience amount is invalid.",,,"Error log for invalid card or exp amount in CharacterGrowthService"
+log_growth_levelup_fail_exp,로그,성장,"레벨업 경험치 부족. 현재: {0}, 필요: {1}","Not enough experience to level up. Current: {0}, Required: {1}",,,"Info log when level up fails due to insufficient EXP"
+log_growth_levelup_fail_blueprint,로그,성장,"레벨업 오류: Blueprint ID {0}를 찾을 수 없습니다.","Level up error: Blueprint ID {0} could not be found.",,,"Error log when blueprint is missing for level up"
+log_growth_levelup_success,로그,성장,"{0} (카드 ID: {1}) 레벨업! -> Lv. {2}","{0} (Card ID: {1}) leveled up! -> Lv. {2}",,,"Info log for successful level up"
+log_growth_apply_fail_null,로그,성장,"스탯 적용 오류: 카드 또는 블루프린트가 null입니다.","Stat application error: Card or blueprint is null.",,,"Error log when card or blueprint is null during ApplyGrowth"
+log_growth_config_not_assigned,로그,성장,"성장 설정 오류: GrowthConfig 애셋에 GradeGrowthConfig가 할당되지 않았습니다.","Growth config error: GradeGrowthConfig is not assigned in the GrowthConfig asset.",,,"Error log when GradeGrowthConfig is missing in GrowthConfig"
+
 element_normal,공통,속성,무,Normal,無,无,Element Type Name: Normal
 element_fire,공통,속성,화염,Fire,炎,火,Element Type Name: Fire
 element_water,공통,속성,물,Water,水,水,Element Type Name: Water

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Linq;
 using DungeonMaster.Character;
 using DungeonMaster.Data;
+using DungeonMaster.Localization;
 using DungeonMaster.Shared.Scaling;
 using DungeonMaster.Utility;
 using UnityEngine;
@@ -45,7 +46,7 @@ namespace DungeonMaster.Character
         {
             if (card == null || amount <= 0)
             {
-                GameLogger.LogWarning("AddExperience: 유효하지 않은 카드 또는 경험치 양입니다.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("log_growth_invalid_input"));
                 return false;
             }
 
@@ -62,21 +63,21 @@ namespace DungeonMaster.Character
         {
             if (card == null)
             {
-                GameLogger.LogWarning("AttemptLevelUp: 카드가 null입니다.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("log_growth_invalid_input"));
                 return false;
             }
 
             long requiredExp = GetRequiredExperienceForNextLevel(card.Level);
             if (card.Experience < requiredExp)
             {
-                GameLogger.LogInfo($"레벨업 경험치 부족. 현재: {card.Experience}, 필요: {requiredExp}");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_growth_levelup_fail_exp", card.Experience, requiredExp));
                 return false;
             }
 
             var blueprint = BlueprintDatabase.Instance.GetBlueprint(card.BlueprintId);
             if (blueprint == null)
             {
-                GameLogger.LogError($"AttemptLevelUp: Blueprint ID {card.BlueprintId}를 찾을 수 없습니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("log_growth_levelup_fail_blueprint", card.BlueprintId));
                 return false;
             }
 
@@ -86,7 +87,7 @@ namespace DungeonMaster.Character
 
             ApplyGrowth(card, blueprint);
             
-            GameLogger.LogInfo($"{blueprint.Name} (카드 ID: {card.Id}) 레벨업! -> Lv. {card.Level}");
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("log_growth_levelup_success", blueprint.Name, card.Id, card.Level));
 
             return true;
         }
@@ -106,7 +107,7 @@ namespace DungeonMaster.Character
         {
             if (card == null || blueprint == null)
             {
-                GameLogger.LogError("ApplyGrowth: 카드 또는 블루프린트가 null입니다.");
+                GameLogger.LogError(LocalizationManager.Instance.GetText("log_growth_apply_fail_null"));
                 return;
             }
 
