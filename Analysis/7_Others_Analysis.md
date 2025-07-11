@@ -115,7 +115,31 @@
 
 ---
 
-## 7.4. Managers: 게임 흐름 및 테스트 관리
+## 7.4. CharacterGrowthService: 통합 성장 관리 서비스
+
+이번 리팩토링을 통해, 기존에 `CharacterGrowthSystem`, `GrowthManager`, 그리고 `ResourceManager`의 일부 기능에 분산되어 있던 캐릭터 성장 관련 로직이 `CharacterGrowthService`라는 단일 서비스로 통합되었습니다. 이는 **단일 책임 원칙(SRP)**을 강화하고 시스템의 응집도를 높이는 중요한 개선입니다.
+
+### `CharacterGrowthService.cs` (성장 로직 중앙 허브)
+- **역할**: `ScriptableObject` 기반의 **싱글턴(Singleton)** 서비스로, 캐릭터(카드)의 경험치 획득, 레벨업, 스탯 성장에 대한 모든 계산을 전담합니다.
+- **핵심 기능**:
+    - **경험치 및 레벨 관리**: `AddExperience`를 통해 경험치를 추가하고 레벨업 가능 여부를 반환하며, `AttemptLevelUp`을 통해 실제 레벨업을 처리합니다.
+    - **성장 계산**: 레벨업 시 `ApplyGrowth` 메서드를 호출하여, `GrowthConfig`에 정의된 데이터를 기반으로 등급별 성장치와 개별 성장률을 조합하여 최종 스탯을 계산하고 `UserCardData`에 반영합니다.
+    - **비용 조회**: `GetCostForLevelUp` API를 통해 레벨업에 필요한 재화(골드, 젬) 정보를 제공합니다.
+
+### `GrowthConfig.cs` (성장 데이터 중앙 저장소)
+- **역할**: `ScriptableObject`로서, 캐릭터 성장에 필요한 모든 **설정 데이터**를 한 곳에서 관리합니다.
+- **데이터 내용**:
+    - 레벨별 요구 경험치 (`ExperiencePerLevel`)
+    - 레벨업 시 필요한 재화 비용 (`GoldCostPerLevel`, `GemCostPerLevel`)
+    - `GradeGrowthConfig` 애셋 참조를 통한 등급별 기본 성장률 데이터
+
+### 설계의 장점
+- **중앙 집중화**: 성장과 관련된 모든 로직과 데이터가 각각 `CharacterGrowthService`와 `GrowthConfig`에 집중되어 있어, 향후 성장 공식 변경이나 밸런스 조정 시 수정해야 할 파일이 명확해졌습니다.
+- **의존성 감소**: `UserDataManager`는 이제 복잡한 성장 계산 로직을 알 필요 없이, `CharacterGrowthService`에 요청을 위임하기만 하면 됩니다. 이는 시스템 간의 결합도를 낮추고 각 클래스가 자신의 핵심 책임에만 집중할 수 있게 합니다.
+
+---
+
+## 7.5. Managers: 게임 흐름 및 테스트 관리
 
 `Managers` 폴더에는 게임의 전반적인 흐름을 제어하거나, 특정 시스템들을 총괄하는 관리자 클래스들이 위치합니다.
 
@@ -132,7 +156,7 @@
 
 ---
 
-## 7.5. Editor: 개발 생산성 향상 도구
+## 7.6. Editor: 개발 생산성 향상 도구
 
 `Editor` 폴더에는 Unity 에디터의 기능을 확장하여, 데이터 관리의 편의성과 정확성을 높이고 복잡한 데이터를 직관적으로 편집할 수 있도록 돕는 스크립트들이 위치합니다.
 

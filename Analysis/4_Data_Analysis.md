@@ -56,8 +56,8 @@
 
 ### 데이터 흐름: Blueprint → Instance
 1.  플레이어가 새로운 카드를 획득하면, `CardBlueprintData` (청사진)를 기반으로 새로운 `UserCardData` (인스턴스)가 생성됩니다.
-2.  `CharacterGrowthSystem`은 이 `UserCardData`의 레벨과 `InnateGrowthRates_x100` 값, 그리고 원본인 `CardBlueprintData`의 기본 스탯을 조합하여 레벨업 시 성장할 스탯을 계산합니다.
-3.  계산된 최종 스탯은 `UserCardData.CurrentStats`에 덮어씌워집니다.
+2.  `CharacterGrowthService`는 `GrowthConfig` 데이터를 참조하여, 이 `UserCardData`의 레벨, 등급, 그리고 고유 성장률(`InnateGrowthRates_x100`) 값을 조합하여 레벨업 시 성장할 스탯을 계산합니다.
+3.  계산된 최종 스탯은 `UserCardData.CurrentStats`에 누적되어 반영됩니다.
 4.  전투가 시작되면 `CharacterDataFactory`가 이 `UserCardData`를 참조하여 전투에 사용될 `DeterministicCharacterData`를 생성합니다.
 
 ---
@@ -92,8 +92,8 @@
 ### `UserDataManager.cs` (유저 데이터 퍼사드)
 - **역할**: 게임의 다른 모든 시스템(UI, 상점, 전투 준비 등)이 플레이어 데이터에 접근하기 위한 **단일 창구(Facade)** 역할을 하는 최상위 정적 클래스입니다.
 - **데이터 총괄**: `UserData`라는 내부 클래스를 통해 플레이어의 모든 영구 데이터(재화, 보유 카드 목록, 레벨, 경험치 등)를 하나의 객체로 묶어 관리합니다.
-- **책임 위임**: 이 클래스는 데이터를 '어떻게' 디스크에 저장하고 로드하는지에 대해서는 전혀 알지 못합니다. `SaveUserData()`나 `LoadUserData()`가 호출되면, 그저 `SaveDataManager`에 실제 작업을 그대로 전달할 뿐입니다.
-- **편의 API 제공**: `AddGold`, `AddExperience`, `AcquireCard` 등 외부 시스템이 자주 사용하는 기능들을 간단한 메서드 호출로 사용할 수 있도록 제공합니다. 이 메서드들은 내부적으로 `CurrentUserData`의 값을 변경한 뒤, 거의 항상 자동으로 `SaveUserData()`를 호출하여 데이터의 정합성을 유지합니다.
+- **책임 위임**: `SaveUserData()`나 `LoadUserData()`가 호출되면, 그저 `SaveDataManager`에 실제 작업을 그대로 전달합니다. 이 클래스는 데이터를 '어떻게' 디스크에 저장하고 로드하는지에 대해서는 전혀 알지 못합니다.
+- **편의 API 제공**: `AddGold`, `SpendGold`, `AddExperience`, `LevelUpCard`, `AcquireCard` 등 외부 시스템이 자주 사용하는 기능들을 간단한 메서드 호출로 사용할 수 있도록 제공합니다. 이 메서드들은 내부적으로 `CurrentUserData`의 값을 변경한 뒤, 데이터 정합성을 유지하기 위해 대부분 자동으로 `SaveUserData()`를 호출합니다. 기존에 `ResourceManager` 등 여러 곳에 흩어져 있던 재화 및 성장 관련 처리 로직이 `UserDataManager`의 책임 하에 통합되었습니다.
 
 <br>
 

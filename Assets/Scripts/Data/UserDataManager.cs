@@ -71,7 +71,7 @@ namespace DungeonMaster.Data
         {
             CurrentUserData = SaveDataManager.LoadUserData();
             GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_user_data_loaded", 
-                ResourceManager.GetResourceStatus(CurrentUserData)));
+                GetResourceStatus(CurrentUserData)));
         }
 
         /// <summary>
@@ -109,7 +109,7 @@ namespace DungeonMaster.Data
         /// </summary>
         public static void AddGold(int amount)
         {
-            ResourceManager.AddGold(CurrentUserData, amount);
+            AddGold(CurrentUserData, amount);
             SaveUserData();
         }
 
@@ -118,7 +118,7 @@ namespace DungeonMaster.Data
         /// </summary>
         public static void AddGems(int amount)
         {
-            ResourceManager.AddGems(CurrentUserData, amount);
+            AddGems(CurrentUserData, amount);
             SaveUserData();
         }
 
@@ -127,7 +127,7 @@ namespace DungeonMaster.Data
         /// </summary>
         public static bool SpendGold(int amount)
         {
-            if (ResourceManager.SpendGold(CurrentUserData, amount))
+            if (SpendGold(CurrentUserData, amount))
             {
                 SaveUserData();
                 return true;
@@ -140,7 +140,7 @@ namespace DungeonMaster.Data
         /// </summary>
         public static bool SpendGems(int amount)
         {
-            if (ResourceManager.SpendGems(CurrentUserData, amount))
+            if (SpendGems(CurrentUserData, amount))
             {
                 SaveUserData();
                 return true;
@@ -151,14 +151,64 @@ namespace DungeonMaster.Data
         /// <summary>
         /// 경험치 추가
         /// </summary>
-        public static bool AddExperience(int amount)
+        public static bool AddExperience(long userCardId, long amount)
         {
-            bool leveledUp = ResourceManager.AddExperience(CurrentUserData, amount);
-            if (leveledUp || amount > 0)
+            UserCardData card = CurrentUserData.CardCollection.GetCard(userCardId);
+            if (card == null)
+            {
+                GameLogger.LogError($"Card with id {userCardId} not found.");
+                return false;
+            }
+
+            bool canLevelUp = CharacterGrowthService.Instance.AddExperience(card, amount);
+            
+            if (canLevelUp)
+            {
+                GameLogger.LogInfo($"Card {card.BlueprintId} can now level up.");
+                // Optionally, fire an event here for UI to listen to.
+                // OnCardCanLevelUp?.Invoke(userCardId);
+            }
+            
+            SaveUserData();
+            return canLevelUp;
+        }
+
+        public static bool LevelUpCard(long userCardId)
+        {
+            UserCardData card = CurrentUserData.CardCollection.GetCard(userCardId);
+            if (card == null)
+            {
+                GameLogger.LogError($"Card with id {userCardId} not found.");
+                return false;
+            }
+
+            var (goldCost, gemCost) = CharacterGrowthService.Instance.GetCostForLevelUp(card.Level);
+
+            if (!HasEnoughGold(CurrentUserData, goldCost))
+            {
+                GameLogger.LogWarning("Not enough gold to level up.");
+                return false;
+            }
+
+            if (!HasEnoughGems(CurrentUserData, gemCost))
+            {
+                GameLogger.LogWarning("Not enough gems to level up.");
+                return false;
+            }
+
+            // Spend resources first
+            SpendGold(CurrentUserData, goldCost);
+            SpendGems(CurrentUserData, gemCost);
+
+            // Then perform the level up
+            bool success = CharacterGrowthService.Instance.AttemptLevelUp(card);
+
+            if (success)
             {
                 SaveUserData();
             }
-            return leveledUp;
+            
+            return success;
         }
 
         /// <summary>
@@ -166,7 +216,7 @@ namespace DungeonMaster.Data
         /// </summary>
         public static string GetResourceStatus()
         {
-            return ResourceManager.GetResourceStatus(CurrentUserData);
+            return GetResourceStatus(CurrentUserData);
         }
 
         /// <summary>
@@ -184,6 +234,56 @@ namespace DungeonMaster.Data
         {
             SaveUserData();
             GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_game_quit_data_saved"));
+        }
+
+        // --- Resource Management Logic (from ResourceManager) ---
+
+        private static void AddGold(UserData userData, int amount)
+        {
+            if (userData == null || amount <= 0) return;
+            userData.Gold += amount;
+        }
+
+        private static void AddGems(UserData userData, int amount)
+        {
+            if (userData == null || amount <= 0) return;
+            userData.Gems += amount;
+        }
+
+        private static bool SpendGold(UserData userData, int amount)
+        {
+            if (HasEnoughGold(userData, amount))
+            {
+                userData.Gold -= amount;
+                return true;
+            }
+            return false;
+        }
+
+        private static bool SpendGems(UserData userData, int amount)
+        {
+            if (HasEnoughGems(userData, amount))
+            {
+                userData.Gems -= amount;
+                return true;
+            }
+            return false;
+        }
+
+        private static bool HasEnoughGold(UserData userData, int amount)
+        {
+            return userData != null && userData.Gold >= amount;
+        }
+
+        private static bool HasEnoughGems(UserData userData, int amount)
+        {
+            return userData != null && userData.Gems >= amount;
+        }
+
+        private static string GetResourceStatus(UserData userData)
+        {
+            if (userData == null) return "User data is null.";
+            return $"Gold: {userData.Gold}, Gems: {userData.Gems}";
         }
 
         /// <summary>
@@ -241,7 +341,7 @@ namespace DungeonMaster.Data
             GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_name", CurrentUserData.UserName));
             GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_level", CurrentUserData.UserLevel));
             GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_experience", CurrentUserData.UserExperience));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_resources", ResourceManager.GetResourceStatus(CurrentUserData)));
+            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_resources", GetResourceStatus(CurrentUserData)));
             GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_card_collection", CurrentUserData.CardCollection));
             GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_starter_card_status", GetStarterCardStatus()));
             GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_last_access_time", CurrentUserData.LastAccessTime));

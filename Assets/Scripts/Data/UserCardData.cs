@@ -20,7 +20,7 @@ namespace DungeonMaster.Data
 
         /// <summary>
         /// 레벨업, 장비 장착 등의 모든 효과가 적용된 최종 스탯.
-        /// GrowthManager가 이 값을 직접 수정하고, CharacterDataFactory는 이 값을 그대로 읽어 사용합니다.
+        /// 이 스탯은 CharacterGrowthService에 의해 계산되고 갱신됩니다.
         /// </summary>
         public Dictionary<StatType, long> CurrentStats = new Dictionary<StatType, long>();
 

@@ -47,23 +47,61 @@ namespace DungeonMaster.Character
             GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_growth_data_not_found", grade));
             return null;
         }
+
+        /// <summary>
+        /// 특정 등급의 기본 스탯 성장치 맵을 반환합니다.
+        /// </summary>
+        public Dictionary<StatType, int> GetBaseGrowthForGrade(Grade grade, StatType statType)
+        {
+            var data = GetGradeGrowthData(grade);
+            if (data != null)
+            {
+                return data.BaseGrowth;
+            }
+            return new Dictionary<StatType, int>();
+        }
     }
 
     /// <summary>
     /// 등급별 성장 데이터를 담는 클래스.
+    /// ISerializationCallbackReceiver를 구현하여 딕셔너리를 직렬화합니다.
     /// </summary>
     [Serializable]
-    public class GradeGrowthData
+    public class GradeGrowthData : ISerializationCallbackReceiver
     {
         public Grade grade;
         
-        [Tooltip("이 등급의 카드가 가질 수 있는 '고유 성장률'의 최소값 (단위: %). 예: 81 -> 81%")]
-        public int MinRate;
-        
-        [Tooltip("이 등급의 카드가 가질 수 있는 '고유 성장률'의 최대값 (단위: %). 예: 110 -> 110%")]
-        public int MaxRate;
-        
-        [Tooltip("이 등급의 성장률을 강화할 때의 성공 확률 (사용처 미정, 확장성을 위해 유지)")]
-        public float Probability;
+        [Tooltip("이 등급의 기본 스탯별 성장치. 레벨업 시 이 값이 기본으로 적용됩니다.")]
+        [HideInInspector]
+        public Dictionary<StatType, int> BaseGrowth = new Dictionary<StatType, int>();
+
+        // Unity 직렬화를 위한 리스트
+        [SerializeField]
+        private List<StatGrowthPair> _growthList = new List<StatGrowthPair>();
+
+        [Serializable]
+        private struct StatGrowthPair
+        {
+            public StatType StatType;
+            public int GrowthValue;
+        }
+
+        public void OnBeforeSerialize()
+        {
+            _growthList.Clear();
+            foreach (var pair in BaseGrowth)
+            {
+                _growthList.Add(new StatGrowthPair { StatType = pair.Key, GrowthValue = pair.Value });
+            }
+        }
+
+        public void OnAfterDeserialize()
+        {
+            BaseGrowth = new Dictionary<StatType, int>();
+            foreach (var pair in _growthList)
+            {
+                BaseGrowth[pair.StatType] = pair.GrowthValue;
+            }
+        }
     }
 } 
