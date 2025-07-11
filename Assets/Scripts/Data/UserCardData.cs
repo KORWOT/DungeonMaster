@@ -12,7 +12,19 @@ namespace DungeonMaster.Data
     [Serializable]
     public class UserCardData
     {
-        public long Id; // 유저가 보유한 카드의 고유 인스턴스 ID 
+        /// <summary>
+        /// 데이터베이스상의 고유 ID (예: 1001)
+        /// </summary>
+        public long Id { get; set; }
+        
+        /// <summary>
+        /// 인스턴스의 고유 식별자 (GUID)
+        /// </summary>
+        public string Guid { get; set; }
+
+        /// <summary>
+        /// 원본 카드 청사진의 ID
+        /// </summary>
         public long BlueprintId; // 어떤 종류의 카드인지 식별하는 ID (CardBlueprintData.BlueprintId와 연결)
         
         public int Level;
@@ -37,8 +49,12 @@ namespace DungeonMaster.Data
         // 장착한 장비의 인스턴스 ID 목록
         public List<long> EquippedItemIds = new List<long>();
 
+        /// <summary>
+        /// 기본 생성자
+        /// </summary>
         public UserCardData()
         {
+            Guid = System.Guid.NewGuid().ToString();
             // 기본 생성자는 JSON 역직렬화를 위해 필요합니다.
             Id = System.Guid.NewGuid().GetHashCode();
             InnateGrowthRates_x100 = new Dictionary<StatType, int>();
@@ -47,10 +63,11 @@ namespace DungeonMaster.Data
         }
 
         /// <summary>
-        /// 특정 설계도로부터 새로운 유저 카드를 생성합니다.
+        /// 청사진으로부터 새 카드 데이터 생성
         /// </summary>
         public UserCardData(long blueprintId)
         {
+            Guid = System.Guid.NewGuid().ToString();
             Id = System.Guid.NewGuid().GetHashCode();
             BlueprintId = blueprintId;
             Level = 1;

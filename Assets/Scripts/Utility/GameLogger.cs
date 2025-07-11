@@ -53,7 +53,15 @@ namespace DungeonMaster.Utility
         {
             Debug.LogError($"[ERROR] {message}");
         }
-        
+
+        /// <summary>
+        /// 컨텍스트 오브젝트를 포함하는 에러 로그
+        /// </summary>
+        public static void LogError(object message, Object context)
+        {
+            Debug.LogError($"[ERROR] {message}", context);
+        }
+
         /// <summary>
         /// 스킬 시스템 전용 로그
         /// </summary>

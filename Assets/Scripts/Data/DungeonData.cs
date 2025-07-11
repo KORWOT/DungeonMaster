@@ -1,38 +1,31 @@
+using UnityEngine;
 using System.Collections.Generic;
 
-namespace DungeonMaster.Data
+namespace DungeonMaster.Dungeon
 {
     /// <summary>
-    /// 단일 전투(Dungeon)에 필요한 모든 초기 데이터를 담는 컨테이너입니다.
-    /// 이 데이터는 BattleManager에게 전달되어 전투를 시작하는 데 사용됩니다.
+    /// 플레이어가 생성하고 커스터마이징한 던전의 모든 상태 정보를 저장하는 클래스입니다.
+    /// 이 데이터가 저장/로드의 대상이 됩니다.
     /// </summary>
+    [System.Serializable]
     public class DungeonData
     {
-        public List<ParticipantData> PlayerMonsters { get; private set; }
-        public List<ParticipantData> EnemyMonsters { get; private set; }
+        public string Guid { get; private set; }
+        public string CustomName { get; set; }
+        public Vector2Int GridSize { get; set; }
+        public Vector2Int StartPosition { get; set; }
+        public Vector2Int BossRoomPosition { get; set; }
 
-        public DungeonData(List<ParticipantData> playerMonsters, List<ParticipantData> enemyMonsters)
+        public Dictionary<Vector2Int, RoomData> Rooms { get; private set; }
+
+        public DungeonData(string name, Vector2Int gridSize, Vector2Int startPos, Vector2Int bossPos)
         {
-            PlayerMonsters = playerMonsters;
-            EnemyMonsters = enemyMonsters;
-        }
-    }
-
-    /// <summary>
-    /// 개별 전투 참가자의 초기 데이터를 정의합니다.
-    /// </summary>
-    public class ParticipantData
-    {
-        public CardBlueprintData Blueprint { get; private set; }
-        public int Level { get; private set; }
-        public UserCardData UserCard { get; private set; }
-        // TODO: 장착한 장비 ID 목록, 강화된 스킬 정보 등을 여기에 추가할 수 있습니다.
-
-        public ParticipantData(CardBlueprintData blueprint, int level, UserCardData userCard)
-        {
-            Blueprint = blueprint;
-            Level = level;
-            UserCard = userCard;
+            Guid = System.Guid.NewGuid().ToString();
+            CustomName = name;
+            GridSize = gridSize;
+            StartPosition = startPos;
+            BossRoomPosition = bossPos;
+            Rooms = new Dictionary<Vector2Int, RoomData>();
         }
     }
 } 

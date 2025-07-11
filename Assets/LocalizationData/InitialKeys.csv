@@ -248,12 +248,47 @@ effect_unique_log_error_rapid_apply,로그,오류,"신속 효과 적용 중 오�
 effect_unique_log_error_rapid_remove,로그,오류,"신속 효과 해제 중 오류: {0}","Error removing Rapid effect: {0}",,,"Error log for an exception during Rapid effect removal"
 effect_unique_log_error_fortress_apply,로그,오류,"요새 효과 적용 중 오류: {0}","Error applying Fortress effect: {0}",,,"Error log for an exception during Fortress effect application"
 effect_unique_log_error_fortress_remove,로그,오류,"요새 효과 해제 중 오류: {0}","Error removing Fortress effect: {0}",,,"Error log for an exception during Fortress effect removal"
+dungeon_log_error_invalid_save,던전,로그,"던전이 유효하지 않아 저장할 수 없습니다.","Cannot save because the dungeon is invalid.",,,"DungeonManager: ValidateDungeon() failed"
+dungeon_log_error_no_entry_or_boss,던전,로그,"입구 또는 보스방이 존재하지 않습니다.","Start room or boss room does not exist.",,,"DungeonManager: Start/Boss room not found in Rooms dictionary"
+dungeon_log_error_no_path,던전,로그,"경로 유효성 검사 실패: 입구에서 보스방까지 이어지는 길이 없습니다.","Path validation failed: No path from start to boss room.",,,"DungeonManager: IsPathValid() failed"
+dungeon_log_warn_room_exists,던전,로그,"위치 {0}에 이미 방이 존재합니다.","A room already exists at position {0}.",,,"DungeonManager: PlaceRoom() failed because a room is already at the position"
+dungeon_log_info_room_placed,던전,로그,"위치 {0}에 '{1}' 방이 배치되었습니다.","Room '{1}' has been placed at position {0}.",,,"DungeonManager: PlaceRoom() success"
+dungeon_log_warn_cant_remove_special,던전,로그,"시작방과 보스방은 제거할 수 없습니다.","Start room and boss room cannot be removed.",,,"DungeonManager: RemoveRoom() failed for special rooms"
+dungeon_log_info_room_removed,던전,로그,"위치 {0}의 방이 제거되었습니다.","The room at position {0} has been removed.",,,"DungeonManager: RemoveRoom() success"
+dungeon_log_info_connection_removed,던전,로그,"방 {0}과 {1}의 연결이 제거되었습니다.","Connection between room {0} and {1} has been removed.",,,"DungeonManager: ToggleConnection() removed"
+dungeon_log_info_connection_added,던전,로그,"방 {0}과 {1}가 연결되었습니다.","Room {0} and {1} are now connected.",,,"DungeonManager: ToggleConnection() added"
+dungeon_log_warn_room_not_exist,던전,로그,"위치 {0} 또는 {1}에 방이 존재하지 않아 연결할 수 없습니다.","Cannot connect because a room does not exist at position {0} or {1}.",,,"DungeonManager: ToggleConnection() failed"
+dungeon_log_info_xp_gained,던전,로그,"방 '{0}'({1})이 경험치 {2}를 획득. (현재: {3})","Room '{0}'({1}) gained {2} XP. (Current: {3})",,,"DungeonManager: AddXpToRoom() info"
+dungeon_log_info_level_up,던전,로그,"레벨업! 방 '{0}'이(가) 레벨 {1}이 되었습니다!","Level Up! Room '{0}' is now level {1}!",,,"DungeonManager: LevelUpRoom() info"
+dungeon_log_error_room_not_found,던전,로그,"위치 {0}에서 방을 찾을 수 없어 전투 데이터를 생성할 수 없습니다.","Cannot create battle data because no room was found at position {0}.",,,"DungeonManager: CreateBattleLaunchData() failed"
+dungeon_log_error_no_user_data,던전,로그,"유저 데이터가 로드되지 않아 던전을 저장할 수 없습니다.","Cannot save dungeon because user data is not loaded.",,,"UserDataManager: SaveCurrentDungeon() failed"
+dungeon_log_info_dungeon_data_updated,던전,로그,"현재 던전 데이터가 유저 데이터에 업데이트되었습니다.","Current dungeon data has been updated in user data.",,,"UserDataManager: SaveCurrentDungeon() success"
+dungeon_log_info_new_dungeon_created,던전,로그,"저장된 던전 데이터가 없어 새 던전을 생성합니다.","No saved dungeon data found. Creating a new dungeon.",,,"GameManager: InitializeDungeon() new"
+dungeon_log_info_dungeon_loaded,던전,로그,"저장된 던전 데이터를 로드합니다.","Loading saved dungeon data.",,,"GameManager: InitializeDungeon() load"
+dungeon_log_error_no_current_dungeon,던전,로그,"현재 활성화된 던전이 없습니다. 먼저 던전을 로드하거나 생성해야 합니다.","No active dungeon. Load or create one first.",,,"GameManager: StartBattleForEntrance() failed"
+dungeon_log_error_no_player_cards,던전,로그,"전투를 시작할 플레이어 카드가 없습니다. (임시 공격자 생성 실패)","No player cards to start battle. (Attacker creation failed)",,,"GameManager: StartBattleForEntrance() no cards"
+dungeon_log_error_battle_data_failed,던전,로그,"전투 데이터를 생성하는데 실패했습니다.","Failed to create battle data.",,,"GameManager: StartBattleForEntrance() data creation failed"
+error_card_not_found,에러,데이터,"카드(ID: {0})를 찾을 수 없습니다.","Card (ID: {0}) not found.",,
+warn_not_enough_gold_levelup,경고,재화,"레벨업에 필요한 골드가 부족합니다.","Not enough gold to level up.",,
+warn_not_enough_gems_levelup,경고,재화,"레벨업에 필요한 젬이 부족합니다.","Not enough gems to level up.",,
+info_user_data_null,정보,데이터,"유저 데이터가 존재하지 않습니다.","User data does not exist.",,
+info_card_can_level_up,정보,성장,"카드({0})가 레벨업 가능 상태가 되었습니다.","Card ({0}) is now ready to level up.",,
+default_dungeon_name,데이터,던전,"나의 첫 던전","My First Dungeon",,
 log_growth_invalid_input,로그,성장,"성장 서비스 입력값 오류: 카드 또는 경험치 양이 유효하지 않습니다.","Growth service input error: Card or experience amount is invalid.",,,"Error log for invalid card or exp amount in CharacterGrowthService"
 log_growth_levelup_fail_exp,로그,성장,"레벨업 경험치 부족. 현재: {0}, 필요: {1}","Not enough experience to level up. Current: {0}, Required: {1}",,,"Info log when level up fails due to insufficient EXP"
-log_growth_levelup_fail_blueprint,로그,성장,"레벨업 오류: Blueprint ID {0}를 찾을 수 없습니다.","Level up error: Blueprint ID {0} could not be found.",,,"Error log when blueprint is missing for level up"
-log_growth_levelup_success,로그,성장,"{0} (카드 ID: {1}) 레벨업! -> Lv. {2}","{0} (Card ID: {1}) leveled up! -> Lv. {2}",,,"Info log for successful level up"
-log_growth_apply_fail_null,로그,성장,"스탯 적용 오류: 카드 또는 블루프린트가 null입니다.","Stat application error: Card or blueprint is null.",,,"Error log when card or blueprint is null during ApplyGrowth"
-log_growth_config_not_assigned,로그,성장,"성장 설정 오류: GrowthConfig 애셋에 GradeGrowthConfig가 할당되지 않았습니다.","Growth config error: GradeGrowthConfig is not assigned in the GrowthConfig asset.",,,"Error log when GradeGrowthConfig is missing in GrowthConfig"
+log_error_no_character_factory,에러,전투,"ICharacterFactory가 인스펙터에 할당되지 않았습니다!","ICharacterFactory is not assigned in the inspector!",,
+log_error_core_data_not_found,에러,전투,"핵심 데이터 파일(Elemental, Growth)을 Resources 폴더에서 찾을 수 없습니다.","Core data files (Elemental, Growth) not found in Resources folder.",,
+log_info_battle_started,정보,전투,"전투 시작! 시드: {0}","Battle started with seed: {0}",,
+log_error_view_creation_failed,에러,전투,"캐릭터 뷰 생성 실패. Blueprint ID: {0}","Failed to create character view for Blueprint ID: {0}",,
+log_info_battle_victory,정보,전투,"승리!","Victory!",,
+log_info_battle_defeat,정보,전투,"패배!","Defeat!",,
+log_info_battle_ui_start,정보,UI,"[UI] 전투 시작","[UI] Battle Start",,
+log_info_battle_ui_turn,정보,UI,"[UI] 턴 {0}","[UI] Turn {0}",,
+log_info_battle_ui_end,정보,UI,"[UI] 전투 종료. 결과: {0}","[UI] Battle End. Outcome: {0}",,
+room_entry_01_name,방,이름,"시작의 방","Chamber of Beginnings",,
+room_entry_01_desc,방,설명,"모든 모험이 시작되는 곳입니다.","This is where all adventures begin.",,
+room_boss_final_01_name,방,이름,"최후의 방","The Final Chamber",,
+room_boss_final_01_desc,방,설명,"강력한 존재가 당신을 기다리고 있습니다.","A powerful being awaits you.",,
 
 element_normal,공통,속성,무,Normal,無,无,Element Type Name: Normal
 element_fire,공통,속성,화염,Fire,炎,火,Element Type Name: Fire

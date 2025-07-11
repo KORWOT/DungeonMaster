@@ -21,6 +21,8 @@ namespace DungeonMaster.Data
 
         // 런타임 중 빠른 조회를 위한 딕셔너리 (Key: UserCardData.Id)
         private Dictionary<long, UserCardData> _cardsById;
+        // 런타임 중 빠른 조회를 위한 딕셔너리 (Key: UserCardData.Guid)
+        private Dictionary<string, UserCardData> _cardsByGuid;
 
         /// <summary>
         /// 특정 설계도(Blueprint)에 해당하는 카드를 이미 소유하고 있는지 확인합니다.
@@ -39,6 +41,16 @@ namespace DungeonMaster.Data
         {
             if (_cardsById == null) RebuildDictionary();
             _cardsById.TryGetValue(cardId, out var card);
+            return card;
+        }
+
+        /// <summary>
+        /// GUID로 소유한 카드를 조회합니다.
+        /// </summary>
+        public UserCardData GetCardByGuid(string guid)
+        {
+            if (_cardsByGuid == null) RebuildDictionary();
+            _cardsByGuid.TryGetValue(guid, out var card);
             return card;
         }
 
@@ -83,6 +95,7 @@ namespace DungeonMaster.Data
             if (_cardsById.TryGetValue(cardId, out var cardToRemove))
             {
                 _cardsById.Remove(cardId);
+                _cardsByGuid.Remove(cardToRemove.Guid); // GUID 딕셔너리에서도 제거
                 _cards.Remove(cardToRemove);
                 return true;
             }
@@ -149,6 +162,7 @@ namespace DungeonMaster.Data
         private void RebuildDictionary()
         {
             _cardsById = _cards.ToDictionary(card => card.Id, card => card);
+            _cardsByGuid = _cards.ToDictionary(card => card.Guid, card => card);
         }
 
         // --- ISerializationCallbackReceiver 구현 ---

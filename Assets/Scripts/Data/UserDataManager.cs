@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using DungeonMaster.Character;
+using DungeonMaster.Dungeon;
 using DungeonMaster.Localization;
 using DungeonMaster.Utility;
 
@@ -156,7 +157,7 @@ namespace DungeonMaster.Data
             UserCardData card = CurrentUserData.CardCollection.GetCard(userCardId);
             if (card == null)
             {
-                GameLogger.LogError($"Card with id {userCardId} not found.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_card_not_found", userCardId));
                 return false;
             }
 
@@ -164,7 +165,7 @@ namespace DungeonMaster.Data
             
             if (canLevelUp)
             {
-                GameLogger.LogInfo($"Card {card.BlueprintId} can now level up.");
+                GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("info_card_can_level_up", card.BlueprintId));
                 // Optionally, fire an event here for UI to listen to.
                 // OnCardCanLevelUp?.Invoke(userCardId);
             }
@@ -178,7 +179,7 @@ namespace DungeonMaster.Data
             UserCardData card = CurrentUserData.CardCollection.GetCard(userCardId);
             if (card == null)
             {
-                GameLogger.LogError($"Card with id {userCardId} not found.");
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("error_card_not_found", userCardId));
                 return false;
             }
 
@@ -186,13 +187,13 @@ namespace DungeonMaster.Data
 
             if (!HasEnoughGold(CurrentUserData, goldCost))
             {
-                GameLogger.LogWarning("Not enough gold to level up.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("warn_not_enough_gold_levelup"));
                 return false;
             }
 
             if (!HasEnoughGems(CurrentUserData, gemCost))
             {
-                GameLogger.LogWarning("Not enough gems to level up.");
+                GameLogger.LogWarning(LocalizationManager.Instance.GetText("warn_not_enough_gems_levelup"));
                 return false;
             }
 
@@ -235,6 +236,35 @@ namespace DungeonMaster.Data
             SaveUserData();
             GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_game_quit_data_saved"));
         }
+
+        #region Dungeon Data Management
+        
+        /// <summary>
+        /// DungeonManager로부터 받은 현재 던전 데이터를 유저 데이터에 저장합니다.
+        /// 이 메서드 호출 후에는 반드시 UserDataManager.SaveUserData()를 호출해야 영구 저장됩니다.
+        /// </summary>
+        public static void SaveCurrentDungeon(DungeonData dungeonData)
+        {
+            if (CurrentUserData == null)
+            {
+                GameLogger.LogError(LocalizationManager.Instance.GetText("dungeon_log_error_no_user_data"));
+                return;
+            }
+            CurrentUserData.PlayerDungeon = dungeonData;
+            SaveUserData(); // 던전 데이터 변경 후 즉시 전체 유저 데이터 저장
+            GameLogger.LogInfo(LocalizationManager.Instance.GetText("dungeon_log_info_dungeon_data_updated"));
+        }
+
+        /// <summary>
+        /// 현재 유저 데이터에 저장된 던전 데이터를 반환합니다.
+        /// </summary>
+        /// <returns>저장된 DungeonData. 없을 경우 null.</returns>
+        public static DungeonData GetDungeon()
+        {
+            return CurrentUserData?.PlayerDungeon;
+        }
+
+        #endregion
 
         // --- Resource Management Logic (from ResourceManager) ---
 
@@ -282,7 +312,7 @@ namespace DungeonMaster.Data
 
         private static string GetResourceStatus(UserData userData)
         {
-            if (userData == null) return "User data is null.";
+            if (userData == null) return LocalizationManager.Instance.GetText("info_user_data_null");
             return $"Gold: {userData.Gold}, Gems: {userData.Gems}";
         }
 
@@ -391,6 +421,11 @@ namespace DungeonMaster.Data
         public UserCardCollection CardCollection { get; set; } = new UserCardCollection();
 
         /// <summary>
+        /// 플레이어가 커스터마이징한 던전의 데이터입니다.
+        /// </summary>
+        public DungeonData PlayerDungeon { get; set; }
+
+        /// <summary>
         /// 마지막 접속 시간
         /// </summary>
         public DateTime LastAccessTime { get; set; } = DateTime.Now;
@@ -411,6 +446,9 @@ namespace DungeonMaster.Data
             CardCollection = new UserCardCollection();
             LastAccessTime = DateTime.Now;
             CreatedTime = DateTime.Now;
+            // 초기 생성 시에는 던전 데이터가 없습니다.
+            // GameManager 또는 DungeonManager에서 필요 시 생성합니다.
+            PlayerDungeon = null;
         }
 
         public override string ToString()

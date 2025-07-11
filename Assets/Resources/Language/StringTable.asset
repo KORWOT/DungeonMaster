@@ -2681,3 +2681,517 @@ MonoBehaviour:
     - language: 3
       text: Secondary={2}
     description: 
+  - key: dungeon_log_error_invalid_save
+    texts:
+    - language: 0
+      text: "\uB358\uC804\uC774 \uC720\uD6A8\uD558\uC9C0 \uC54A\uC544 \uC800\uC7A5\uD560
+        \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Cannot save because the dungeon is invalid.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_error_no_entry_or_boss
+    texts:
+    - language: 0
+      text: "\uC785\uAD6C \uB610\uB294 \uBCF4\uC2A4\uBC29\uC774 \uC874\uC7AC\uD558\uC9C0
+        \uC54A\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Start room or boss room does not exist.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_error_no_path
+    texts:
+    - language: 0
+      text: "\uACBD\uB85C \uC720\uD6A8\uC131 \uAC80\uC0AC \uC2E4\uD328: \uC785\uAD6C\uC5D0\uC11C
+        \uBCF4\uC2A4\uBC29\uAE4C\uC9C0 \uC774\uC5B4\uC9C0\uB294 \uAE38\uC774 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: 'Path validation failed: No path from start to boss room.'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_warn_room_exists
+    texts:
+    - language: 0
+      text: "\uC704\uCE58 {0}\uC5D0 \uC774\uBBF8 \uBC29\uC774 \uC874\uC7AC\uD569\uB2C8\uB2E4."
+    - language: 1
+      text: A room already exists at position {0}.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_room_placed
+    texts:
+    - language: 0
+      text: "\uC704\uCE58 {0}\uC5D0 '{1}' \uBC29\uC774 \uBC30\uCE58\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Room '{1}' has been placed at position {0}.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_warn_cant_remove_special
+    texts:
+    - language: 0
+      text: "\uC2DC\uC791\uBC29\uACFC \uBCF4\uC2A4\uBC29\uC740 \uC81C\uAC70\uD560
+        \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Start room and boss room cannot be removed.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_room_removed
+    texts:
+    - language: 0
+      text: "\uC704\uCE58 {0}\uC758 \uBC29\uC774 \uC81C\uAC70\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: The room at position {0} has been removed.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_connection_removed
+    texts:
+    - language: 0
+      text: "\uBC29 {0}\uACFC {1}\uC758 \uC5F0\uACB0\uC774 \uC81C\uAC70\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Connection between room {0} and {1} has been removed.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_connection_added
+    texts:
+    - language: 0
+      text: "\uBC29 {0}\uACFC {1}\uAC00 \uC5F0\uACB0\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Room {0} and {1} are now connected.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_warn_room_not_exist
+    texts:
+    - language: 0
+      text: "\uC704\uCE58 {0} \uB610\uB294 {1}\uC5D0 \uBC29\uC774 \uC874\uC7AC\uD558\uC9C0
+        \uC54A\uC544 \uC5F0\uACB0\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Cannot connect because a room does not exist at position {0} or {1}.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_xp_gained
+    texts:
+    - language: 0
+      text: "\uBC29 '{0}'({1})\uC774 \uACBD\uD5D8\uCE58 {2}\uB97C \uD68D\uB4DD. (\uD604\uC7AC:
+        {3})"
+    - language: 1
+      text: 'Room ''{0}''({1}) gained {2} XP. (Current: {3})'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_level_up
+    texts:
+    - language: 0
+      text: "\uB808\uBCA8\uC5C5! \uBC29 '{0}'\uC774(\uAC00) \uB808\uBCA8 {1}\uC774
+        \uB418\uC5C8\uC2B5\uB2C8\uB2E4!"
+    - language: 1
+      text: Level Up! Room '{0}' is now level {1}!
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_error_room_not_found
+    texts:
+    - language: 0
+      text: "\uC704\uCE58 {0}\uC5D0\uC11C \uBC29\uC744 \uCC3E\uC744 \uC218 \uC5C6\uC5B4
+        \uC804\uD22C \uB370\uC774\uD130\uB97C \uC0DD\uC131\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Cannot create battle data because no room was found at position {0}.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_error_no_user_data
+    texts:
+    - language: 0
+      text: "\uC720\uC800 \uB370\uC774\uD130\uAC00 \uB85C\uB4DC\uB418\uC9C0 \uC54A\uC544
+        \uB358\uC804\uC744 \uC800\uC7A5\uD560 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Cannot save dungeon because user data is not loaded.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_dungeon_data_updated
+    texts:
+    - language: 0
+      text: "\uD604\uC7AC \uB358\uC804 \uB370\uC774\uD130\uAC00 \uC720\uC800 \uB370\uC774\uD130\uC5D0
+        \uC5C5\uB370\uC774\uD2B8\uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Current dungeon data has been updated in user data.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_new_dungeon_created
+    texts:
+    - language: 0
+      text: "\uC800\uC7A5\uB41C \uB358\uC804 \uB370\uC774\uD130\uAC00 \uC5C6\uC5B4
+        \uC0C8 \uB358\uC804\uC744 \uC0DD\uC131\uD569\uB2C8\uB2E4."
+    - language: 1
+      text: No saved dungeon data found. Creating a new dungeon.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_info_dungeon_loaded
+    texts:
+    - language: 0
+      text: "\uC800\uC7A5\uB41C \uB358\uC804 \uB370\uC774\uD130\uB97C \uB85C\uB4DC\uD569\uB2C8\uB2E4."
+    - language: 1
+      text: Loading saved dungeon data.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_error_no_current_dungeon
+    texts:
+    - language: 0
+      text: "\uD604\uC7AC \uD65C\uC131\uD654\uB41C \uB358\uC804\uC774 \uC5C6\uC2B5\uB2C8\uB2E4.
+        \uBA3C\uC800 \uB358\uC804\uC744 \uB85C\uB4DC\uD558\uAC70\uB098 \uC0DD\uC131\uD574\uC57C
+        \uD569\uB2C8\uB2E4."
+    - language: 1
+      text: No active dungeon. Load or create one first.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_error_no_player_cards
+    texts:
+    - language: 0
+      text: "\uC804\uD22C\uB97C \uC2DC\uC791\uD560 \uD50C\uB808\uC774\uC5B4 \uCE74\uB4DC\uAC00
+        \uC5C6\uC2B5\uB2C8\uB2E4. (\uC784\uC2DC \uACF5\uACA9\uC790 \uC0DD\uC131 \uC2E4\uD328)"
+    - language: 1
+      text: No player cards to start battle. (Attacker creation failed)
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: dungeon_log_error_battle_data_failed
+    texts:
+    - language: 0
+      text: "\uC804\uD22C \uB370\uC774\uD130\uB97C \uC0DD\uC131\uD558\uB294\uB370
+        \uC2E4\uD328\uD588\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Failed to create battle data.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: error_card_not_found
+    texts:
+    - language: 0
+      text: "\uCE74\uB4DC(ID: {0})\uB97C \uCC3E\uC744 \uC218 \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: 'Card (ID: {0}) not found.'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: warn_not_enough_gold_levelup
+    texts:
+    - language: 0
+      text: "\uB808\uBCA8\uC5C5\uC5D0 \uD544\uC694\uD55C \uACE8\uB4DC\uAC00 \uBD80\uC871\uD569\uB2C8\uB2E4."
+    - language: 1
+      text: Not enough gold to level up.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: warn_not_enough_gems_levelup
+    texts:
+    - language: 0
+      text: "\uB808\uBCA8\uC5C5\uC5D0 \uD544\uC694\uD55C \uC82C\uC774 \uBD80\uC871\uD569\uB2C8\uB2E4."
+    - language: 1
+      text: Not enough gems to level up.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: info_user_data_null
+    texts:
+    - language: 0
+      text: "\uC720\uC800 \uB370\uC774\uD130\uAC00 \uC874\uC7AC\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: User data does not exist.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: info_card_can_level_up
+    texts:
+    - language: 0
+      text: "\uCE74\uB4DC({0})\uAC00 \uB808\uBCA8\uC5C5 \uAC00\uB2A5 \uC0C1\uD0DC\uAC00
+        \uB418\uC5C8\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: Card ({0}) is now ready to level up.
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: default_dungeon_name
+    texts:
+    - language: 0
+      text: "\uB098\uC758 \uCCAB \uB358\uC804"
+    - language: 1
+      text: My First Dungeon
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_growth_invalid_input
+    texts:
+    - language: 0
+      text: "\uC131\uC7A5 \uC11C\uBE44\uC2A4 \uC785\uB825\uAC12 \uC624\uB958: \uCE74\uB4DC
+        \uB610\uB294 \uACBD\uD5D8\uCE58 \uC591\uC774 \uC720\uD6A8\uD558\uC9C0 \uC54A\uC2B5\uB2C8\uB2E4."
+    - language: 1
+      text: 'Growth service input error: Card or experience amount is invalid.'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_growth_levelup_fail_exp
+    texts:
+    - language: 0
+      text: "\uB808\uBCA8\uC5C5 \uACBD\uD5D8\uCE58 \uBD80\uC871. \uD604\uC7AC: {0}"
+    - language: 1
+      text: "\uD544\uC694: {1}"
+    - language: 2
+      text: 'Not enough experience to level up. Current: {0}'
+    - language: 3
+      text: 'Required: {1}'
+    description: 
+  - key: log_error_no_character_factory
+    texts:
+    - language: 0
+      text: "ICharacterFactory\uAC00 \uC778\uC2A4\uD399\uD130\uC5D0 \uD560\uB2F9\uB418\uC9C0
+        \uC54A\uC558\uC2B5\uB2C8\uB2E4!"
+    - language: 1
+      text: ICharacterFactory is not assigned in the inspector!
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_error_core_data_not_found
+    texts:
+    - language: 0
+      text: "\uD575\uC2EC \uB370\uC774\uD130 \uD30C\uC77C(Elemental"
+    - language: 1
+      text: "Growth)\uC744 Resources \uD3F4\uB354\uC5D0\uC11C \uCC3E\uC744 \uC218
+        \uC5C6\uC2B5\uB2C8\uB2E4."
+    - language: 2
+      text: Core data files (Elemental
+    - language: 3
+      text: Growth) not found in Resources folder.
+    description: 
+  - key: log_info_battle_started
+    texts:
+    - language: 0
+      text: "\uC804\uD22C \uC2DC\uC791! \uC2DC\uB4DC: {0}"
+    - language: 1
+      text: 'Battle started with seed: {0}'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_error_view_creation_failed
+    texts:
+    - language: 0
+      text: "\uCE90\uB9AD\uD130 \uBDF0 \uC0DD\uC131 \uC2E4\uD328. Blueprint ID: {0}"
+    - language: 1
+      text: 'Failed to create character view for Blueprint ID: {0}'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_info_battle_victory
+    texts:
+    - language: 0
+      text: "\uC2B9\uB9AC!"
+    - language: 1
+      text: Victory!
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_info_battle_defeat
+    texts:
+    - language: 0
+      text: "\uD328\uBC30!"
+    - language: 1
+      text: Defeat!
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_info_battle_ui_start
+    texts:
+    - language: 0
+      text: "[UI] \uC804\uD22C \uC2DC\uC791"
+    - language: 1
+      text: '[UI] Battle Start'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_info_battle_ui_turn
+    texts:
+    - language: 0
+      text: "[UI] \uD134 {0}"
+    - language: 1
+      text: '[UI] Turn {0}'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: log_info_battle_ui_end
+    texts:
+    - language: 0
+      text: "[UI] \uC804\uD22C \uC885\uB8CC. \uACB0\uACFC: {0}"
+    - language: 1
+      text: '[UI] Battle End. Outcome: {0}'
+    - language: 2
+      text: 
+    - language: 3
+      text: 
+    description: 
+  - key: element_normal
+    texts:
+    - language: 0
+      text: "\uBB34"
+    - language: 1
+      text: Normal
+    - language: 2
+      text: "\u7121"
+    - language: 3
+      text: "\u65E0"
+    description: 
+  - key: element_fire
+    texts:
+    - language: 0
+      text: "\uD654\uC5FC"
+    - language: 1
+      text: Fire
+    - language: 2
+      text: "\u708E"
+    - language: 3
+      text: "\u706B"
+    description: 
+  - key: element_water
+    texts:
+    - language: 0
+      text: "\uBB3C"
+    - language: 1
+      text: Water
+    - language: 2
+      text: "\u6C34"
+    - language: 3
+      text: "\u6C34"
+    description: 
+  - key: element_wind
+    texts:
+    - language: 0
+      text: "\uBC14\uB78C"
+    - language: 1
+      text: Wind
+    - language: 2
+      text: "\u98A8"
+    - language: 3
+      text: "\u98CE"
+    description: 
+  - key: element_earth
+    texts:
+    - language: 0
+      text: "\uB300\uC9C0"
+    - language: 1
+      text: Earth
+    - language: 2
+      text: "\u5730"
+    - language: 3
+      text: "\u571F"
+    description: 
+  - key: element_light
+    texts:
+    - language: 0
+      text: "\uBE5B"
+    - language: 1
+      text: Light
+    - language: 2
+      text: "\u5149"
+    - language: 3
+      text: "\u5149"
+    description: 
+  - key: element_dark
+    texts:
+    - language: 0
+      text: "\uC5B4\uB460"
+    - language: 1
+      text: Dark
+    - language: 2
+      text: "\u95C7"
+    - language: 3
+      text: "\u6697"
+    description: 
+  - key: effect_unique_elemental_specific_desc
+    texts:
+    - language: 0
+      text: "{0} \uC18D\uC131 \uD53C\uD574\uAC00 {1}"
+    - language: 1
+      text: "\uAD00\uD1B5\uB825\uC774 {2} \uC99D\uAC00\uD569\uB2C8\uB2E4."
+    - language: 2
+      text: Increases {0} damage by {1} and Penetration by {2}.
+    - language: 3
+      text: "{0}\u5C5E\u6027\u30C0\u30E1\u30FC\u30B8\u304C{1}\u3001\u8CAB\u901A\u529B\u304C{2}\u5897\u52A0\u3057\u307E\u3059\u3002"
+    description: 

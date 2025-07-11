@@ -1,25 +1,24 @@
-using DungeonMaster.Battle;
 using DungeonMaster.Data;
-using System.Collections.Generic;
+using DungeonMaster.Dungeon;
 using UnityEngine;
-using System;
-using DungeonMaster.Character;
+using System.Collections.Generic;
+using System.Linq;
+using DungeonMaster.Battle;
+using DungeonMaster.Localization;
+using DungeonMaster.Utility;
 
 namespace DungeonMaster.Managers
 {
     /// <summary>
     /// 게임의 전체적인 흐름과 상태를 관리하는 최상위 관리자 클래스입니다.
+    /// 이 클래스는 게임의 핵심 상태(예: 메인 메뉴, 인게임, 일시정지)를 전환하고,
+    /// 다른 관리자들을 총괄하는 역할을 수행할 수 있습니다.
     /// </summary>
     public class GameManager : MonoBehaviour
     {
         public static GameManager Instance { get; private set; }
 
-        [Header("전투 관리자 참조")]
-        [SerializeField] private BattleManager battleManager;
-        
-        [Header("임시 전투 시작 데이터")]
-        [SerializeField] private List<TestParticipant> playerTeam;
-        [SerializeField] private List<TestParticipant> enemyTeam;
+        private DungeonConfig _dungeonConfig;
 
         private void Awake()
         {
@@ -27,6 +26,7 @@ namespace DungeonMaster.Managers
             {
                 Instance = this;
                 DontDestroyOnLoad(gameObject);
+                LoadConfigs();
             }
             else
             {
@@ -34,83 +34,86 @@ namespace DungeonMaster.Managers
             }
         }
 
-        [ContextMenu("Start Test Battle")]
-        public void StartTestBattle()
+        private void LoadConfigs()
         {
-            if (battleManager == null)
+            _dungeonConfig = Resources.Load<DungeonConfig>("DungeonConfig");
+            if (_dungeonConfig == null)
             {
-                Debug.LogError("BattleManager가 할당되지 않았습니다!");
+                GameLogger.LogError("DungeonConfig not found in Resources folder. Please create one.");
+            }
+        }
+
+        private void Start()
+        {
+            InitializeDungeon();
+        }
+
+        private void InitializeDungeon()
+        {
+            var dungeonData = UserDataManager.GetDungeon();
+
+            if (dungeonData == null)
+            {
+                if (_dungeonConfig == null)
+                {
+                    GameLogger.LogError("Cannot create new dungeon because DungeonConfig is not loaded.");
+                    return;
+                }
+
+                GameLogger.LogInfo(LocalizationManager.Instance.GetText("dungeon_log_info_new_dungeon_created"));
+                
+                var dungeonManager = DungeonManager.Instance;
+                
+                string dungeonName = LocalizationManager.Instance.GetText(_dungeonConfig.DefaultDungeonNameKey);
+                Vector2Int gridSize = _dungeonConfig.DefaultGridSize;
+                Vector2Int startPos = _dungeonConfig.DefaultStartPosition;
+                Vector2Int bossPos = _dungeonConfig.DefaultBossPosition;
+
+                dungeonManager.CreateNewDungeon(dungeonName, gridSize, startPos, bossPos);
+                
+                dungeonManager.PlaceRoom(_dungeonConfig.StartRoomBlueprintId, startPos);
+                dungeonManager.PlaceRoom(_dungeonConfig.BossRoomBlueprintId, bossPos);
+
+                // 새 던전 생성 후 즉시 저장
+                dungeonManager.TrySaveCurrentDungeon();
+            }
+            else
+            {
+                GameLogger.LogInfo(LocalizationManager.Instance.GetText("dungeon_log_info_dungeon_loaded"));
+                DungeonManager.Instance.LoadDungeon(dungeonData);
+            }
+        }
+
+        public void StartBattleForEntrance()
+        {
+            var dungeonManager = DungeonManager.Instance;
+            if (dungeonManager.CurrentDungeon == null)
+            {
+                GameLogger.LogError(LocalizationManager.Instance.GetText("dungeon_log_error_no_current_dungeon"));
                 return;
             }
 
-            var playerMonsters = new List<ParticipantData>();
-            foreach (var p in playerTeam)
+            // 1. 임시 공격자 목록 생성 (플레이어의 첫 번째 카드를 적으로 사용)
+            var allPlayerCards = UserDataManager.CurrentUserData.CardCollection.GetAllCards();
+            if (allPlayerCards.Count == 0)
             {
-                if (p.Blueprint != null)
-                {
-                    var userCard = p.ToUserCardData();
-                    playerMonsters.Add(new ParticipantData(p.Blueprint, p.Level, userCard));
-                }
+                GameLogger.LogError(LocalizationManager.Instance.GetText("dungeon_log_error_no_player_cards"));
+                return;
+            }
+            var attackerGuids = new List<string> { allPlayerCards.First().Guid };
+
+            // 2. 전투 데이터 생성
+            var entrancePosition = dungeonManager.CurrentDungeon.StartPosition;
+            var battleData = dungeonManager.CreateBattleLaunchData(entrancePosition, attackerGuids);
+
+            if (battleData == null)
+            {
+                GameLogger.LogError(LocalizationManager.Instance.GetText("dungeon_log_error_battle_data_failed"));
+                return;
             }
 
-            var enemyMonsters = new List<ParticipantData>();
-            foreach (var p in enemyTeam)
-            {
-                if (p.Blueprint != null)
-                {
-                    var userCard = p.ToUserCardData();
-                    enemyMonsters.Add(new ParticipantData(p.Blueprint, p.Level, userCard));
-                }
-            }
-
-            var dungeonData = new DungeonData(playerMonsters, enemyMonsters);
-            battleManager.StartBattle(dungeonData);
-        }
-    }
-
-    /// <summary>
-    /// 인스펙터에서 테스트 데이터를 쉽게 설정하기 위한 보조 클래스
-    /// </summary>
-    [System.Serializable]
-    public class TestParticipant
-    {
-        public CardBlueprintData Blueprint;
-        [Range(1, 100)] public int Level = 1;
-
-        [Header("개체별 성장률 (x100)")]
-        [Tooltip("100 = 100%")]
-        public long AttackGrowthRate_x100 = 100;
-        public long DefenseGrowthRate_x100 = 100;
-        public long HpGrowthRate_x100 = 100;
-        
-        /// <summary>
-        /// 테스트용 참가자 데이터를 기반으로 UserCardData 객체를 생성합니다.
-        /// </summary>
-        public UserCardData ToUserCardData()
-        {
-            if (Blueprint == null) return null;
-
-            var cardData = new UserCardData
-            {
-                Id = BitConverter.ToInt64(Guid.NewGuid().ToByteArray(), 0),
-                BlueprintId = Blueprint.BlueprintId,
-                Level = this.Level,
-                Experience = 0,
-                SkillLevels = new Dictionary<long, int>() // 스킬은 일단 비워둠
-            };
-            
-            // Blueprint의 기본 스탯을 CurrentStats에 복사
-            foreach (var stat in Blueprint.BaseStats)
-            {
-                cardData.CurrentStats[stat.StatType] = stat.Value;
-            }
-            
-            // 고유 성장률 설정 (StatType.MaxHP 사용)
-            cardData.InnateGrowthRates_x100[StatType.Attack] = (int)this.AttackGrowthRate_x100;
-            cardData.InnateGrowthRates_x100[StatType.Defense] = (int)this.DefenseGrowthRate_x100;
-            cardData.InnateGrowthRates_x100[StatType.MaxHP] = (int)this.HpGrowthRate_x100;
-
-            return cardData;
+            // 3. 전투 시작
+            BattleManager.Instance.StartBattle(battleData);
         }
     }
 }

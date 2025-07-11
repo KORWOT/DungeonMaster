@@ -12,6 +12,7 @@ namespace DungeonMaster.Data
         public List<DeterministicCharacterData> Characters { get; }
         public BattleStatus Status { get; }
         public long CurrentTimeMs { get; set; }
+        public int TurnCount { get; private set; }
         public List<BattleEvent> Events { get; private set; }
 
         public BattleState(IEnumerable<DeterministicCharacterData> characters, BattleStatus status)
@@ -19,14 +20,16 @@ namespace DungeonMaster.Data
             Characters = characters.Select(c => new DeterministicCharacterData(c)).ToList();
             Status = status;
             CurrentTimeMs = 0;
+            TurnCount = 1; // 전투 시작 시 1턴
             Events = new List<BattleEvent>();
         }
 
-        private BattleState(List<DeterministicCharacterData> characters, BattleStatus status, List<BattleEvent> events)
+        private BattleState(List<DeterministicCharacterData> characters, BattleStatus status, List<BattleEvent> events, int turnCount)
         {
             Characters = characters;
             Status = status;
             Events = events;
+            TurnCount = turnCount;
         }
 
         /// <summary>
@@ -34,13 +37,15 @@ namespace DungeonMaster.Data
         /// </summary>
         public BattleState With(IEnumerable<DeterministicCharacterData> newCharacters = null,
                                 BattleStatus? newStatus = null,
-                                List<BattleEvent> newEvents = null)
+                                List<BattleEvent> newEvents = null,
+                                int? newTurnCount = null)
         {
             var characterClones = newCharacters?.Select(c => new DeterministicCharacterData(c)).ToList() ?? Characters;
             var status = newStatus ?? Status;
             var events = newEvents ?? Events;
+            var turnCount = newTurnCount ?? TurnCount;
 
-            return new BattleState(characterClones, status, events);
+            return new BattleState(characterClones, status, events, turnCount);
         }
 
         public DeterministicCharacterData GetCharacter(long instanceId)
@@ -52,7 +57,7 @@ namespace DungeonMaster.Data
         {
             var clonedCharacters = Characters.Select(c => new DeterministicCharacterData(c)).ToList();
             var clonedEvents = new List<BattleEvent>(Events); // 이벤트는 복사합니다.
-            var clonedState = new BattleState(clonedCharacters, Status, clonedEvents);
+            var clonedState = new BattleState(clonedCharacters, Status, clonedEvents, TurnCount);
             clonedState.CurrentTimeMs = this.CurrentTimeMs;
             return clonedState;
         }
