@@ -39,10 +39,10 @@ namespace DungeonMaster.Battle
         private IVictoryConditionChecker _victoryConditionChecker;
         private ICharacterFactory _characterFactory;
         
-        private readonly Dictionary<long, ICharacter> _characterViewMap = new();
-        private readonly List<ICharacter> _activeViews = new();
+        private readonly Dictionary<long, ICombatant> _combatantMap = new();
+        private readonly List<ICombatant> _activeCombatants = new();
 
-        public event Action<ICharacter> OnCharacterDeath;
+        public event Action<ICombatant> OnCharacterDeath;
         public event Action<bool> OnBattleEnd;
 
         public bool IsBattleActive { get; private set; }
@@ -86,10 +86,24 @@ namespace DungeonMaster.Battle
             _actionInputProvider = new AIActionInputProvider();
             _victoryConditionChecker = new DefaultVictoryConditionChecker();
             _nextInstanceId = 1; 
-            _currentBattleState = new BattleState(new List<DeterministicCharacterData>(), BattleStatus.Ongoing);
+            _currentBattleState = new BattleState(new List<DeterministicCharacterData>(), new List<DemonLordData>(), BattleStatus.Ongoing);
 
             var initialCharacters = new List<DeterministicCharacterData>();
+            var initialDemonLords = new List<DemonLordData>();
             
+            // 마왕 생성 (플레이어 소속)
+            if (battleData.PlayerDemonLord != null)
+            {
+                var demonLordData = DemonLord.DemonLordDataFactory.Create(battleData.PlayerDemonLord, battleData.DemonLordLevel, true, GetNextInstanceId());
+                if (demonLordData != null)
+                {
+                    initialDemonLords.Add(demonLordData);
+                    var demonLord = new DemonLord.DemonLord(demonLordData);
+                    _combatantMap.Add(demonLord.InstanceId, demonLord);
+                    _activeCombatants.Add(demonLord);
+                }
+            }
+
             for (int i = 0; i < battleData.PlayerMonsters.Count; i++)
             {
                 if (i >= playerSpawnPoints.Count) break;
@@ -110,7 +124,7 @@ namespace DungeonMaster.Battle
                 if (characterData != null) initialCharacters.Add(characterData);
             }
             
-            _currentBattleState = _currentBattleState.With(newCharacters: initialCharacters);
+            _currentBattleState = _currentBattleState.With(newCharacters: initialCharacters, newDemonLords: initialDemonLords);
             
             var allSpawnPoints = playerSpawnPoints.Concat(enemySpawnPoints).ToList();
             for(int i = 0; i < _currentBattleState.Characters.Count; i++)
@@ -129,12 +143,15 @@ namespace DungeonMaster.Battle
 
         private void ClearPreviousBattle()
         {
-            foreach (var view in _activeViews)
+            foreach (var combatant in _activeCombatants)
             {
-                _characterFactory.Release(view);
+                if(combatant is ICharacter characterView)
+                {
+                    _characterFactory.Release(characterView);
+                }
             }
-            _activeViews.Clear();
-            _characterViewMap.Clear();
+            _activeCombatants.Clear();
+            _combatantMap.Clear();
         }
 
         private void SetupCharacterView(DeterministicCharacterData data, Transform spawnPoint)
@@ -148,8 +165,8 @@ namespace DungeonMaster.Battle
     
             view.Initialize(data);
             
-            _characterViewMap.Add(data.InstanceId, view);
-            _activeViews.Add(view);
+            _combatantMap.Add(data.InstanceId, view);
+            _activeCombatants.Add(view);
         }
 
         private long GetNextInstanceId()
@@ -186,18 +203,29 @@ namespace DungeonMaster.Battle
 
             foreach (var battleEvent in events)
             {
-                if (_characterViewMap.TryGetValue(battleEvent.TargetId, out var targetView))
+                if (_combatantMap.TryGetValue(battleEvent.TargetId, out var targetCombatant))
                 {
-                    switch (battleEvent.Type)
+                    // 뷰가 있는 전투원(예: 몬스터)인 경우에만 뷰 관련 이벤트를 호출합니다.
+                    if (targetCombatant is ICharacter targetView)
                     {
-                        case BattleEventType.Damage: targetView.OnDamageReceived(battleEvent.Value); break;
-                        case BattleEventType.Heal: targetView.OnHealed(battleEvent.Value); break;
-                        case BattleEventType.BuffApply: targetView.OnBuffApplied(battleEvent.Value); break;
-                        case BattleEventType.BuffRemove: targetView.OnBuffRemoved(battleEvent.Value); break;
-                        case BattleEventType.Death:
-                            targetView.OnDeath();
-                            OnCharacterDeath?.Invoke(targetView);
-                            break;
+                        switch (battleEvent.Type)
+                        {
+                            case BattleEventType.Damage: targetView.OnDamageReceived(battleEvent.Value); break;
+                            case BattleEventType.Heal: targetView.OnHealed(battleEvent.Value); break;
+                            case BattleEventType.BuffApply: targetView.OnBuffApplied(battleEvent.Value); break;
+                            case BattleEventType.BuffRemove: targetView.OnBuffRemoved(battleEvent.Value); break;
+                            case BattleEventType.Death:
+                                targetView.OnDeath();
+                                OnCharacterDeath?.Invoke(targetCombatant);
+                                break;
+                        }
+                    }
+                    else // 뷰가 없는 전투원(예: 마왕)의 사망 처리
+                    {
+                        if (battleEvent.Type == BattleEventType.Death)
+                        {
+                            OnCharacterDeath?.Invoke(targetCombatant);
+                        }
                     }
                 }
             }
@@ -217,9 +245,17 @@ namespace DungeonMaster.Battle
         {
             foreach (var characterData in state.Characters)
             {
-                if (_characterViewMap.TryGetValue(characterData.InstanceId, out var view))
+                if (_combatantMap.TryGetValue(characterData.InstanceId, out var combatant))
                 {
-                    view.ApplyState(characterData);
+                    combatant.ApplyState(characterData);
+                }
+            }
+            
+            foreach (var demonLordData in state.DemonLords)
+            {
+                if (_combatantMap.TryGetValue(demonLordData.InstanceId, out var combatant))
+                {
+                    combatant.ApplyState(demonLordData);
                 }
             }
         }

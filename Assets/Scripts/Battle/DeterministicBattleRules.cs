@@ -89,26 +89,41 @@ namespace DungeonMaster.Battle
         }
 
         /// <summary>
-        /// 상태에 있는 모든 캐릭터의 버프 효과를 적용하고 지속시간을 갱신합니다.
+        /// 상태에 있는 모든 전투원의 버프 효과를 적용하고 지속시간을 갱신합니다.
         /// </summary>
-        private BattleState ApplyAllBuffEffects(BattleState state, long deltaTimeMs) 
+        private BattleState ApplyAllBuffEffects(BattleState state, long deltaTimeMs)
         {
-            var nextState = state.Clone();
+            var nextState = state;
             
-            foreach (var character in nextState.Characters.ToList())
+            var updatedCharacters = ApplyBuffsToCombatantList(nextState, nextState.Characters, deltaTimeMs);
+            var updatedDemonLords = ApplyBuffsToCombatantList(nextState, nextState.DemonLords, deltaTimeMs);
+
+            return nextState.With(newCharacters: updatedCharacters, newDemonLords: updatedDemonLords);
+        }
+        
+        private List<T> ApplyBuffsToCombatantList<T>(BattleState state, IEnumerable<T> combatants, long deltaTimeMs) where T : class
+        {
+            var updatedList = new List<T>();
+
+            foreach (var combatant in combatants)
             {
-                if (character.ActiveBuffs.Count == 0) continue;
+                dynamic mutableCombatant = combatant;
+                if (mutableCombatant.ActiveBuffs.Count == 0)
+                {
+                    updatedList.Add(mutableCombatant);
+                    continue;
+                }
 
                 var newBuffList = new List<Data.BuffData>();
                 
-                foreach (var buff in character.ActiveBuffs)
+                foreach (var buff in mutableCombatant.ActiveBuffs)
                 {
                     var effect = BuffEffectRegistry.Get(buff.BuffId);
                     if (effect == null) continue;
 
-                    var mutableBuff = buff; // 이제 복제 필요 없음
+                    var mutableBuff = buff; 
                     
-                    effect.OnTick(nextState, ref mutableBuff);
+                    effect.OnTick(state, ref mutableBuff);
                     
                     mutableBuff.RemainingDurationMs -= (int)deltaTimeMs;
 
@@ -118,39 +133,49 @@ namespace DungeonMaster.Battle
                     }
                     else
                     {
-                        effect.OnRemove(nextState, mutableBuff);
-                        nextState.Events.Add(new BattleEvent(BattleEventType.BuffRemove, character.InstanceId, mutableBuff.BuffId));
+                        effect.OnRemove(state, mutableBuff);
+                        state.Events.Add(new BattleEvent(BattleEventType.BuffRemove, mutableCombatant.InstanceId, mutableBuff.BuffId));
                     }
                 }
 
-                character.ActiveBuffs = newBuffList;
+                mutableCombatant.ActiveBuffs = newBuffList;
+                updatedList.Add(mutableCombatant);
             }
             
-            return nextState;
+            return updatedList;
         }
 
+
         /// <summary>
-        /// 상태에 있는 모든 캐릭터의 스킬 및 공격 쿨타임을 갱신합니다.
+        /// 상태에 있는 모든 전투원의 스킬 및 공격 쿨타임을 갱신합니다.
         /// </summary>
         private BattleState UpdateAllCooldowns(BattleState state, long deltaTimeMs)
         {
-            var newCharacters = new List<DeterministicCharacterData>();
+            var updatedCharacters = UpdateCooldownsForCombatantList(state.Characters, deltaTimeMs);
+            var updatedDemonLords = UpdateCooldownsForCombatantList(state.DemonLords, deltaTimeMs);
+            
+            return state.With(newCharacters: updatedCharacters, newDemonLords: updatedDemonLords);
+        }
+        
+        private List<T> UpdateCooldownsForCombatantList<T>(IEnumerable<T> combatants, long deltaTimeMs) where T : class
+        {
+            var updatedList = new List<T>();
 
-            foreach (var character in state.Characters)
+            foreach (var combatant in combatants)
             {
-                var newChar = new DeterministicCharacterData(character);
+                dynamic mutableCombatant = combatant;
 
                 // 공격 쿨타임 감소
-                if (newChar.AttackCooldownRemainingMs > 0)
+                if (mutableCombatant.AttackCooldownRemainingMs > 0)
                 {
-                    newChar.AttackCooldownRemainingMs = Math.Max(0, newChar.AttackCooldownRemainingMs - deltaTimeMs);
+                    mutableCombatant.AttackCooldownRemainingMs = Math.Max(0, mutableCombatant.AttackCooldownRemainingMs - deltaTimeMs);
                 }
 
                 // 스킬 쿨타임 감소
-                if (newChar.SkillCooldowns != null && newChar.SkillCooldowns.Count > 0)
+                if (mutableCombatant.SkillCooldowns != null && mutableCombatant.SkillCooldowns.Count > 0)
                 {
                     var newCooldowns = new Dictionary<long, long>();
-                    foreach (var cooldown in newChar.SkillCooldowns)
+                    foreach (var cooldown in mutableCombatant.SkillCooldowns)
                     {
                         var remaining = cooldown.Value - deltaTimeMs;
                         if (remaining > 0)
@@ -158,12 +183,11 @@ namespace DungeonMaster.Battle
                             newCooldowns[cooldown.Key] = remaining;
                         }
                     }
-                    newChar.SkillCooldowns = newCooldowns;
+                    mutableCombatant.SkillCooldowns = newCooldowns;
                 }
-                newCharacters.Add(newChar);
+                updatedList.Add(mutableCombatant);
             }
-
-            return state.With(newCharacters: newCharacters);
+            return updatedList;
         }
         
         /// <summary>

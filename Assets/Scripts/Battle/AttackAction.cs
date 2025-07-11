@@ -27,12 +27,12 @@ namespace DungeonMaster.Battle
             var nextState = currentState.Clone(); 
             var generatedEvents = new List<BattleEvent>();
 
-            var actor = nextState.GetCharacter(_actorId);
-            var target = nextState.GetCharacter(_targetId);
+            var actor = nextState.GetCombatant(_actorId) as DeterministicCharacterData;
+            var target = nextState.GetCombatant(_targetId) as DeterministicCharacterData;
 
             if (actor == null || target == null || target.CurrentHP <= 0)
             {
-                return (nextState, null); 
+                return (nextState, generatedEvents); 
             }
 
             // 기본 공격 스킬 데이터 가져오기

@@ -78,4 +78,14 @@ namespace DungeonMaster.Character
         Elite,   // 정예
         Boss     // 보스
     }
+
+    /// <summary>
+    /// 마왕 등급
+    /// </summary>
+    public enum DemonLordGrade
+    {
+        Unique,
+        Epic,
+        Legendary
+    }
 }

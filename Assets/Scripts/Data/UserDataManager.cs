@@ -4,6 +4,8 @@ using DungeonMaster.Character;
 using DungeonMaster.Dungeon;
 using DungeonMaster.Localization;
 using DungeonMaster.Utility;
+using System.Collections.Generic;
+using System.Collections;
 
 namespace DungeonMaster.Data
 {
@@ -360,24 +362,69 @@ namespace DungeonMaster.Data
         /// </summary>
         public static void PrintDebugInfo()
         {
-            if (CurrentUserData == null)
-            {
-                GameLogger.LogInfo(LocalizationManager.Instance.GetText("info_user_data_not_found"));
-                return;
-            }
-
-            GameLogger.LogInfo(LocalizationManager.Instance.GetText("debug_header_user_data"));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_id", CurrentUserData.UserId));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_name", CurrentUserData.UserName));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_level", CurrentUserData.UserLevel));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_user_experience", CurrentUserData.UserExperience));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_resources", GetResourceStatus(CurrentUserData)));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_card_collection", CurrentUserData.CardCollection));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_starter_card_status", GetStarterCardStatus()));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_last_access_time", CurrentUserData.LastAccessTime));
-            GameLogger.LogInfo(LocalizationManager.Instance.GetTextFormatted("debug_label_created_time", CurrentUserData.CreatedTime));
+            if (CurrentUserData == null) return;
+            
+            Debug.Log($"<color=yellow>--- User Data ---</color>");
+            Debug.Log(CurrentUserData.ToString());
+            Debug.Log($"<color=yellow>--- Starter Cards ---</color>");
+            var (given, total) = GetStarterCardStatus();
+            Debug.Log($"Given: {given} / Total: {total}");
         }
     }
+    
+    /// <summary>
+    /// 마왕 장비 슬롯 타입
+    /// </summary>
+    [Serializable]
+    public enum DemonLordEquipmentSlot
+    {
+        Weapon,
+        Armor,
+        Necklace,
+        Ring1,
+        Ring2,
+        Bracelet,
+        Unique // 전용장비
+    }
+
+    /// <summary>
+    /// 마왕 스킬 슬롯 타입
+    /// </summary>
+    [Serializable]
+    public enum DemonLordSkillSlot
+    {
+        Active1,
+        Active2,
+        Active3,
+        Ultimate,
+        Passive1,
+        Passive2,
+        Passive3
+    }
+
+    /// <summary>
+    /// 플레이어의 영구적인 마왕 성장 데이터를 담는 클래스입니다.
+    /// </summary>
+    [Serializable]
+    public class DemonLordPersistentData
+    {
+        public string LinkedBlueprintId;
+        public int Level = 1;
+        public long CurrentXP = 0;
+        
+        // StatType을 키로, 성장률 배율(1.0f = 100%)을 값으로 가집니다.
+        public Dictionary<StatType, float> GrowthRateMultipliers = new Dictionary<StatType, float>();
+        
+        // 패시브 Blueprint ID를 키로, 현재 레벨을 값으로 가집니다.
+        public Dictionary<string, int> UniquePassiveLevels = new Dictionary<string, int>();
+
+        public List<string> OwnedSkillCardGuids = new List<string>();
+        public List<string> OwnedPermanentEquipmentGuids = new List<string>();
+
+        public Dictionary<DemonLordSkillSlot, string> EquippedSkills = new Dictionary<DemonLordSkillSlot, string>();
+        public Dictionary<DemonLordEquipmentSlot, string> EquippedPermanentEquipment = new Dictionary<DemonLordEquipmentSlot, string>();
+    }
+
 
     /// <summary>
     /// 유저 데이터 클래스
@@ -419,11 +466,16 @@ namespace DungeonMaster.Data
         /// 카드 컬렉션
         /// </summary>
         public UserCardCollection CardCollection { get; set; } = new UserCardCollection();
-
+        
         /// <summary>
-        /// 플레이어가 커스터마이징한 던전의 데이터입니다.
+        /// 플레이어가 소유하고 성장시키는 던전의 데이터입니다.
         /// </summary>
         public DungeonData PlayerDungeon { get; set; }
+
+        /// <summary>
+        /// 플레이어가 소유하고 성장시키는 마왕의 데이터입니다.
+        /// </summary>
+        public DemonLordPersistentData DemonLordData { get; set; } = new DemonLordPersistentData();
 
         /// <summary>
         /// 마지막 접속 시간

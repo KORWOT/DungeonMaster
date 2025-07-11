@@ -26,13 +26,22 @@ namespace DungeonMaster.Character
         /// </summary>
         public long PrefabID { get; set; }
 
-        /// <summary>
-        /// ICharacter 인터페이스 구현: 이 뷰가 표현하는 데이터의 고유 ID를 반환합니다.
-        /// </summary>
+        // --- ICombatant 구현 ---
         public long InstanceId => _data?.InstanceId ?? 0;
-
+        public bool IsPlayer => _data?.IsPlayer ?? false;
+        public float CurrentHp => _data?.CurrentHP ?? 0;
+        public object StateData => _data;
+        
+        public void ApplyState(object data)
+        {
+            if (data is DeterministicCharacterData characterData)
+            {
+                ApplyState(characterData);
+            }
+        }
+        
+        // --- ICharacter 구현 ---
         public string Name => _data?.Name ?? LocalizationManager.Instance.GetText("monster_name_unknown");
-
         public Dictionary<StatType, long> Stats => _data?.Stats;
 
         /// <summary>
@@ -40,10 +49,16 @@ namespace DungeonMaster.Character
         /// </summary>
         private DeterministicCharacterData _data;
 
-        /// <summary>
-        /// ICharacter 인터페이스 구현: BattleManager가 전투 시작 시 이 뷰와 데이터를 연결하기 위해 호출합니다.
-        /// </summary>
-        public void Initialize(DeterministicCharacterData initialData)
+        public void Initialize(object initialData)
+        {
+            if (initialData is DeterministicCharacterData characterData)
+            {
+                Initialize(characterData);
+            }
+        }
+        
+        // --- 기존 로직 (내부 구현) ---
+        private void Initialize(DeterministicCharacterData initialData)
         {
             // 오브젝트 풀링으로 재사용될 때를 대비해 항상 활성화 상태로 시작합니다.
             if (!gameObject.activeSelf)
@@ -60,11 +75,8 @@ namespace DungeonMaster.Character
             // ApplyState를 호출하여 HP바 등 변하는 정보의 초기 상태를 설정합니다.
             ApplyState(initialData);
         }
-
-        /// <summary>
-        /// ICharacter 인터페이스 구현: BattleManager가 매 틱마다 최신 상태를 뷰에 반영하기 위해 호출합니다.
-        /// </summary>
-        public void ApplyState(DeterministicCharacterData data)
+        
+        private void ApplyState(DeterministicCharacterData data)
         {
             _data = data;
             // HP 바 업데이트

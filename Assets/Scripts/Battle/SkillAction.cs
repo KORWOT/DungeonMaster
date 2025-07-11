@@ -25,8 +25,8 @@ namespace DungeonMaster.Battle
         public (BattleState newState, List<BattleEvent> newEvents) Execute(BattleState currentState, DeterministicBattleRules battleRules)
         {
             var nextState = currentState.Clone();
-            var caster = nextState.GetCharacter(_casterId);
-            var target = nextState.GetCharacter(_targetId);
+            var caster = nextState.GetCombatant(_casterId) as DeterministicCharacterData;
+            var target = nextState.GetCombatant(_targetId) as DeterministicCharacterData;
 
             if (caster == null || target == null || _skill == null)
             {
@@ -40,12 +40,12 @@ namespace DungeonMaster.Battle
                 nextState = strategy.Execute(nextState, battleRules, caster, target, _skill, effect);
                 
                 // 루프를 돌 때마다 변경된 상태에서 캐릭터 정보를 다시 가져와야 합니다.
-                caster = nextState.GetCharacter(_casterId);
-                target = nextState.GetCharacter(_targetId);
+                caster = nextState.GetCombatant(_casterId) as DeterministicCharacterData;
+                target = nextState.GetCombatant(_targetId) as DeterministicCharacterData;
             }
 
             // 쿨다운 설정
-            var mutableCaster = nextState.GetCharacter(_casterId);
+            var mutableCaster = nextState.GetCombatant(_casterId) as DeterministicCharacterData;
             if (mutableCaster != null)
             {
                 mutableCaster.AttackCooldownRemainingMs = mutableCaster.Stats.GetValueOrDefault(Character.StatType.AttackSpeed, 1000);

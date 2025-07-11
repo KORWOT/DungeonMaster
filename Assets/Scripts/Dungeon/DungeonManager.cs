@@ -284,42 +284,37 @@ namespace DungeonMaster.Dungeon
         {
             if (CurrentDungeon == null || !CurrentDungeon.Rooms.TryGetValue(roomPosition, out var roomData))
             {
-                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("dungeon_log_error_room_not_found", roomPosition));
+                GameLogger.LogError(LocalizationManager.Instance.GetTextFormatted("dungeon_log_error_create_battle_data_failed", roomPosition));
                 return null;
             }
 
-            // 수비팀 (방에 배치된 몬스터)
+            // 방어측: 해당 방에 배치된 몬스터들
             var defenders = new List<Battle.ParticipantData>();
-            foreach (var monsterGuid in roomData.PlacedMonsterGuids)
+            foreach (var guid in roomData.PlacedMonsterGuids)
             {
-                var userCard = UserDataManager.CurrentUserData.CardCollection.GetCardByGuid(monsterGuid);
-                if (userCard != null)
+                var card = UserDataManager.Instance.CurrentUserData.CardCollection.GetCardByGuid(guid);
+                if (card != null && card.Blueprint != null)
                 {
-                    var blueprint = BlueprintDatabase.Instance.GetBlueprint(userCard.BlueprintId);
-                    if (blueprint != null)
-                    {
-                        defenders.Add(new Battle.ParticipantData(blueprint, userCard));
-                    }
+                    defenders.Add(new Battle.ParticipantData(card.Blueprint, card));
                 }
             }
-
-            // 공격팀 (외부에서 온 몬스터)
+            
+            // 공격측: 외부에서 침입한 몬스터들
             var attackers = new List<Battle.ParticipantData>();
-            foreach (var monsterGuid in attackerGuids)
+            if (attackerGuids != null)
             {
-                var userCard = UserDataManager.CurrentUserData.CardCollection.GetCardByGuid(monsterGuid); // 실제로는 적 팩션의 카드 목록에서 찾아야 함
-                if (userCard != null)
+                foreach (var guid in attackerGuids)
                 {
-                    var blueprint = BlueprintDatabase.Instance.GetBlueprint(userCard.BlueprintId);
-                    if (blueprint != null)
+                    var card = UserDataManager.Instance.CurrentUserData.CardCollection.GetCardByGuid(guid);
+                    if (card != null && card.Blueprint != null)
                     {
-                        attackers.Add(new Battle.ParticipantData(blueprint, userCard));
+                        attackers.Add(new Battle.ParticipantData(card.Blueprint, card));
                     }
                 }
             }
             
-            // BattleManager의 컨텍스트에서 'Player'는 수비팀, 'Enemy'는 공격팀이 됩니다.
-            return new Battle.BattleLaunchData(playerMonsters: defenders, enemyMonsters: attackers);
+            // TODO: 마왕이 이 전투에 참여하는지 여부를 결정하는 로직 필요
+            return new Battle.BattleLaunchData(defenders, attackers, null, 1);
         }
 
         #endregion

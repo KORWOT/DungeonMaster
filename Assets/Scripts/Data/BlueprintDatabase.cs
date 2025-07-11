@@ -15,8 +15,12 @@ namespace DungeonMaster.Data
     {
         [Header("몬스터 설계도 목록")]
         [SerializeField] private List<CardBlueprintData> cardBlueprints = new List<CardBlueprintData>();
+        
+        [Header("마왕 설계도 목록")]
+        [SerializeField] private List<DemonLordBlueprint> demonLordBlueprints = new List<DemonLordBlueprint>();
 
         private readonly Dictionary<long, CardBlueprintData> _blueprintById = new Dictionary<long, CardBlueprintData>();
+        private readonly Dictionary<string, DemonLordBlueprint> _demonLordBlueprintById = new Dictionary<string, DemonLordBlueprint>();
         private readonly Dictionary<Grade, List<CardBlueprintData>> _blueprintsByGrade = new Dictionary<Grade, List<CardBlueprintData>>();
         private bool _isInitialized = false;
         
@@ -50,34 +54,48 @@ namespace DungeonMaster.Data
 
             _blueprintById.Clear();
             _blueprintsByGrade.Clear();
+            _demonLordBlueprintById.Clear();
 
-            if (cardBlueprints == null)
+            // 카드 블루프린트 초기화
+            if (cardBlueprints != null)
             {
-                GameLogger.LogWarning(LocalizationManager.Instance.GetText("warn_no_blueprints_configured"));
-                _isInitialized = true;
-                return;
+                foreach (var blueprint in cardBlueprints)
+                {
+                    if (blueprint == null) continue;
+
+                    if (!_blueprintById.ContainsKey(blueprint.BlueprintId))
+                    {
+                        _blueprintById.Add(blueprint.BlueprintId, blueprint);
+                    }
+                    else
+                    {
+                        GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("warn_duplicate_blueprint_id", blueprint.BlueprintId, blueprint.Name));
+                    }
+
+                    if (!_blueprintsByGrade.ContainsKey(blueprint.Grade))
+                    {
+                        _blueprintsByGrade[blueprint.Grade] = new List<CardBlueprintData>();
+                    }
+                    _blueprintsByGrade[blueprint.Grade].Add(blueprint);
+                }
             }
             
-            foreach (var blueprint in cardBlueprints)
+            // 마왕 블루프린트 초기화
+            if (demonLordBlueprints != null)
             {
-                if (blueprint == null) continue;
-
-                // ID 기반 딕셔너리 채우기
-                if (!_blueprintById.ContainsKey(blueprint.BlueprintId))
+                foreach (var blueprint in demonLordBlueprints)
                 {
-                    _blueprintById.Add(blueprint.BlueprintId, blueprint);
+                    if (blueprint == null) continue;
+                    
+                    if (!_demonLordBlueprintById.ContainsKey(blueprint.BlueprintId))
+                    {
+                        _demonLordBlueprintById.Add(blueprint.BlueprintId, blueprint);
+                    }
+                    else
+                    {
+                        GameLogger.LogWarning($"Duplicate Demon Lord Blueprint ID found: {blueprint.BlueprintId}");
+                    }
                 }
-                else
-                {
-                    GameLogger.LogWarning(LocalizationManager.Instance.GetTextFormatted("warn_duplicate_blueprint_id", blueprint.BlueprintId, blueprint.Name));
-                }
-
-                // 등급 기반 딕셔너리 채우기
-                if (!_blueprintsByGrade.ContainsKey(blueprint.Grade))
-                {
-                    _blueprintsByGrade[blueprint.Grade] = new List<CardBlueprintData>();
-                }
-                _blueprintsByGrade[blueprint.Grade].Add(blueprint);
             }
             
             _isInitialized = true;
@@ -99,6 +117,15 @@ namespace DungeonMaster.Data
         public CardBlueprintData GetBlueprint(string monsterName)
         {
             return cardBlueprints?.FirstOrDefault(bp => bp != null && bp.Name == monsterName);
+        }
+
+        /// <summary>
+        /// ID로 마왕 설계도를 찾습니다.
+        /// </summary>
+        public DemonLordBlueprint GetDemonLordBlueprint(string blueprintId)
+        {
+            _demonLordBlueprintById.TryGetValue(blueprintId, out var blueprint);
+            return blueprint;
         }
 
         /// <summary>

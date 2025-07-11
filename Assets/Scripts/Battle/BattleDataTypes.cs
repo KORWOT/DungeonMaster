@@ -1,5 +1,6 @@
 using DungeonMaster.Data;
 using System.Collections.Generic;
+using DungeonMaster.DemonLord;
 
 namespace DungeonMaster.Battle
 {
@@ -10,11 +11,15 @@ namespace DungeonMaster.Battle
     {
         public List<ParticipantData> PlayerMonsters { get; private set; }
         public List<ParticipantData> EnemyMonsters { get; private set; }
+        public DemonLordBlueprint PlayerDemonLord { get; private set; }
+        public int DemonLordLevel { get; private set; }
 
-        public BattleLaunchData(List<ParticipantData> playerMonsters, List<ParticipantData> enemyMonsters)
+        public BattleLaunchData(List<ParticipantData> playerMonsters, List<ParticipantData> enemyMonsters, DemonLordBlueprint playerDemonLord = null, int demonLordLevel = 1)
         {
             PlayerMonsters = playerMonsters;
             EnemyMonsters = enemyMonsters;
+            PlayerDemonLord = playerDemonLord;
+            DemonLordLevel = demonLordLevel;
         }
     }
 

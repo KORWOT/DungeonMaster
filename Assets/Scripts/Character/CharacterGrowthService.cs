@@ -12,6 +12,7 @@ namespace DungeonMaster.Character
     public class CharacterGrowthService : ScriptableObject
     {
         [SerializeField] private GrowthConfig _growthConfig;
+        [SerializeField] private DemonLordGradeConfig _demonLordGradeConfig;
         [SerializeField] private BlueprintDatabase _blueprintDatabase;
 
         // 이 서비스는 ScriptableObject이므로, 싱글턴 인스턴스가 필요합니다.
@@ -130,5 +131,82 @@ namespace DungeonMaster.Character
                 DictionaryExtensions.AddValue(card.CurrentStats, statType, finalGrowthAmount);
             }
         }
+        
+        #region Demon Lord Growth
+        
+        /// <summary>
+        /// 마왕의 현재 레벨과 청사진을 기반으로 최종 스탯을 계산합니다.
+        /// </summary>
+        public Dictionary<StatType, long> CalculateDemonLordFinalStats(DemonLordBlueprint blueprint, DemonLordPersistentData demonLordData)
+        {
+            var finalStats = new Dictionary<StatType, long>();
+            if (blueprint == null || demonLordData == null) return finalStats;
+
+            // 1. 기본 스탯 복사
+            foreach (var stat in blueprint.BaseStats)
+            {
+                finalStats[stat.StatType] = stat.Value;
+            }
+
+            // 2. 레벨업에 따른 성장치 계산
+            if (demonLordData.Level > 1)
+            {
+                int levelsToGrow = demonLordData.Level - 1;
+                
+                // 2-1. 등급별 성장 배율 가져오기
+                float gradeMultiplier = _demonLordGradeConfig.GetMultiplier(blueprint.Grade);
+
+                foreach (var growthStat in blueprint.GrowthStats_x100)
+                {
+                    // 2-2. 기본 성장률 (x100된 값)
+                    long baseGrowth = growthStat.Value;
+                    
+                    // 2-3. 커스텀 성장률 배율 (기본값 1.0f)
+                    float customMultiplier = demonLordData.GrowthRateMultipliers.GetValueOrDefault(growthStat.StatType, 1.0f);
+
+                    // 2-4. 최종 성장치 계산
+                    // (기본성장/100) * 커스텀배율 * 등급배율 * 성장레벨수
+                    long finalGrowthAmount = (long)(baseGrowth / 100f * customMultiplier * gradeMultiplier * levelsToGrow);
+
+                    finalStats.AddValue(growthStat.StatType, finalGrowthAmount);
+                }
+            }
+            
+            return finalStats;
+        }
+
+        public bool AddExperienceToDemonLord(DemonLordPersistentData demonLordData, long amount)
+        {
+            if (demonLordData == null || amount <= 0) return false;
+            demonLordData.CurrentXP += amount;
+            // TODO: 마왕용 경험치 테이블 필요
+            // long requiredExp = GetRequiredExperienceForDemonLord(demonLordData.Level);
+            // return demonLordData.CurrentXP >= requiredExp;
+            return false; // 임시
+        }
+
+        public bool AttemptLevelUpDemonLord(DemonLordPersistentData demonLordData)
+        {
+            if (demonLordData == null) return false;
+            
+            // TODO: 마왕용 경험치 및 재화 소모 로직 필요
+
+            var blueprint = _blueprintDatabase.GetDemonLordBlueprint(demonLordData.LinkedBlueprintId);
+            if (blueprint == null) return false;
+
+            demonLordData.Level++;
+            ApplyDemonLordGrowth(demonLordData, blueprint);
+            return true;
+        }
+
+        private void ApplyDemonLordGrowth(DemonLordPersistentData demonLordData, DemonLordBlueprint blueprint)
+        {
+            // 이 메서드는 레벨업 시 스탯이 변하는 "영구 데이터"에는 영향을 주지 않음.
+            // 스탯은 항상 CalculateDemonLordFinalStats를 통해 동적으로 계산됨.
+            // 여기서는 레벨업 시 스킬 해금 등 다른 효과를 처리할 수 있음.
+            GameLogger.LogInfo("Demon Lord leveled up! Future growth effects can be applied here.");
+        }
+
+        #endregion
     }
 } 

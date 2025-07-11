@@ -23,7 +23,7 @@ namespace DungeonMaster.Buffs      // [설명] 이 코드는 'DungeonMaster.Buff
         // BattleState: 현재 전투 상태(모든 캐릭터, 버프 등 포함)
         public void OnApply(BattleState state, ref BuffData buffData)
         {
-            var target = state.GetCharacter(buffData.TargetId);
+            var target = state.GetCombatant(buffData.TargetId) as DeterministicCharacterData;
             if (target == null) return;
             
             // 첫 적용 시, 레벨 1에 해당하는 스케일링된 값을 적용합니다.
@@ -43,7 +43,7 @@ namespace DungeonMaster.Buffs      // [설명] 이 코드는 'DungeonMaster.Buff
         // 적용했던 _amount 만큼 다시 빼서 원상복구
         public void OnRemove(BattleState state, BuffData buffData)
         {
-            var target = state.GetCharacter(buffData.TargetId);
+            var target = state.GetCombatant(buffData.TargetId) as DeterministicCharacterData;
             if (target == null) return;
 
             // 버프 제거 시, 현재 스택 레벨에 해당하는 총 스케일링된 값을 제거합니다.
@@ -53,7 +53,7 @@ namespace DungeonMaster.Buffs      // [설명] 이 코드는 'DungeonMaster.Buff
         
         public void OnReapply(BattleState state, ref BuffData buffData)
         {
-            var target = state.GetCharacter(buffData.TargetId);
+            var target = state.GetCombatant(buffData.TargetId) as DeterministicCharacterData;
             if (target == null) return;
 
             if (buffData.Stacks <= 1) // 재적용이지만 스택이 1이면 OnApply와 동일

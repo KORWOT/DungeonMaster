@@ -33,7 +33,7 @@ namespace DungeonMaster.Skill
             }
             
             var nextState = battleState.Clone();
-            var mutableTarget = nextState.GetCharacter(target.InstanceId);
+            var mutableTarget = nextState.GetCombatant(target.InstanceId) as DeterministicCharacterData;
             if (mutableTarget == null) return nextState;
             
             var existingBuff = mutableTarget.ActiveBuffs.FirstOrDefault(b => b.BuffId == buffId);
