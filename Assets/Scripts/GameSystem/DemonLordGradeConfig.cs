@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using DungeonMaster.Character;
 using UnityEngine;
 
-namespace DungeonMaster.System
+namespace DungeonMaster.GameSystem
 {
     [CreateAssetMenu(fileName = "DemonLordGradeConfig", menuName = "DungeonMaster/System/DemonLord Grade Config")]
     public class DemonLordGradeConfig : ScriptableObject

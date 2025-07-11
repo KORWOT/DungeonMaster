@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using DungeonMaster.Character;
+using DungeonMaster.DemonLord;
 using DungeonMaster.Localization;
 using DungeonMaster.Utility;
 using UnityEngine;

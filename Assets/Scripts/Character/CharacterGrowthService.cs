@@ -2,6 +2,8 @@ using System.Collections.Generic;
 using System.Linq;
 using DungeonMaster.Character;
 using DungeonMaster.Data;
+using DungeonMaster.DemonLord;
+using DungeonMaster.GameSystem;
 using DungeonMaster.Localization;
 using DungeonMaster.Shared.Scaling;
 using DungeonMaster.Utility;

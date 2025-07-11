@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using DungeonMaster.Data;
 using UnityEngine;
 
 namespace DungeonMaster.DemonLord

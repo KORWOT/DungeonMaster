@@ -40,4 +40,4 @@ namespace DungeonMaster.Battle
             return BattleOutcome.Ongoing;
         }
     }
-} 
+}  
