@@ -13,6 +13,16 @@ namespace DungeonMaster.Character
     public interface ICharacter : ICombatant
     {
         /// <summary>
+        /// 캐릭터의 현재 스탯 정보에 접근합니다.
+        /// </summary>
+        Dictionary<StatType, long> Stats { get; }
+        
+        /// <summary>
+        /// 캐릭터의 이름에 접근합니다.
+        /// </summary>
+        string Name { get; }
+
+        /// <summary>
         /// 뷰를 초기화합니다. 전투 시작 시 한 번만 호출됩니다.
         /// </summary>
         /// <param name="initialData">캐릭터의 초기 전투 상태 데이터</param>

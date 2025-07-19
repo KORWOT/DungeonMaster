@@ -12,10 +12,10 @@ namespace DungeonMaster.Data
     /// 이 데이터 객체는 순수 C# 코드로만 이루어져 Unity 종속성이 없으며, 서버에서도 동일하게 사용될 수 있습니다.
     /// 모든 계산 로직은 이 데이터를 입력받아 새로운 데이터를 반환하는 순수 함수 형태로 작성되어야 합니다.
     /// </summary>
-    public class DeterministicCharacterData
+    public class DeterministicCharacterData : ICombatantData
     {
         // --- 고유 식별자 ---
-        public readonly long InstanceId; // 전투 중 사용되는 고유 ID
+        public long InstanceId { get; } // 전투 중 사용되는 고유 ID
         public readonly long BlueprintId; // 원본 데이터(Blueprint)의 ID
 
         // --- 기본 정보 (Blueprint로부터 복사) ---
@@ -56,7 +56,7 @@ namespace DungeonMaster.Data
         /// <summary>
         /// 다음 기본 공격까지 남은 쿨타임 (밀리초).
         /// </summary>
-        public long AttackCooldownRemainingMs;
+        public long AttackCooldownRemainingMs { get; set; }
         
         /// <summary>
         /// 현재 적용중인 버프 목록

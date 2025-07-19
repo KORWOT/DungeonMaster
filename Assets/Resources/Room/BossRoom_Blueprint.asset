@@ -12,13 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d27e88088aeb983498e49d4a622897cb, type: 3}
   m_Name: BossRoom_Blueprint
   m_EditorClassIdentifier: 
-  Name: 
-  Description: 
+  BlueprintId: room_boss_final_01
+  NameKey: room_boss_final_01_name
+  DescriptionKey: room_boss_final_01_desc
   Icon: {fileID: 0}
   Grade: 0
-  Type: 0
+  Type: 7
   PlacementCost: 0
-  MaxLevel: 10
+  MaxLevel: 1
   XpCurve:
     serializedVersion: 2
     m_Curve:

@@ -28,7 +28,7 @@ namespace DungeonMaster.Character
 
         // --- ICombatant 구현 ---
         public long InstanceId => _data?.InstanceId ?? 0;
-        public bool IsPlayer => _data?.IsPlayer ?? false;
+        public bool IsPlayer => _data?.IsPlayerCharacter ?? false;
         public float CurrentHp => _data?.CurrentHP ?? 0;
         public object StateData => _data;
         

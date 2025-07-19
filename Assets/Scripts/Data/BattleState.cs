@@ -1,7 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using DungeonMaster.Battle;
-using DungeonMaster.DemonLord;
 
 namespace DungeonMaster.Data
 {
@@ -11,67 +10,62 @@ namespace DungeonMaster.Data
     public class BattleState
     {
         public List<DeterministicCharacterData> Characters { get; }
-        public List<DemonLordData> DemonLords { get; }
         public BattleStatus Status { get; }
         public long CurrentTimeMs { get; set; }
-        public int TurnCount { get; private set; }
         public List<BattleEvent> Events { get; private set; }
 
-        public BattleState(IEnumerable<DeterministicCharacterData> characters, IEnumerable<DemonLordData> demonLords, BattleStatus status)
+        public BattleState(IEnumerable<DeterministicCharacterData> characters, BattleStatus status)
         {
-            Characters = characters?.Select(c => new DeterministicCharacterData(c)).ToList() ?? new List<DeterministicCharacterData>();
-            DemonLords = demonLords?.Select(dl => dl.With()).ToList() ?? new List<DemonLordData>();
+            Characters = characters.Select(c => new DeterministicCharacterData(c)).ToList();
             Status = status;
             CurrentTimeMs = 0;
-            TurnCount = 1; // 전투 시작 시 1턴
             Events = new List<BattleEvent>();
         }
 
-        private BattleState(List<DeterministicCharacterData> characters, List<DemonLordData> demonLords, BattleStatus status, List<BattleEvent> events, int turnCount)
+        private BattleState(List<DeterministicCharacterData> characters, BattleStatus status, List<BattleEvent> events)
         {
             Characters = characters;
-            DemonLords = demonLords;
             Status = status;
             Events = events;
-            TurnCount = turnCount;
         }
 
         /// <summary>
         /// 상태를 변경하는 새 BattleState를 생성합니다.
         /// </summary>
         public BattleState With(IEnumerable<DeterministicCharacterData> newCharacters = null,
-                                IEnumerable<DemonLordData> newDemonLords = null,
                                 BattleStatus? newStatus = null,
-                                List<BattleEvent> newEvents = null,
-                                int? newTurnCount = null)
+                                List<BattleEvent> newEvents = null)
         {
             var characterClones = newCharacters?.Select(c => new DeterministicCharacterData(c)).ToList() ?? Characters;
-            var demonLordClones = newDemonLords?.Select(dl => dl.With()).ToList() ?? DemonLords;
             var status = newStatus ?? Status;
             var events = newEvents ?? Events;
-            var turnCount = newTurnCount ?? TurnCount;
 
-            return new BattleState(characterClones, demonLordClones, status, events, turnCount);
+            return new BattleState(characterClones, status, events);
         }
-        
-        public object GetCombatant(long instanceId)
+
+        public DeterministicCharacterData GetCharacter(long instanceId)
         {
-            object character = Characters.FirstOrDefault(c => c.InstanceId == instanceId);
-            if (character != null)
-            {
-                return character;
-            }
-            return DemonLords.FirstOrDefault(dl => dl.InstanceId == instanceId);
+            return Characters.FirstOrDefault(c => c.InstanceId == instanceId);
         }
 
         public BattleState Clone()
         {
             var clonedCharacters = Characters.Select(c => new DeterministicCharacterData(c)).ToList();
-            var clonedDemonLords = DemonLords.Select(dl => dl.With()).ToList();
-            var clonedEvents = new List<BattleEvent>(Events);
-            var clonedState = new BattleState(clonedCharacters, clonedDemonLords, Status, clonedEvents, TurnCount);
+            var clonedEvents = new List<BattleEvent>(Events); // 이벤트는 복사합니다.
+            var clonedState = new BattleState(clonedCharacters, Status, clonedEvents);
             clonedState.CurrentTimeMs = this.CurrentTimeMs;
             return clonedState;
         }
+
+        // AddEvent와 ClearEvents는 불변성을 위반하므로 제거합니다.
+        // public void AddEvent(BattleEvent newEvent)
+        // {
+        //     Events.Add(newEvent);
+        // }
+        // 
+        // public void ClearEvents()
+        // {
+        //     Events.Clear();
+        // }
     }
 }

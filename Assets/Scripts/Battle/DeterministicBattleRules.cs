@@ -101,22 +101,21 @@ namespace DungeonMaster.Battle
             return nextState.With(newCharacters: updatedCharacters, newDemonLords: updatedDemonLords);
         }
         
-        private List<T> ApplyBuffsToCombatantList<T>(BattleState state, IEnumerable<T> combatants, long deltaTimeMs) where T : class
+        private List<T> ApplyBuffsToCombatantList<T>(BattleState state, IEnumerable<T> combatants, long deltaTimeMs) where T : class, ICombatantData
         {
             var updatedList = new List<T>();
 
             foreach (var combatant in combatants)
             {
-                dynamic mutableCombatant = combatant;
-                if (mutableCombatant.ActiveBuffs.Count == 0)
+                if (combatant.ActiveBuffs.Count == 0)
                 {
-                    updatedList.Add(mutableCombatant);
+                    updatedList.Add(combatant);
                     continue;
                 }
 
                 var newBuffList = new List<Data.BuffData>();
                 
-                foreach (var buff in mutableCombatant.ActiveBuffs)
+                foreach (var buff in combatant.ActiveBuffs)
                 {
                     var effect = BuffEffectRegistry.Get(buff.BuffId);
                     if (effect == null) continue;
@@ -134,12 +133,12 @@ namespace DungeonMaster.Battle
                     else
                     {
                         effect.OnRemove(state, mutableBuff);
-                        state.Events.Add(new BattleEvent(BattleEventType.BuffRemove, mutableCombatant.InstanceId, mutableBuff.BuffId));
+                        state.Events.Add(new BattleEvent(BattleEventType.BuffRemove, combatant.InstanceId, mutableBuff.BuffId));
                     }
                 }
 
-                mutableCombatant.ActiveBuffs = newBuffList;
-                updatedList.Add(mutableCombatant);
+                combatant.ActiveBuffs = newBuffList;
+                updatedList.Add(combatant);
             }
             
             return updatedList;
@@ -157,25 +156,23 @@ namespace DungeonMaster.Battle
             return state.With(newCharacters: updatedCharacters, newDemonLords: updatedDemonLords);
         }
         
-        private List<T> UpdateCooldownsForCombatantList<T>(IEnumerable<T> combatants, long deltaTimeMs) where T : class
+        private List<T> UpdateCooldownsForCombatantList<T>(IEnumerable<T> combatants, long deltaTimeMs) where T : class, ICombatantData
         {
             var updatedList = new List<T>();
 
             foreach (var combatant in combatants)
             {
-                dynamic mutableCombatant = combatant;
-
                 // 공격 쿨타임 감소
-                if (mutableCombatant.AttackCooldownRemainingMs > 0)
+                if (combatant.AttackCooldownRemainingMs > 0)
                 {
-                    mutableCombatant.AttackCooldownRemainingMs = Math.Max(0, mutableCombatant.AttackCooldownRemainingMs - deltaTimeMs);
+                    combatant.AttackCooldownRemainingMs = System.Math.Max(0, combatant.AttackCooldownRemainingMs - deltaTimeMs);
                 }
 
                 // 스킬 쿨타임 감소
-                if (mutableCombatant.SkillCooldowns != null && mutableCombatant.SkillCooldowns.Count > 0)
+                if (combatant.SkillCooldowns != null && combatant.SkillCooldowns.Count > 0)
                 {
                     var newCooldowns = new Dictionary<long, long>();
-                    foreach (var cooldown in mutableCombatant.SkillCooldowns)
+                    foreach (var cooldown in combatant.SkillCooldowns)
                     {
                         var remaining = cooldown.Value - deltaTimeMs;
                         if (remaining > 0)
@@ -183,9 +180,9 @@ namespace DungeonMaster.Battle
                             newCooldowns[cooldown.Key] = remaining;
                         }
                     }
-                    mutableCombatant.SkillCooldowns = newCooldowns;
+                    combatant.SkillCooldowns = newCooldowns;
                 }
-                updatedList.Add(mutableCombatant);
+                updatedList.Add(combatant);
             }
             return updatedList;
         }

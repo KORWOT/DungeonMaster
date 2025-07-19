@@ -10,7 +10,7 @@ namespace DungeonMaster.DemonLord
     /// 결정론적 전투 상태에 포함되는 마왕의 데이터입니다.
     /// </summary>
     [Serializable]
-    public class DemonLordData
+    public class DemonLordData : ICombatantData
     {
         public long InstanceId { get; }
         public bool IsPlayer { get; }
@@ -21,7 +21,7 @@ namespace DungeonMaster.DemonLord
         public IReadOnlyDictionary<StatType, long> Stats { get; }
         public IReadOnlyList<long> BaseSkillIds { get; }
 
-        // 몬스터와 동일한 로직 처리를 위한 속성들 추가
+        // ICombatantData 인터페이스 구현을 위한 속성들
         public List<BuffData> ActiveBuffs { get; set; }
         public long AttackCooldownRemainingMs { get; set; }
         public Dictionary<long, long> SkillCooldowns { get; set; }

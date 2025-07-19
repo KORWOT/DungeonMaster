@@ -292,10 +292,15 @@ namespace DungeonMaster.Dungeon
             var defenders = new List<Battle.ParticipantData>();
             foreach (var guid in roomData.PlacedMonsterGuids)
             {
-                var card = UserDataManager.Instance.CurrentUserData.CardCollection.GetCardByGuid(guid);
-                if (card != null && card.Blueprint != null)
+                var card = UserDataManager.CurrentUserData.CardCollection.GetCardByGuid(guid);
+                if (card != null)
                 {
-                    defenders.Add(new Battle.ParticipantData(card.Blueprint, card));
+                    // card에서 BlueprintId를 사용해 데이터베이스에서 Blueprint를 가져옵니다.
+                    var blueprint = BlueprintDatabase.Instance.GetBlueprint(card.BlueprintId);
+                    if (blueprint != null)
+                    {
+                        defenders.Add(new Battle.ParticipantData(blueprint, card));
+                    }
                 }
             }
             
@@ -305,10 +310,15 @@ namespace DungeonMaster.Dungeon
             {
                 foreach (var guid in attackerGuids)
                 {
-                    var card = UserDataManager.Instance.CurrentUserData.CardCollection.GetCardByGuid(guid);
-                    if (card != null && card.Blueprint != null)
+                    var card = UserDataManager.CurrentUserData.CardCollection.GetCardByGuid(guid);
+                    if (card != null)
                     {
-                        attackers.Add(new Battle.ParticipantData(card.Blueprint, card));
+                        // card에서 BlueprintId를 사용해 데이터베이스에서 Blueprint를 가져옵니다.
+                        var blueprint = BlueprintDatabase.Instance.GetBlueprint(card.BlueprintId);
+                        if (blueprint != null)
+                        {
+                            attackers.Add(new Battle.ParticipantData(blueprint, card));
+                        }
                     }
                 }
             }

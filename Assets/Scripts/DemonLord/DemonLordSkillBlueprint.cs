@@ -31,7 +31,9 @@ namespace DungeonMaster.DemonLord
         public int BaseResourceCost;
 
         [Header("레벨 스케일링 설정")]
+        public ScalingType CooldownScalingType;
         public ScalingConfig CooldownScalingConfig;
+        public ScalingType ResourceCostScalingType;
         public ScalingConfig ResourceCostScalingConfig;
         
         [Header("효과 목록")]
@@ -47,7 +49,7 @@ namespace DungeonMaster.DemonLord
         public float GetScaledCooldown(int level, int maxLevel = 10)
         {
             if (_cooldownStrategy == null)
-                _cooldownStrategy = ScalingStrategyFactory.GetStrategy(CooldownScalingConfig.scalingType);
+                _cooldownStrategy = ScalingStrategyFactory.GetStrategy(CooldownScalingType);
 
             float addedValue = _cooldownStrategy.Calculate(level, maxLevel, CooldownScalingConfig);
             return BaseCooldown + addedValue;
@@ -59,7 +61,7 @@ namespace DungeonMaster.DemonLord
         public int GetScaledResourceCost(int level, int maxLevel = 10)
         {
             if (_resourceCostStrategy == null)
-                _resourceCostStrategy = ScalingStrategyFactory.GetStrategy(ResourceCostScalingConfig.scalingType);
+                _resourceCostStrategy = ScalingStrategyFactory.GetStrategy(ResourceCostScalingType);
 
             float addedValue = _resourceCostStrategy.Calculate(level, maxLevel, ResourceCostScalingConfig);
             return BaseResourceCost + (int)addedValue;
